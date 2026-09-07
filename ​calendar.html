@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ne" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>नेपाली क्यालेन्डर</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class' }
+    </script>
+    <!-- Nepali Date Converter Library via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/nepali-date-converter@3.4.0/dist/nepali-date-converter.umd.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 p-4 md:p-8 flex items-center justify-center min-h-screen">
+
+<div class="w-full max-w-md bg-white dark:bg-slate-900 p-6 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 space-y-4">
+    <!-- Header with Nepali Month & Navigation -->
+    <div class="flex justify-between items-center">
+        <h2 id="calendar-month-year" class="text-base font-bold text-slate-900 dark:text-white"></h2>
+        <div class="flex items-center gap-1.5">
+            <button onclick="changeNepaliMonth(-1)" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs transition"><i class="fa-solid fa-chevron-left"></i></button>
+            <button onclick="changeNepaliMonth(1)" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs transition"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <!-- Week Days Header (Nepali) -->
+    <div class="grid grid-cols-7 text-center text-xs font-semibold text-slate-400 py-1">
+        <span>आइत</span>
+        <span>सोम</span>
+        <span>मङ्गल</span>
+        <span>बुध</span>
+        <span>बिही</span>
+        <span>शुक्र</span>
+        <span>शनि</span>
+    </div>
+
+    <!-- Days Grid -->
+    <div id="calendar-days" class="grid grid-cols-7 gap-1.5 text-center text-xs">
+        <!-- Dynamic Nepali Days will load here -->
+    </div>
+</div>
+
+<script>
+let currentBsDate = new NepaliDate();
+let viewYear = currentBsDate.getYear();
+let viewMonth = currentBsDate.getMonth(); // १ देखि १२
+
+const nepaliMonthsNames = [
+    "वैशाख", "जेठ", "आषाढ", "श्रावण", "भाद्र", "आश्विन", 
+    "कार्तिक", "मंसिर", "पौष", "माघ", "फागुन", "चैत्र"
+];
+
+// नेपाली अङ्क रूपान्तरणका लागि
+function convertToNepaliNumber(num) {
+    const nepaliDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+    return num.toString().split('').map(digit => nepaliDigits[digit] !== undefined ? nepaliDigits[digit] : digit).join('');
+}
+
+function renderNepaliCalendar() {
+    const monthYearEl = document.getElementById('calendar-month-year');
+    const daysContainer = document.getElementById('calendar-days');
+    
+    monthYearEl.innerText = `${nepaliMonthsNames[viewMonth - 1]} ${convertToNepaliNumber(viewYear)}`;
+    daysContainer.innerHTML = '';
+
+    let firstDayBs = new NepaliDate(viewYear, viewMonth, 1);
+    let firstDayAdWeek = firstDayBs.toAd().getDay(); 
+
+    let totalDays;
+    try {
+        let nextMonthTest = viewMonth === 12 ? new NepaliDate(viewYear + 1, 1, 1) : new NepaliDate(viewYear, viewMonth + 1, 1);
+        let currentMonthTest = new NepaliDate(viewYear, viewMonth, 1);
+        let diffTime = nextMonthTest.toAd().getTime() - currentMonthTest.toAd().getTime();
+        totalDays = Math.round(diffTime / (1000 * 3600 * 24));
+    } catch (e) {
+        totalDays = 30;
+    }
+
+    for (let i = 0; i < firstDayAdWeek; i++) {
+        let dayDiv = document.createElement('div');
+        dayDiv.className = "p-2.5 rounded-xl text-slate-200 dark:text-slate-800 font-medium select-none";
+        daysContainer.appendChild(dayDiv);
+    }
+
+    for (let day = 1; day <= totalDays; day++) {
+        let dayDiv = document.createElement('div');
+        dayDiv.innerText = convertToNepaliNumber(day);
+        dayDiv.className = "p-2.5 rounded-xl font-medium transition flex items-center justify-center cursor-pointer hover:bg-indigo-50 dark:hover:bg-indigo-950/50";
+
+        let isToday = (day === currentBsDate.getDate() && viewMonth === currentBsDate.getMonth() && viewYear === currentBsDate.getYear());
+        if (isToday) {
+            dayDiv.className += " bg-indigo-600 text-white hover:bg-indigo-700 font-bold shadow-md shadow-indigo-500/20";
+        } else {
+            dayDiv.className += " text-slate-700 dark:text-slate-300";
+        }
+
+        daysContainer.appendChild(dayDiv);
+    }
+}
+
+function changeNepaliMonth(direction) {
+    viewMonth += direction;
+    if (viewMonth > 12) {
+        viewMonth = 1;
+        viewYear++;
+    } else if (viewMonth < 1) {
+        viewMonth = 12;
+        viewYear--;
+    }
+    renderNepaliCalendar();
+}
+
+renderNepaliCalendar();
+</script>
+
+</body>
+</html>
