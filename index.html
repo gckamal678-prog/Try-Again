@@ -43,6 +43,9 @@ tailwind.config = {
         background-size: 300% auto;
         animation: rainbow 5s linear infinite;
     }
+    .text-3d {
+        text-shadow: 0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0,0,0,.1), 0 0 5px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.3), 0 3px 5px rgba(0,0,0,.2), 0 5px 10px rgba(0,0,0,.25);
+    }
 </style>
 </head>
 <body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-xs">
@@ -142,20 +145,16 @@ tailwind.config = {
         
         <!-- HEADER SECTION -->
         <header class="sticky top-0 z-40 flex items-center justify-between px-3 md:px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-slate-800 shadow-md">
-            <div class="flex items-center space-x-2">
+            <div class="flex items-center space-x-2.5">
                 <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-indigo-400 transition">☰</button>
-                <div class="flex items-center space-x-1.5 cursor-pointer" onclick="toggleSidebar()">
+                <div class="flex items-center space-x-2 cursor-pointer" onclick="toggleSidebar()">
                     <div class="w-7 h-7 rounded-lg bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-sm">
                         <img src="N1024.png" alt="Logo" class="w-full h-full object-cover">
                     </div>
-                    <span class="text-xs font-bold text-white tracking-wide hidden sm:inline">Digital NoteBook</span>
+                    <span class="text-xs md:text-sm font-extrabold tracking-wider bg-gradient-to-r from-red-500 via-yellow-400 via-green-400 via-cyan-400 via-purple-500 to-pink-500 animate-rainbow bg-clip-text text-transparent text-3d">
+                        Digital NoteBook
+                    </span>
                 </div>
-            </div>
-
-            <div class="text-center px-1 hidden md:block">
-                <h1 class="text-base font-extrabold tracking-wider bg-gradient-to-r from-red-500 via-yellow-400 via-green-400 via-cyan-400 via-purple-500 to-pink-500 animate-rainbow bg-clip-text text-transparent">
-                    Digital NoteBook
-                </h1>
             </div>
 
             <div class="flex items-center space-x-2">
@@ -395,12 +394,10 @@ tailwind.config = {
 
     // Dynamic Financial Data Calculation from localStorage
     function loadFinancialSummaries() {
-        // १. Add Income को डेटाबाट कुल आम्दानी गणना गर्ने
         const incomes = JSON.parse(localStorage.getItem('digital_notebook_incomes') || '[]');
         const totalIncome = incomes.reduce((sum, item) => sum + Number(item.amount || 0), 0);
         document.getElementById('val-income').innerText = `Rs ${totalIncome.toLocaleString()}`;
 
-        // २. Add Transaction को डेटाबाट Total Invest, Total Receivable, Total Giveble गणना गर्ने
         const transactions = JSON.parse(localStorage.getItem('digital_notebook_transactions') || '[]');
         let totalInvest = 0;
         let totalReceivable = 0;
@@ -418,9 +415,11 @@ tailwind.config = {
         document.getElementById('val-giveble').innerText = `Rs ${totalGiveble.toLocaleString()}`;
     }
 
-    // Connect files navigation helper
+    // Fixed navigateTo function to prevent 404 on GitHub Pages
     function navigateTo(pageName) {
-        window.location.href = pageName;
+        const currentPath = window.location.pathname;
+        const basePath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
+        window.location.href = window.location.origin + basePath + pageName;
     }
 
     function saveProfileDetails() {
