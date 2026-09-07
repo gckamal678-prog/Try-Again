@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Nepal App UI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0b0f19;
+            color: #ffffff;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 260px;
+            background-color: #121829;
+            border-right: 1px solid #1e293b;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s ease;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #1e293b;
+        }
+
+        .sidebar-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .sidebar-header h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 20px 0;
+            flex-grow: 1;
+        }
+
+        .sidebar-menu li {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-menu li:hover, .sidebar-menu li.active {
+            background-color: #1e293b;
+            color: #ffffff;
+            border-left: 4px solid #6366f1;
+        }
+
+        /* Main Container */
+        .main-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        /* Top Header */
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            background-color: #121829;
+            border-bottom: 1px solid #1e293b;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .menu-toggle {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 24px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 2px;
+        }
+
+        /* 3D Animated Digital Nepal Header */
+        .animated-title {
+            font-size: 22px;
+            font-weight: 800;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+            animation: pulseGlow 3s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                filter: drop-shadow(0 0 2px rgba(129, 140, 248, 0.6));
+                transform: scale(1);
+            }
+            100% {
+                filter: drop-shadow(0 0 8px rgba(192, 132, 252, 0.9));
+                transform: scale(1.02);
+            }
+        }
+
+        /* Right Side Avatar Icon with Round Name */
+        .user-profile-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            pointer-events: none; /* Blocked: touch/click does not open */
+            user-select: none;
+        }
+
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #818cf8;
+        }
+
+        .user-name-tag {
+            font-size: 14px;
+            font-weight: 500;
+            color: #e2e8f0;
+        }
+
+        /* Content Area */
+        .content-body {
+            padding: 25px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .overview-box {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: #121829;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #6366f1;
+        }
+
+        .btn-save {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-save:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div>
+            <div class="sidebar-header">
+                <!-- Sidebar Top Permanent Photo & Digital Nepal Text -->
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="Permanent Logo">
+                <h2>Digital Nepal</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="active">📊 Dashboard</li>
+                <li>📁 Documents</li>
+                <li>⚙️ Settings</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <div class="main-container">
+        
+        <!-- Top Header -->
+        <header class="top-header">
+            <!-- Left Side 3-Line Menu Icon inside Sidebar layout concept -->
+            <div class="menu-toggle" onclick="toggleSidebar()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <!-- Overview Header Top Center: Digital Nepal animation with 3D style colour -->
+            <div class="animated-title">Digital Nepal</div>
+
+            <!-- Right Side Avatar Icon with Round Name (Blocked/Non-clickable) -->
+            <div class="user-profile-section">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="User Avatar" class="user-avatar">
+                <span class="user-name-tag">Kamal G.C.</span>
+            </div>
+        </header>
+
+        <!-- Body Form Section matching reference image -->
+        <div class="content-body">
+            <div class="overview-box">
+                <span>📈</span> Overview
+            </div>
+
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" placeholder="Enter Full Name">
+            </div>
+
+            <div class="form-group">
+                <label>Address</label>
+                <input type="text" placeholder="Enter Address">
+            </div>
+
+            <div class="form-group">
+                <label>Mobile Number</label>
+                <input type="text" placeholder="Enter Mobile Number">
+            </div>
+
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" placeholder="Enter Email Address">
+            </div>
+
+            <button class="btn-save">Save Details to Firebase</button>
+        </div>
+
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar.style.transform === 'translateX(-100%)') {
+                sidebar.style.transform = 'translateX(0)';
+            } else {
+                sidebar.style.transform = 'translateX(-100%)';
+            }
+        }
+    </script>
+</body>
+</html>
