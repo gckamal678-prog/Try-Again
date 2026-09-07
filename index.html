@@ -47,9 +47,9 @@ tailwind.config = {
 </head>
 <body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-xs">
 
-<!-- WELCOME SPLASH SCREEN (Click to skip or auto close after 3 seconds) -->
-<div id="splash-screen" onclick="removeSplash()" class="fixed inset-0 bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 z-50 flex flex-col items-center justify-center text-white transition-opacity duration-700 cursor-pointer">
-    <div class="text-center space-y-6 pointer-events-none">
+<!-- WELCOME SPLASH SCREEN (6 Seconds) -->
+<div id="splash-screen" class="fixed inset-0 bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 z-50 flex flex-col items-center justify-center text-white transition-opacity duration-700">
+    <div class="text-center space-y-6">
         <div class="flex justify-center">
             <div class="w-20 h-20 rounded-full bg-slate-900/80 border-2 border-indigo-500/40 p-2 shadow-2xl flex items-center justify-center backdrop-blur-md overflow-hidden">
                 <img src="N1024.png" alt="Logo" class="w-full h-full object-cover rounded-full">
@@ -60,7 +60,6 @@ tailwind.config = {
             <h1 class="text-xl font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-indigo-200 via-sky-300 to-white animated-title">
                 DIGITAL NOTEBOOK
             </h1>
-            <p class="text-[10px] text-slate-400 pt-2">(Tap anywhere to continue)</p>
         </div>
     </div>
 </div>
@@ -103,27 +102,27 @@ tailwind.config = {
             </div>
 
             <nav class="space-y-1 font-medium">
-                <a href="#" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl bg-indigo-600 text-white shadow-md shadow-indigo-600/20 transition"><span>📊</span> <span>Overview</span></a>
+                <a href="#" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl bg-indigo-600 text-white shadow-md shadow-indigo-600/20 transition"><span>📊</span> <span class="lang-text" data-en="Overview" data-np="अवलोकन">Overview</span></a>
             </nav>
 
             <div class="space-y-2.5 bg-slate-800/50 p-3 rounded-xl border border-slate-700/60">
                 <h3 class="text-[11px] font-bold text-white flex items-center gap-1.5 mb-1">
-                    <i class="fa-solid fa-address-card text-indigo-400"></i> Personal Info
+                    <i class="fa-solid fa-address-card text-indigo-400"></i> <span class="lang-text" data-en="Personal Info" data-np="व्यक्तिगत विवरण">Personal Info</span>
                 </h3>
                 <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Full Name</label>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Full Name" data-np="पूरा नाम">Full Name</span></label>
                     <input type="text" id="input-full-name" placeholder="Enter Full Name" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-indigo-500">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Address</label>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Address" data-np="ठेगाना">Address</span></label>
                     <input type="text" id="input-address" placeholder="Enter Address" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-indigo-500">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Mobile Number</label>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Mobile Number" data-np="मोबाइल नम्बर">Mobile Number</span></label>
                     <input type="tel" id="input-mobile" placeholder="Enter Mobile Number" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-indigo-500">
                 </div>
                 <button onclick="saveProfileDetails()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg transition shadow-md">
-                    Save Info
+                    <span class="lang-text" data-en="Save Info" data-np="सेभ गर्नुहोस्">Save Info</span>
                 </button>
             </div>
         </div>
@@ -132,108 +131,135 @@ tailwind.config = {
     <div class="flex-1 flex flex-col w-full">
         
         <!-- HEADER SECTION -->
-        <header class="sticky top-0 z-40 flex items-center justify-between px-4 py-3 bg-slate-900/95 backdrop-blur border-b border-slate-800 shadow-md">
+        <header class="sticky top-0 z-40 flex items-center justify-between px-3 md:px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-slate-800 shadow-md">
             
-            <!-- Left side: 3-line menu button + N1024.png logo + Digital Notebook text -->
+            <!-- Left Group: 3-line menu button + Photo + N1024.png + Digital Notebook -->
             <div class="flex items-center space-x-2">
-                <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-indigo-400 transition pr-1">
+                <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-indigo-400 transition">
                     ☰
                 </button>
-                <div class="w-7 h-7 rounded-md bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-sm shrink-0">
-                    <img src="N1024.png" alt="Logo" class="w-full h-full object-cover">
+                <div class="flex items-center space-x-1.5 cursor-pointer" onclick="toggleSidebar()">
+                    <div class="w-7 h-7 rounded-lg bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-sm">
+                        <img src="N1024.png" alt="Logo" class="w-full h-full object-cover">
+                    </div>
+                    <span class="text-xs font-bold text-white tracking-wide hidden sm:inline">Digital NoteBook</span>
                 </div>
-                <h1 class="text-sm md:text-base font-extrabold tracking-wider bg-gradient-to-r from-red-500 via-yellow-400 via-green-400 via-cyan-400 via-purple-500 to-pink-500 animate-rainbow bg-clip-text text-transparent truncate">
+            </div>
+
+            <!-- Center/Flowing Title -->
+            <div class="text-center px-1 hidden md:block">
+                <h1 class="text-base font-extrabold tracking-wider bg-gradient-to-r from-red-500 via-yellow-400 via-green-400 via-cyan-400 via-purple-500 to-pink-500 animate-rainbow bg-clip-text text-transparent">
                     Digital NoteBook
                 </h1>
             </div>
 
-            <!-- Right side: Profile photo -->
-            <div class="relative cursor-pointer shrink-0" onclick="toggleSidebar()">
-                <div class="w-9 h-9 rounded-full bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-sm">
-                    <img id="header-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
-                    <span id="header-avatar-icon" class="text-white text-xs hidden">📷</span>
+            <!-- Right Group: NEP/ENG toggle, Dark/Light toggle, Profile Avatar -->
+            <div class="flex items-center space-x-2">
+                <!-- NEP/ENG Toggle Button -->
+                <button onclick="toggleLanguage()" id="lang-toggle-btn" class="px-2 py-1 rounded-md bg-slate-800 border border-slate-700 text-[10px] font-bold text-slate-200 hover:bg-slate-700 transition">
+                    ENG
+                </button>
+
+                <!-- Dark/Light Mode Toggle Button (Single Emoji: 🌞 for light, 🌛 for dark) -->
+                <button onclick="toggleTheme()" id="theme-toggle-btn" class="w-7 h-7 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center text-sm hover:bg-slate-700 transition">
+                    🌛
+                </button>
+
+                <!-- Profile Avatar -->
+                <div class="relative cursor-pointer" onclick="toggleSidebar()">
+                    <div class="w-8 h-8 rounded-full bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-sm">
+                        <img id="header-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
+                        <span id="header-avatar-icon" class="text-white text-xs hidden">📷</span>
+                    </div>
                 </div>
             </div>
         </header>
 
         <main class="p-4 md:p-6 space-y-4 flex-1 w-full text-xs">
             
-            <!-- LIVE DATE & GREETING ROW -->
+            <!-- LIVE DATE, GREETING & QR CODE ROW -->
             <div class="flex justify-between items-start px-1 py-1 text-white">
                 <div>
                     <p id="dynamic-date" class="text-[11px] font-semibold tracking-wider text-slate-400 uppercase mb-1"></p>
                     <h2 id="dynamic-greeting" class="text-base md:text-lg font-bold text-slate-800 dark:text-white tracking-tight"></h2>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Here is what is happening with your money today.</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5"><span class="lang-text" data-en="Here is what is happening with your money today." data-np="आज तपाईंको पैसाको स्थिति यहाँ छ।">Here is what is happening with your money today.</span></p>
+                </div>
+                <!-- QR Code Box -->
+                <div class="bg-white dark:bg-slate-900 p-1.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col items-center shrink-0">
+                    <div class="w-12 h-12 bg-white flex items-center justify-center p-0.5 rounded">
+                        <img src="N1024.png" alt="QR Code" class="w-full h-full object-contain">
+                    </div>
+                    <span class="text-[9px] text-slate-400 mt-0.5 font-medium"><span class="lang-text" data-en="QR Scan" data-np="क्यूआर स्क्यान">QR Scan</span></span>
                 </div>
             </div>
 
-            <!-- ROW 1: 4 items in one line without cards -->
+            <!-- ROW 1: 4 items in one line without cards (Total Income, Total Invest, Total Receivable, Total Giveble) -->
             <div class="grid grid-cols-4 gap-2 text-center pt-2">
                 <div class="flex flex-col items-center p-1">
                     <span class="text-base mb-0.5">💵</span>
-                    <span class="text-[10px] font-semibold text-emerald-500 truncate w-full">Total Income</span>
+                    <span class="text-[10px] font-semibold text-emerald-500 truncate w-full"><span class="lang-text" data-en="Total Income" data-np="कुल आम्दानी">Total Income</span></span>
                     <span id="val-income" class="text-xs font-bold text-slate-800 dark:text-slate-100 mt-0.5">Rs 0</span>
                 </div>
                 <div class="flex flex-col items-center p-1">
                     <span class="text-base mb-0.5">📈</span>
-                    <span class="text-[10px] font-semibold text-purple-500 truncate w-full">Total Invest</span>
+                    <span class="text-[10px] font-semibold text-purple-500 truncate w-full"><span class="lang-text" data-en="Total Invest" data-np="कुल लगानी">Total Invest</span></span>
                     <span id="val-invest" class="text-xs font-bold text-slate-800 dark:text-slate-100 mt-0.5">Rs 0</span>
                 </div>
                 <div class="flex flex-col items-center p-1">
                     <span class="text-base mb-0.5">📥</span>
-                    <span class="text-[10px] font-semibold text-blue-500 truncate w-full">Total Receivable</span>
+                    <span class="text-[10px] font-semibold text-blue-500 truncate w-full"><span class="lang-text" data-en="Total Receivable" data-np="पाउनुपर्ने रकम">Total Receivable</span></span>
                     <span id="val-receivable" class="text-xs font-bold text-slate-800 dark:text-slate-100 mt-0.5">Rs 0</span>
                 </div>
                 <div class="flex flex-col items-center p-1">
                     <span class="text-base mb-0.5">📤</span>
-                    <span class="text-[10px] font-semibold text-rose-500 truncate w-full">Total Giveble</span>
+                    <span class="text-[10px] font-semibold text-rose-500 truncate w-full"><span class="lang-text" data-en="Total Giveble" data-np="दिनुपर्ने रकम">Total Giveble</span></span>
                     <span id="val-giveble" class="text-xs font-bold text-slate-800 dark:text-slate-100 mt-0.5">Rs 0</span>
                 </div>
             </div>
 
             <hr class="border-slate-200 dark:border-slate-800 my-2">
 
-            <!-- ROW 2: 3 items horizontal line -->
+            <!-- ROW 2: 3 items horizontal line (Add transaction, Add Income, Add Saving) -->
             <div class="grid grid-cols-3 gap-2 text-center">
                 <div onclick="alert('Add Transaction clicked')" class="flex flex-col items-center p-2 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
                     <span class="text-base mb-1">💳</span>
-                    <span class="text-[11px] font-medium text-slate-700 dark:text-slate-300">Add transaction</span>
+                    <span class="text-[11px] font-medium text-slate-700 dark:text-slate-300"><span class="lang-text" data-en="Add transaction" data-np="कारोबार थप्नुहोस्">Add transaction</span></span>
                 </div>
                 <div onclick="alert('Add Income clicked')" class="flex flex-col items-center p-2 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
                     <span class="text-base mb-1">💰</span>
-                    <span class="text-[11px] font-medium text-slate-700 dark:text-slate-300">Add Income</span>
+                    <span class="text-[11px] font-medium text-slate-700 dark:text-slate-300"><span class="lang-text" data-en="Add Income" data-np="आम्दानी थप्नुहोस्">Add Income</span></span>
                 </div>
                 <div onclick="alert('Add Saving clicked')" class="flex flex-col items-center p-2 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
                     <span class="text-base mb-1">🏦</span>
-                    <span class="text-[11px] font-medium text-slate-700 dark:text-slate-300">Add Saving</span>
+                    <span class="text-[11px] font-medium text-slate-700 dark:text-slate-300"><span class="lang-text" data-en="Add Saving" data-np="बचत थप्नुहोस्">Add Saving</span></span>
                 </div>
             </div>
 
-            <!-- ROW 3: 3 items horizontal line -->
+            <!-- ROW 3: 3 items horizontal line (calculate, Notebook, calendar) -->
             <div class="grid grid-cols-3 gap-2 text-center">
                 <div onclick="alert('Calculate clicked')" class="flex flex-col items-center p-2 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
                     <span class="text-base mb-1">🧮</span>
-                    <span class="text-[11px] font-medium text-slate-700 dark:text-slate-300">calculate</span>
+                    <span class="text-[11px] font-medium text-slate-700 dark:text-slate-300"><span class="lang-text" data-en="calculate" data-np="हिसाब गर्नुहोस्">calculate</span></span>
                 </div>
                 <div onclick="alert('Notebook clicked')" class="flex flex-col items-center p-2 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
                     <span class="text-base mb-1">📓</span>
-                    <span class="text-[11px] font-medium text-slate-700 dark:text-slate-300">Notebook</span>
+                    <span class="text-[11px] font-medium text-slate-700 dark:text-slate-300"><span class="lang-text" data-en="Notebook" data-np="नोटबुक">Notebook</span></span>
                 </div>
                 <div onclick="alert('Calendar clicked')" class="flex flex-col items-center p-2 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
                     <span class="text-base mb-1">📅</span>
-                    <span class="text-[11px] font-medium text-slate-700 dark:text-slate-300">calendar</span>
+                    <span class="text-[11px] font-medium text-slate-700 dark:text-slate-300"><span class="lang-text" data-en="calendar" data-np="पात्रो">calendar</span></span>
                 </div>
             </div>
 
-            <!-- ROW 4: 2 items horizontal line -->
+            <!-- ROW 4: 2 items horizontal line (Setting, account) -->
             <div class="grid grid-cols-2 gap-2 text-center">
                 <div onclick="alert('Setting clicked')" class="flex flex-col items-center p-2.5 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
                     <span class="text-base mb-1">⚙️</span>
-                    <span class="text-[11px] font-medium text-slate-700 dark:text-slate-300">Setting</span>
+                    <span class="text-[11px] font-medium text-slate-700 dark:text-slate-300"><span class="lang-text" data-en="Setting" data-np="सेटिङ">Setting</span></span>
                 </div>
                 <div onclick="alert('Account clicked')" class="flex flex-col items-center p-2.5 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
                     <span class="text-base mb-1">👤</span>
-                    <span class="text-[11px] font-medium text-slate-700 dark:text-slate-300">account</span>
+                    <span class="text-[11px] font-medium text-slate-700 dark:text-slate-300"><span class="lang-text" data-en="account" data-np="खाता">account</span></span>
                 </div>
             </div>
 
@@ -249,18 +275,49 @@ tailwind.config = {
         }
     }
 
-    function removeSplash() {
-        const splash = document.getElementById('splash-screen');
-        if (splash) {
-            splash.style.opacity = '0';
-            setTimeout(() => splash.remove(), 700);
+    let currentLang = localStorage.getItem('lang') || 'EN';
+
+    function updateLanguageUI() {
+        const btn = document.getElementById('lang-toggle-btn');
+        if(btn) btn.innerText = currentLang;
+
+        document.querySelectorAll('.lang-text').forEach(el => {
+            const text = currentLang === 'NEP' ? el.getAttribute('data-np') : el.getAttribute('data-en');
+            if(text) el.innerText = text;
+        });
+    }
+
+    function toggleLanguage() {
+        currentLang = currentLang === 'EN' ? 'NEP' : 'EN';
+        localStorage.setItem('lang', currentLang);
+        updateLanguageUI();
+        updateDynamicHeader();
+    }
+
+    function updateThemeUI() {
+        const isDark = document.documentElement.classList.contains('dark');
+        const themeBtn = document.getElementById('theme-toggle-btn');
+        if(themeBtn) {
+            themeBtn.innerText = isDark ? '🌛' : '🌞';
         }
+    }
+
+    function toggleTheme() {
+        const htmlEl = document.documentElement;
+        if (htmlEl.classList.contains('dark')) {
+            htmlEl.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+        } else {
+            htmlEl.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        }
+        updateThemeUI();
     }
 
     function updateDynamicHeader() {
         const now = new Date();
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        const dateString = now.toLocaleDateString('en-US', options).toUpperCase();
+        const dateString = now.toLocaleDateString(currentLang === 'NEP' ? 'ne-NP' : 'en-US', options).toUpperCase();
         
         const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
         const timeString = now.toLocaleTimeString('en-US', timeOptions);
@@ -269,11 +326,11 @@ tailwind.config = {
         if (dateEl) dateEl.innerText = `${dateString} | ${timeString}`;
 
         const hours = now.getHours();
-        let greetingText = 'Good morning';
+        let greetingText = currentLang === 'NEP' ? 'शुभ प्रभात' : 'Good morning';
         if (hours >= 12 && hours < 17) {
-            greetingText = 'Good afternoon';
+            greetingText = currentLang === 'NEP' ? 'शुभ अपरहण' : 'Good afternoon';
         } else if (hours >= 17) {
-            greetingText = 'Good evening';
+            greetingText = currentLang === 'NEP' ? 'शुभ साँझ' : 'Good evening';
         }
 
         const savedName = localStorage.getItem('profile_name') || 'Kamal G.C.';
@@ -296,7 +353,7 @@ tailwind.config = {
 
         loadUserData();
         updateDynamicHeader();
-        alert('Details saved successfully!');
+        alert(currentLang === 'NEP' ? 'विवरण सफलतापूर्वक सेभ भयो!' : 'Details saved successfully!');
     }
 
     function loadUserData() {
@@ -337,14 +394,17 @@ tailwind.config = {
     }
 
     document.addEventListener("DOMContentLoaded", () => {
+        updateLanguageUI();
+        updateThemeUI();
         updateDynamicHeader();
         loadUserData();
         loadAvatar();
         
-        // Splash screen auto removes after 3 seconds, or tap anywhere to skip immediately
+        // Welcome splash screen duration set to 6 seconds (6000ms)
         setTimeout(() => {
-            removeSplash();
-        }, 3000);
+            const splash = document.getElementById('splash-screen');
+            if(splash) splash.remove();
+        }, 6000);
     });
 </script>
 </body>
