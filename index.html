@@ -50,20 +50,11 @@ tailwind.config = {
         background-size: 300% auto;
         animation: rainbow 5s linear infinite;
     }
-    .letter-anim span {
-        display: inline-block;
-        animation: bounceLetter 2s infinite ease-in-out;
-        animation-delay: calc(0.08s * var(--i));
-    }
-    @keyframes bounceLetter {
-        0%, 100% { transform: translateY(0); filter: brightness(1); }
-        50% { transform: translateY(-4px); filter: brightness(1.3); }
-    }
 </style>
 </head>
 <body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-xs">
 
-<!-- WELCOME SPLASH SCREEN -->
+<!-- WELCOME SPLASH SCREEN (6 Seconds) -->
 <div id="splash-screen" class="fixed inset-0 bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 z-50 flex flex-col items-center justify-center text-white transition-opacity duration-700">
     <div class="text-center space-y-6">
         <div class="flex justify-center">
@@ -120,6 +111,7 @@ tailwind.config = {
                 </div>
             </div>
 
+            <!-- Personal Info Form -->
             <div class="space-y-2.5 bg-slate-800/50 p-3 rounded-xl border border-slate-700/60">
                 <h3 class="text-[11px] font-bold text-white flex items-center gap-1.5 mb-1">
                     <i class="fa-solid fa-address-card text-indigo-400"></i> Personal Info
@@ -151,202 +143,130 @@ tailwind.config = {
 
     <div class="flex-1 flex flex-col w-full">
         
-        <!-- HEADER SECTION -->
-        <header class="sticky top-0 z-40 flex items-center justify-between px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-slate-800 shadow-md">
+        <!-- HEADER SECTION (With N1024.png logo & Flowing Rainbow Title) -->
+        <header class="sticky top-0 z-40 flex items-center justify-between px-4 py-3 bg-slate-900/95 backdrop-blur border-b border-slate-800 shadow-md">
             <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-indigo-400 transition">
                 ☰
             </button>
 
-            <div class="text-center px-2">
-                <h1 class="text-base md:text-lg font-extrabold tracking-wider bg-gradient-to-r from-red-500 via-yellow-400 via-green-400 via-cyan-400 via-purple-500 to-pink-500 animate-rainbow bg-clip-text text-transparent letter-anim space-x-[1px]">
-                    <span style="--i:1; color: #ff3366;">D</span>
-                    <span style="--i:2; color: #ff9933;">i</span>
-                    <span style="--i:3; color: #ffff33;">g</span>
-                    <span style="--i:4; color: #33cc33;">i</span>
-                    <span style="--i:5; color: #33ccff;">t</span>
-                    <span style="--i:6; color: #3366ff;">a</span>
-                    <span style="--i:7; color: #9933ff;">l</span>&nbsp;
-                    <span style="--i:8; color: #ff33cc;">N</span>
-                    <span style="--i:9; color: #ff3366;">o</span>
-                    <span style="--i:10; color: #ff9933;">t</span>
-                    <span style="--i:11; color: #ffff33;">e</span>
-                    <span style="--i:12; color: #33cc33;">B</span>
-                    <span style="--i:13; color: #33ccff;">o</span>
-                    <span style="--i:14; color: #3366ff;">o</span>
-                    <span style="--i:15; color: #9933ff;">k</span>
+            <!-- Brand Title with Flowing Rainbow Effect -->
+            <div class="flex items-center space-x-2">
+                <div class="w-7 h-7 rounded-lg overflow-hidden border border-indigo-500/50 shadow-sm flex-shrink-0">
+                    <img src="N1024.png" alt="Logo" class="w-full h-full object-cover">
+                </div>
+                <h1 class="text-sm md:text-base font-extrabold tracking-wider bg-gradient-to-r from-red-500 via-yellow-400 via-green-400 via-cyan-400 via-purple-500 to-pink-500 animate-rainbow bg-clip-text text-transparent">
+                    Digital NoteBook
                 </h1>
             </div>
 
             <div class="relative">
-                <div class="w-9 h-9 rounded-full bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-sm">
+                <div class="w-8 h-8 rounded-full bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-sm">
                     <img id="header-avatar-img" src="" alt="Profile" class="w-full h-full object-cover hidden">
                     <span id="header-avatar-icon" class="text-white text-xs">📷</span>
                 </div>
             </div>
         </header>
 
-        <main class="p-4 md:p-6 space-y-4 flex-1 w-full text-xs">
+        <main class="p-3 md:p-4 space-y-4 flex-1 w-full text-xs">
             
-            <!-- LIVE DATE & TIME + QR CODE SECTION -->
+            <!-- DATE, GREETING & QR CODE SECTION -->
             <div class="flex justify-between items-start px-1 py-1 text-white">
                 <div>
-                    <p id="dynamic-date" class="text-[11px] font-semibold tracking-wider text-slate-400 uppercase mb-1"></p>
-                    <h2 id="dynamic-greeting" class="text-base md:text-lg font-bold text-slate-800 dark:text-white tracking-tight"></h2>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Here is what is happening with your money today.</p>
+                    <p id="dynamic-date" class="text-[10px] font-semibold tracking-wider text-slate-400 uppercase mb-0.5"></p>
+                    <h2 id="dynamic-greeting" class="text-base font-bold text-slate-800 dark:text-white tracking-tight"></h2>
+                    <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Here is what is happening with your money today.</p>
                 </div>
                 
-                <!-- QR Code Box -->
-                <div class="bg-white p-2 rounded-xl shadow-md border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center shrink-0">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=https://dn.kamalgc.com.np" alt="QR Code" class="w-14 h-14 object-contain">
-                    <span class="text-[9px] text-slate-600 font-semibold mt-1">Scan QR</span>
+                <!-- QR Code Display Box -->
+                <div class="bg-white p-1.5 rounded-lg shadow border border-slate-200 dark:border-slate-800 flex-shrink-0">
+                    <div class="w-12 h-12 bg-slate-900 text-white flex items-center justify-center text-[10px] font-bold rounded">
+                        QR
+                    </div>
                 </div>
             </div>
 
-            <!-- 10 CARDS GRID SECTION -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5 pt-2">
+            <!-- GRID MENU (4 items per row, NO CARDS / flat layout with custom emoji colors) -->
+            <div class="grid grid-cols-4 gap-3 pt-2">
                 
-                <!-- 1. Total Income -->
-                <div class="bg-emerald-500/10 dark:bg-emerald-950/40 border border-emerald-500/30 p-4 rounded-2xl shadow-sm flex flex-col items-center justify-center text-center space-y-2 hover:scale-105 transition cursor-pointer">
-                    <div class="w-12 h-12 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xl shadow-md">
+                <!-- 1. Income -->
+                <button onclick="handleMenuClick('Income')" class="flex flex-col items-center justify-center p-2 text-center group focus:outline-none">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl mb-1.5 shadow-sm group-hover:scale-105 transition-transform">
                         💰
                     </div>
-                    <div>
-                        <h4 class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wide">Total Income</h4>
-                        <p class="text-xs font-extrabold text-slate-800 dark:text-slate-100 mt-0.5">Rs 0</p>
-                    </div>
-                </div>
+                    <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200">Income</span>
+                </button>
 
-                <!-- 2. Total Expense -->
-                <div class="bg-rose-500/10 dark:bg-rose-950/40 border border-rose-500/30 p-4 rounded-2xl shadow-sm flex flex-col items-center justify-center text-center space-y-2 hover:scale-105 transition cursor-pointer">
-                    <div class="w-12 h-12 rounded-full bg-rose-500 text-white flex items-center justify-center text-xl shadow-md">
-                        💸
-                    </div>
-                    <div>
-                        <h4 class="text-[11px] font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wide">Total Expense</h4>
-                        <p class="text-xs font-extrabold text-slate-800 dark:text-slate-100 mt-0.5">Rs 0</p>
-                    </div>
-                </div>
-
-                <!-- 3. Total Receivable -->
-                <div class="bg-blue-500/10 dark:bg-blue-950/40 border border-blue-500/30 p-4 rounded-2xl shadow-sm flex flex-col items-center justify-center text-center space-y-2 hover:scale-105 transition cursor-pointer">
-                    <div class="w-12 h-12 rounded-full bg-blue-500 text-white flex items-center justify-center text-xl shadow-md">
-                        📥
-                    </div>
-                    <div>
-                        <h4 class="text-[11px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wide">Total Receivable</h4>
-                        <p class="text-xs font-extrabold text-slate-800 dark:text-slate-100 mt-0.5">Rs 0</p>
-                    </div>
-                </div>
-
-                <!-- 4. Total Giveble (Payable) -->
-                <div class="bg-amber-500/10 dark:bg-amber-950/40 border border-amber-500/30 p-4 rounded-2xl shadow-sm flex flex-col items-center justify-center text-center space-y-2 hover:scale-105 transition cursor-pointer">
-                    <div class="w-12 h-12 rounded-full bg-amber-500 text-white flex items-center justify-center text-xl shadow-md">
-                        📤
-                    </div>
-                    <div>
-                        <h4 class="text-[11px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wide">Total Giveble</h4>
-                        <p class="text-xs font-extrabold text-slate-800 dark:text-slate-100 mt-0.5">Rs 0</p>
-                    </div>
-                </div>
-
-                <!-- 5. Add Transaction -->
-                <div class="bg-indigo-500/10 dark:bg-indigo-950/40 border border-indigo-500/30 p-4 rounded-2xl shadow-sm flex flex-col items-center justify-center text-center space-y-2 hover:scale-105 transition cursor-pointer">
-                    <div class="w-12 h-12 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xl shadow-md">
-                        ➕
-                    </div>
-                    <div>
-                        <h4 class="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wide">Add Transaction</h4>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400">New Entry</p>
-                    </div>
-                </div>
-
-                <!-- 6. Party Ledger -->
-                <div class="bg-purple-500/10 dark:bg-purple-950/40 border border-purple-500/30 p-4 rounded-2xl shadow-sm flex flex-col items-center justify-center text-center space-y-2 hover:scale-105 transition cursor-pointer">
-                    <div class="w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center text-xl shadow-md">
-                        👥
-                    </div>
-                    <div>
-                        <h4 class="text-[11px] font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wide">Party Ledger</h4>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400">View Accounts</p>
-                    </div>
-                </div>
-
-                <!-- 7. Add Income -->
-                <div class="bg-teal-500/10 dark:bg-teal-950/40 border border-teal-500/30 p-4 rounded-2xl shadow-sm flex flex-col items-center justify-center text-center space-y-2 hover:scale-105 transition cursor-pointer">
-                    <div class="w-12 h-12 rounded-full bg-teal-600 text-white flex items-center justify-center text-xl shadow-md">
+                <!-- 2. Invest -->
+                <button onclick="handleMenuClick('Invest')" class="flex flex-col items-center justify-center p-2 text-center group focus:outline-none">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xl mb-1.5 shadow-sm group-hover:scale-105 transition-transform">
                         📈
                     </div>
-                    <div>
-                        <h4 class="text-[11px] font-bold text-teal-600 dark:text-teal-400 uppercase tracking-wide">Add Income</h4>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Record Earning</p>
-                    </div>
-                </div>
+                    <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200">Invest</span>
+                </button>
 
-                <!-- 8. Add Saving -->
-                <div class="bg-cyan-500/10 dark:bg-cyan-950/40 border border-cyan-500/30 p-4 rounded-2xl shadow-sm flex flex-col items-center justify-center text-center space-y-2 hover:scale-105 transition cursor-pointer">
-                    <div class="w-12 h-12 rounded-full bg-cyan-600 text-white flex items-center justify-center text-xl shadow-md">
-                        🏦
+                <!-- 3. Receivable -->
+                <button onclick="handleMenuClick('Receivable')" class="flex flex-col items-center justify-center p-2 text-center group focus:outline-none">
+                    <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 dark:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 flex items-center justify-center text-xl mb-1.5 shadow-sm group-hover:scale-105 transition-transform">
+                        📥
                     </div>
-                    <div>
-                        <h4 class="text-[11px] font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wide">Add Saving</h4>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Investments</p>
-                    </div>
-                </div>
+                    <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200">Receivable</span>
+                </button>
 
-                <!-- 9. Calculate -->
-                <div class="bg-orange-500/10 dark:bg-orange-950/40 border border-orange-500/30 p-4 rounded-2xl shadow-sm flex flex-col items-center justify-center text-center space-y-2 hover:scale-105 transition cursor-pointer">
-                    <div class="w-12 h-12 rounded-full bg-orange-600 text-white flex items-center justify-center text-xl shadow-md">
+                <!-- 4. Giveble -->
+                <button onclick="handleMenuClick('Giveble')" class="flex flex-col items-center justify-center p-2 text-center group focus:outline-none">
+                    <div class="w-12 h-12 rounded-2xl bg-rose-500/10 dark:bg-rose-500/20 text-rose-600 dark:text-rose-400 flex items-center justify-center text-xl mb-1.5 shadow-sm group-hover:scale-105 transition-transform">
+                        📤
+                    </div>
+                    <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200">Giveble</span>
+                </button>
+
+                <!-- 5. Saving -->
+                <button onclick="handleMenuClick('Saving')" class="flex flex-col items-center justify-center p-2 text-center group focus:outline-none">
+                    <div class="w-12 h-12 rounded-2xl bg-purple-500/10 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xl mb-1.5 shadow-sm group-hover:scale-105 transition-transform">
+                        piggy_bank
+                    </div>
+                    <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200">Saving</span>
+                </button>
+
+                <!-- 6. Calculate -->
+                <button onclick="handleMenuClick('Calculate')" class="flex flex-col items-center justify-center p-2 text-center group focus:outline-none">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xl mb-1.5 shadow-sm group-hover:scale-105 transition-transform">
                         🧮
                     </div>
-                    <div>
-                        <h4 class="text-[11px] font-bold text-orange-600 dark:text-orange-400 uppercase tracking-wide">Calculate</h4>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Quick Math</p>
-                    </div>
-                </div>
+                    <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200">Calculate</span>
+                </button>
 
-                <!-- 10. Notebook -->
-                <div class="bg-yellow-500/10 dark:bg-yellow-950/40 border border-yellow-500/30 p-4 rounded-2xl shadow-sm flex flex-col items-center justify-center text-center space-y-2 hover:scale-105 transition cursor-pointer">
-                    <div class="w-12 h-12 rounded-full bg-yellow-600 text-white flex items-center justify-center text-xl shadow-md">
-                        📓
+                <!-- 7. Notebook -->
+                <button onclick="handleMenuClick('Notebook')" class="flex flex-col items-center justify-center p-2 text-center group focus:outline-none">
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xl mb-1.5 shadow-sm group-hover:scale-105 transition-transform">
+                        📋
                     </div>
-                    <div>
-                        <h4 class="text-[11px] font-bold text-yellow-600 dark:text-yellow-400 uppercase tracking-wide">Notebook</h4>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Personal Notes</p>
-                    </div>
-                </div>
+                    <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200">Notebook</span>
+                </button>
 
-                <!-- 11. Setting -->
-                <div class="bg-slate-500/10 dark:bg-slate-800/40 border border-slate-500/30 p-4 rounded-2xl shadow-sm flex flex-col items-center justify-center text-center space-y-2 hover:scale-105 transition cursor-pointer">
-                    <div class="w-12 h-12 rounded-full bg-slate-600 text-white flex items-center justify-center text-xl shadow-md">
+                <!-- 8. Setting -->
+                <button onclick="handleMenuClick('Setting')" class="flex flex-col items-center justify-center p-2 text-center group focus:outline-none">
+                    <div class="w-12 h-12 rounded-2xl bg-slate-500/10 dark:bg-slate-500/20 text-slate-600 dark:text-slate-300 flex items-center justify-center text-xl mb-1.5 shadow-sm group-hover:scale-105 transition-transform">
                         ⚙️
                     </div>
-                    <div>
-                        <h4 class="text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Setting</h4>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400">App Prefs</p>
-                    </div>
-                </div>
+                    <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200">Setting</span>
+                </button>
 
-                <!-- 12. Account -->
-                <div class="bg-pink-500/10 dark:bg-pink-950/40 border border-pink-500/30 p-4 rounded-2xl shadow-sm flex flex-col items-center justify-center text-center space-y-2 hover:scale-105 transition cursor-pointer">
-                    <div class="w-12 h-12 rounded-full bg-pink-600 text-white flex items-center justify-center text-xl shadow-md">
+                <!-- 9. Account -->
+                <button onclick="handleMenuClick('Account')" class="flex flex-col items-center justify-center p-2 text-center group focus:outline-none">
+                    <div class="w-12 h-12 rounded-2xl bg-teal-500/10 dark:bg-teal-500/20 text-teal-600 dark:text-teal-400 flex items-center justify-center text-xl mb-1.5 shadow-sm group-hover:scale-105 transition-transform">
                         👤
                     </div>
-                    <div>
-                        <h4 class="text-[11px] font-bold text-pink-600 dark:text-pink-400 uppercase tracking-wide">Account</h4>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Profile Info</p>
-                    </div>
-                </div>
+                    <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200">Account</span>
+                </button>
 
-                <!-- 13. Calendar -->
-                <div class="bg-sky-500/10 dark:bg-sky-950/40 border border-sky-500/30 p-4 rounded-2xl shadow-sm flex flex-col items-center justify-center text-center space-y-2 hover:scale-105 transition cursor-pointer">
-                    <div class="w-12 h-12 rounded-full bg-sky-600 text-white flex items-center justify-center text-xl shadow-md">
+                <!-- 10. Calendar -->
+                <button onclick="handleMenuClick('Calendar')" class="flex flex-col items-center justify-center p-2 text-center group focus:outline-none">
+                    <div class="w-12 h-12 rounded-2xl bg-pink-500/10 dark:bg-pink-500/20 text-pink-600 dark:text-pink-400 flex items-center justify-center text-xl mb-1.5 shadow-sm group-hover:scale-105 transition-transform">
                         📅
                     </div>
-                    <div>
-                        <h4 class="text-[11px] font-bold text-sky-600 dark:text-sky-400 uppercase tracking-wide">Calendar</h4>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Date Planner</p>
-                    </div>
-                </div>
+                    <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200">Calendar</span>
+                </button>
 
             </div>
 
@@ -355,6 +275,7 @@ tailwind.config = {
 </div>
 
 <script>
+    // Toggle Sidebar
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
         if (sidebar) {
@@ -362,6 +283,7 @@ tailwind.config = {
         }
     }
 
+    // Live Date, Time & Dynamic Greeting
     function updateDynamicHeader() {
         const now = new Date();
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -381,15 +303,16 @@ tailwind.config = {
             greetingText = 'Good evening';
         }
 
-        const savedName = localStorage.getItem('profile_name') || 'Kamal G.C.';
+        const savedName = localStorage.getItem('profile_name') || '';
         const greetingEl = document.getElementById('dynamic-greeting');
         if (greetingEl) {
-            greetingEl.innerText = `${greetingText}, ${savedName}.`;
+            greetingEl.innerText = savedName ? `${greetingText}, ${savedName}` : greetingText;
         }
     }
 
     setInterval(updateDynamicHeader, 1000);
 
+    // Profile Details Save Function
     function saveProfileDetails() {
         const name = document.getElementById('input-full-name').value;
         const address = document.getElementById('input-address').value;
@@ -417,6 +340,7 @@ tailwind.config = {
         if(nameEl) nameEl.innerText = savedName ? savedName : 'Guest User';
     }
 
+    // Avatar Upload Handler
     function handleAvatarUpload(event) {
         const file = event.target.files[0];
         if (file) {
@@ -447,15 +371,21 @@ tailwind.config = {
         }
     }
 
+    function handleMenuClick(menuName) {
+        alert(menuName + " clicked!");
+    }
+
+    // Initial load
     document.addEventListener("DOMContentLoaded", () => {
         updateDynamicHeader();
         loadUserData();
         loadAvatar();
         
+        // Remove Splash Screen after 6000ms (6 seconds)
         setTimeout(() => {
             const splash = document.getElementById('splash-screen');
             if(splash) splash.remove();
-        }, 700);
+        }, 6000);
     });
 </script>
 </body>
