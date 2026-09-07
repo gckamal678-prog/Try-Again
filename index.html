@@ -66,7 +66,7 @@ tailwind.config = {
 
 <div class="flex min-h-screen w-full">
     
-    <!-- SIDEBAR SECTION (Contains 3-line menu trigger, photo, and navigation) -->
+    <!-- SIDEBAR SECTION -->
     <div id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 border-r border-slate-800 transform -translate-x-full transition-transform duration-300 flex flex-col text-white">
         
         <div class="flex items-center justify-between px-4 py-3 border-b border-slate-800">
@@ -130,20 +130,24 @@ tailwind.config = {
 
     <div class="flex-1 flex flex-col w-full">
         
-        <!-- HEADER SECTION with 3-line menu button and profile photo -->
-        <header class="sticky top-0 z-40 flex items-center justify-between px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-slate-800 shadow-md">
-            <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-indigo-400 transition">
-                ☰
-            </button>
-
-            <!-- Normal text with flowing color animation (No 3-line bounce) -->
-            <div class="text-center px-2">
-                <h1 class="text-base md:text-lg font-extrabold tracking-wider bg-gradient-to-r from-red-500 via-yellow-400 via-green-400 via-cyan-400 via-purple-500 to-pink-500 animate-rainbow bg-clip-text text-transparent">
+        <!-- HEADER SECTION -->
+        <header class="sticky top-0 z-40 flex items-center justify-between px-4 py-3 bg-slate-900/95 backdrop-blur border-b border-slate-800 shadow-md">
+            
+            <!-- Left side: 3-line menu button + N1024.png logo + Digital Notebook text -->
+            <div class="flex items-center space-x-2">
+                <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-indigo-400 transition pr-1">
+                    ☰
+                </button>
+                <div class="w-7 h-7 rounded-md bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-sm shrink-0">
+                    <img src="N1024.png" alt="Logo" class="w-full h-full object-cover">
+                </div>
+                <h1 class="text-sm md:text-base font-extrabold tracking-wider bg-gradient-to-r from-red-500 via-yellow-400 via-green-400 via-cyan-400 via-purple-500 to-pink-500 animate-rainbow bg-clip-text text-transparent truncate">
                     Digital NoteBook
                 </h1>
             </div>
 
-            <div class="relative cursor-pointer" onclick="toggleSidebar()">
+            <!-- Right side: Profile photo -->
+            <div class="relative cursor-pointer shrink-0" onclick="toggleSidebar()">
                 <div class="w-9 h-9 rounded-full bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-sm">
                     <img id="header-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
                     <span id="header-avatar-icon" class="text-white text-xs hidden">📷</span>
@@ -153,19 +157,12 @@ tailwind.config = {
 
         <main class="p-4 md:p-6 space-y-4 flex-1 w-full text-xs">
             
-            <!-- LIVE DATE, GREETING & QR CODE ROW -->
+            <!-- LIVE DATE & GREETING ROW (QR removed) -->
             <div class="flex justify-between items-start px-1 py-1 text-white">
                 <div>
                     <p id="dynamic-date" class="text-[11px] font-semibold tracking-wider text-slate-400 uppercase mb-1"></p>
                     <h2 id="dynamic-greeting" class="text-base md:text-lg font-bold text-slate-800 dark:text-white tracking-tight"></h2>
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Here is what is happening with your money today.</p>
-                </div>
-                <!-- QR Code Box -->
-                <div class="bg-white dark:bg-slate-900 p-1.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col items-center shrink-0">
-                    <div class="w-12 h-12 bg-white flex items-center justify-center p-0.5 rounded">
-                        <img src="N1024.png" alt="QR Code" class="w-full h-full object-contain">
-                    </div>
-                    <span class="text-[9px] text-slate-400 mt-0.5 font-medium">QR Scan</span>
                 </div>
             </div>
 
@@ -299,7 +296,7 @@ tailwind.config = {
         const savedMobile = localStorage.getItem('profile_mobile') || '';
 
         if(document.getElementById('input-full-name')) document.getElementById('input-full-name').value = savedName;
-        if(document.getElementById('input-address')) document.getElementById('input-address').value = savedAddress;
+        if(document.getElementById('input-address')) document.getElementById('input-address-address')?.value = savedAddress;
         if(document.getElementById('input-mobile')) document.getElementById('input-mobile').value = savedMobile;
 
         const nameEl = document.getElementById('sidebar-profile-name');
@@ -335,7 +332,6 @@ tailwind.config = {
         loadUserData();
         loadAvatar();
         
-        // Welcome splash screen duration set to 6 seconds (6000ms)
         setTimeout(() => {
             const splash = document.getElementById('splash-screen');
             if(splash) splash.remove();
