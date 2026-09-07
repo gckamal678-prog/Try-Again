@@ -66,7 +66,7 @@ tailwind.config = {
 
 <div class="flex min-h-screen w-full">
     
-    <!-- SIDEBAR SECTION -->
+    <!-- SIDEBAR SECTION (Contains 3-line menu trigger, photo, and navigation) -->
     <div id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 border-r border-slate-800 transform -translate-x-full transition-transform duration-300 flex flex-col text-white">
         
         <div class="flex items-center justify-between px-4 py-3 border-b border-slate-800">
@@ -86,10 +86,7 @@ tailwind.config = {
         </div>
 
         <div class="p-3 space-y-3 overflow-y-auto flex-1 text-xs">
-            <nav class="space-y-1 font-medium">
-                <a href="#" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl bg-indigo-600 text-white shadow-md shadow-indigo-600/20 transition"><span>📊</span> <span>Overview</span></a>
-            </nav>
-
+            <!-- Profile Info Section with Photo -->
             <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-3 flex items-center space-x-3">
                 <div class="relative cursor-pointer group" onclick="document.getElementById('avatar-upload-input').click()">
                     <div class="w-11 h-11 rounded-full bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-sm">
@@ -103,6 +100,10 @@ tailwind.config = {
                     <p class="text-[10px] text-slate-400">Click icon to set photo</p>
                 </div>
             </div>
+
+            <nav class="space-y-1 font-medium">
+                <a href="#" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl bg-indigo-600 text-white shadow-md shadow-indigo-600/20 transition"><span>📊</span> <span>Overview</span></a>
+            </nav>
 
             <div class="space-y-2.5 bg-slate-800/50 p-3 rounded-xl border border-slate-700/60">
                 <h3 class="text-[11px] font-bold text-white flex items-center gap-1.5 mb-1">
@@ -129,7 +130,7 @@ tailwind.config = {
 
     <div class="flex-1 flex flex-col w-full">
         
-        <!-- HEADER SECTION -->
+        <!-- HEADER SECTION with 3-line menu button and profile photo -->
         <header class="sticky top-0 z-40 flex items-center justify-between px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-slate-800 shadow-md">
             <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-indigo-400 transition">
                 ☰
@@ -142,7 +143,7 @@ tailwind.config = {
                 </h1>
             </div>
 
-            <div class="relative">
+            <div class="relative cursor-pointer" onclick="toggleSidebar()">
                 <div class="w-9 h-9 rounded-full bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-sm">
                     <img id="header-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
                     <span id="header-avatar-icon" class="text-white text-xs hidden">📷</span>
@@ -168,7 +169,7 @@ tailwind.config = {
                 </div>
             </div>
 
-            <!-- SECTION 1: Total Money Grid (4 items in 1 line, no card background, money values shown) -->
+            <!-- ROW 1: 4 items in one line without cards (Total Income, Total Invest, Total Receivable, Total Giveble) -->
             <div class="grid grid-cols-4 gap-2 text-center pt-2">
                 <div class="flex flex-col items-center p-1">
                     <span class="text-base mb-0.5">💵</span>
@@ -194,7 +195,7 @@ tailwind.config = {
 
             <hr class="border-slate-200 dark:border-slate-800 my-2">
 
-            <!-- SECTION 2: 3 Items horizontal line (Add transaction, Add Income, Add Saving) -->
+            <!-- ROW 2: 3 items horizontal line (Add transaction, Add Income, Add Saving) -->
             <div class="grid grid-cols-3 gap-2 text-center">
                 <div onclick="alert('Add Transaction clicked')" class="flex flex-col items-center p-2 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
                     <span class="text-base mb-1">💳</span>
@@ -210,7 +211,7 @@ tailwind.config = {
                 </div>
             </div>
 
-            <!-- SECTION 3: 3 Items horizontal line (calculate, Notebook, calendar) -->
+            <!-- ROW 3: 3 items horizontal line (calculate, Notebook, calendar) -->
             <div class="grid grid-cols-3 gap-2 text-center">
                 <div onclick="alert('Calculate clicked')" class="flex flex-col items-center p-2 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
                     <span class="text-base mb-1">🧮</span>
@@ -226,7 +227,7 @@ tailwind.config = {
                 </div>
             </div>
 
-            <!-- SECTION 4: 2 Items horizontal line (Setting, account) -->
+            <!-- ROW 4: 2 items horizontal line (Setting, account) -->
             <div class="grid grid-cols-2 gap-2 text-center">
                 <div onclick="alert('Setting clicked')" class="flex flex-col items-center p-2.5 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
                     <span class="text-base mb-1">⚙️</span>
