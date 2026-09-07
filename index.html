@@ -47,7 +47,7 @@ tailwind.config = {
 </head>
 <body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-xs">
 
-<!-- WELCOME SPLASH SCREEN (6 Seconds) -->
+<!-- WELCOME SPLASH SCREEN -->
 <div id="splash-screen" class="fixed inset-0 bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 z-50 flex flex-col items-center justify-center text-white transition-opacity duration-700">
     <div class="text-center space-y-6">
         <div class="flex justify-center">
@@ -80,18 +80,14 @@ tailwind.config = {
                     </h1>
                 </div>
             </div>
-            <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white text-lg focus:outline-none">
-                ✕
-            </button>
+            <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white text-lg focus:outline-none">✕</button>
         </div>
 
         <div class="p-3 space-y-3 overflow-y-auto flex-1 text-xs">
-            <!-- Profile Info Section with Photo -->
             <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-3 flex items-center space-x-3">
                 <div class="relative cursor-pointer group" onclick="document.getElementById('avatar-upload-input').click()">
                     <div class="w-11 h-11 rounded-full bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-sm">
                         <img id="sidebar-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
-                        <span id="sidebar-avatar-icon" class="text-white text-sm hidden">📷</span>
                     </div>
                 </div>
                 <input type="file" id="avatar-upload-input" accept="image/*" class="hidden" onchange="handleAvatarUpload(event)">
@@ -102,7 +98,7 @@ tailwind.config = {
             </div>
 
             <nav class="space-y-1 font-medium">
-                <a href="#" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl bg-indigo-600 text-white shadow-md shadow-indigo-600/20 transition"><span>📊</span> <span class="lang-text" data-en="Overview" data-np="अवलोकन">Overview</span></a>
+                <a href="index.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl bg-indigo-600 text-white shadow-md shadow-indigo-600/20 transition"><span>📊</span> <span class="lang-text" data-en="Overview" data-np="अवलोकन">Overview</span></a>
             </nav>
 
             <div class="space-y-2.5 bg-slate-800/50 p-3 rounded-xl border border-slate-700/60">
@@ -125,6 +121,20 @@ tailwind.config = {
                     <span class="lang-text" data-en="Save Info" data-np="सेभ गर्नुहोस्">Save Info</span>
                 </button>
             </div>
+
+            <div class="space-y-2 bg-slate-800/50 p-3 rounded-xl border border-slate-700/60">
+                <h3 class="text-[11px] font-bold text-white flex items-center gap-1.5 mb-1">
+                    <i class="fa-solid fa-cloud text-indigo-400"></i> <span class="lang-text" data-en="Cloud Sync" data-np="क्लाउड सिंक">Cloud Sync</span>
+                </h3>
+                <div class="flex gap-2">
+                    <button onclick="handleCloudBackup()" class="flex-1 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition text-[10px]">
+                        <span class="lang-text" data-en="Backup" data-np="ब्याकअप">Backup</span>
+                    </button>
+                    <button onclick="handleCloudRestore()" class="flex-1 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition text-[10px]">
+                        <span class="lang-text" data-en="Restore" data-np="पुनः भण्डारण">Restore</span>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -132,12 +142,8 @@ tailwind.config = {
         
         <!-- HEADER SECTION -->
         <header class="sticky top-0 z-40 flex items-center justify-between px-3 md:px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-slate-800 shadow-md">
-            
-            <!-- Left Group: 3-line menu button + Photo + N1024.png + Digital Notebook -->
             <div class="flex items-center space-x-2">
-                <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-indigo-400 transition">
-                    ☰
-                </button>
+                <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-indigo-400 transition">☰</button>
                 <div class="flex items-center space-x-1.5 cursor-pointer" onclick="toggleSidebar()">
                     <div class="w-7 h-7 rounded-lg bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-sm">
                         <img src="N1024.png" alt="Logo" class="w-full h-full object-cover">
@@ -146,30 +152,18 @@ tailwind.config = {
                 </div>
             </div>
 
-            <!-- Center/Flowing Title -->
             <div class="text-center px-1 hidden md:block">
                 <h1 class="text-base font-extrabold tracking-wider bg-gradient-to-r from-red-500 via-yellow-400 via-green-400 via-cyan-400 via-purple-500 to-pink-500 animate-rainbow bg-clip-text text-transparent">
                     Digital NoteBook
                 </h1>
             </div>
 
-            <!-- Right Group: NEP/ENG toggle, Dark/Light toggle, Profile Avatar -->
             <div class="flex items-center space-x-2">
-                <!-- NEP/ENG Toggle Button -->
-                <button onclick="toggleLanguage()" id="lang-toggle-btn" class="px-2 py-1 rounded-md bg-slate-800 border border-slate-700 text-[10px] font-bold text-slate-200 hover:bg-slate-700 transition">
-                    ENG
-                </button>
-
-                <!-- Dark/Light Mode Toggle Button (Single Emoji: 🌞 for light, 🌛 for dark) -->
-                <button onclick="toggleTheme()" id="theme-toggle-btn" class="w-7 h-7 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center text-sm hover:bg-slate-700 transition">
-                    🌛
-                </button>
-
-                <!-- Profile Avatar -->
+                <button onclick="toggleLanguage()" id="lang-toggle-btn" class="px-2 py-1 rounded-md bg-slate-800 border border-slate-700 text-[10px] font-bold text-slate-200 hover:bg-slate-700 transition">ENG</button>
+                <button onclick="toggleTheme()" id="theme-toggle-btn" class="w-7 h-7 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center text-sm hover:bg-slate-700 transition">🌛</button>
                 <div class="relative cursor-pointer" onclick="toggleSidebar()">
                     <div class="w-8 h-8 rounded-full bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-sm">
                         <img id="header-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
-                        <span id="header-avatar-icon" class="text-white text-xs hidden">📷</span>
                     </div>
                 </div>
             </div>
@@ -177,14 +171,12 @@ tailwind.config = {
 
         <main class="p-4 md:p-6 space-y-4 flex-1 w-full text-xs">
             
-            <!-- LIVE DATE, GREETING & QR CODE ROW -->
             <div class="flex justify-between items-start px-1 py-1 text-white">
                 <div>
                     <p id="dynamic-date" class="text-[11px] font-semibold tracking-wider text-slate-400 uppercase mb-1"></p>
                     <h2 id="dynamic-greeting" class="text-base md:text-lg font-bold text-slate-800 dark:text-white tracking-tight"></h2>
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5"><span class="lang-text" data-en="Here is what is happening with your money today." data-np="आज तपाईंको पैसाको स्थिति यहाँ छ।">Here is what is happening with your money today.</span></p>
                 </div>
-                <!-- QR Code Box -->
                 <div class="bg-white dark:bg-slate-900 p-1.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col items-center shrink-0">
                     <div class="w-12 h-12 bg-white flex items-center justify-center p-0.5 rounded">
                         <img src="N1024.png" alt="QR Code" class="w-full h-full object-contain">
@@ -193,7 +185,7 @@ tailwind.config = {
                 </div>
             </div>
 
-            <!-- ROW 1: 4 items in one line without cards (Total Income, Total Invest, Total Receivable, Total Giveble) -->
+            <!-- ROW 1: Dynamic Calculated Financial Summaries -->
             <div class="grid grid-cols-4 gap-2 text-center pt-2">
                 <div class="flex flex-col items-center p-1">
                     <span class="text-base mb-0.5">💵</span>
@@ -219,45 +211,45 @@ tailwind.config = {
 
             <hr class="border-slate-200 dark:border-slate-800 my-2">
 
-            <!-- ROW 2: 3 items horizontal line (Add transaction, Add Income, Add Saving) -->
+            <!-- ROW 2: Connected Feature 1, 2, 3 -->
             <div class="grid grid-cols-3 gap-2 text-center">
-                <div onclick="alert('Add Transaction clicked')" class="flex flex-col items-center p-2 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
+                <div onclick="navigateTo('add-transaction.html')" class="flex flex-col items-center p-2 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
                     <span class="text-base mb-1">💳</span>
                     <span class="text-[11px] font-medium text-slate-700 dark:text-slate-300"><span class="lang-text" data-en="Add transaction" data-np="कारोबार थप्नुहोस्">Add transaction</span></span>
                 </div>
-                <div onclick="alert('Add Income clicked')" class="flex flex-col items-center p-2 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
+                <div onclick="navigateTo('add-income.html')" class="flex flex-col items-center p-2 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
                     <span class="text-base mb-1">💰</span>
                     <span class="text-[11px] font-medium text-slate-700 dark:text-slate-300"><span class="lang-text" data-en="Add Income" data-np="आम्दानी थप्नुहोस्">Add Income</span></span>
                 </div>
-                <div onclick="alert('Add Saving clicked')" class="flex flex-col items-center p-2 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
+                <div onclick="navigateTo('add-saving.html')" class="flex flex-col items-center p-2 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
                     <span class="text-base mb-1">🏦</span>
                     <span class="text-[11px] font-medium text-slate-700 dark:text-slate-300"><span class="lang-text" data-en="Add Saving" data-np="बचत थप्नुहोस्">Add Saving</span></span>
                 </div>
             </div>
 
-            <!-- ROW 3: 3 items horizontal line (calculate, Notebook, calendar) -->
+            <!-- ROW 3: Connected Feature 4, 5, 6 -->
             <div class="grid grid-cols-3 gap-2 text-center">
-                <div onclick="alert('Calculate clicked')" class="flex flex-col items-center p-2 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
+                <div onclick="navigateTo('calculate.html')" class="flex flex-col items-center p-2 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
                     <span class="text-base mb-1">🧮</span>
                     <span class="text-[11px] font-medium text-slate-700 dark:text-slate-300"><span class="lang-text" data-en="calculate" data-np="हिसाब गर्नुहोस्">calculate</span></span>
                 </div>
-                <div onclick="alert('Notebook clicked')" class="flex flex-col items-center p-2 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
+                <div onclick="navigateTo('notebook.html')" class="flex flex-col items-center p-2 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
                     <span class="text-base mb-1">📓</span>
                     <span class="text-[11px] font-medium text-slate-700 dark:text-slate-300"><span class="lang-text" data-en="Notebook" data-np="नोटबुक">Notebook</span></span>
                 </div>
-                <div onclick="alert('Calendar clicked')" class="flex flex-col items-center p-2 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
+                <div onclick="navigateTo('calendar.html')" class="flex flex-col items-center p-2 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
                     <span class="text-base mb-1">📅</span>
                     <span class="text-[11px] font-medium text-slate-700 dark:text-slate-300"><span class="lang-text" data-en="calendar" data-np="पात्रो">calendar</span></span>
                 </div>
             </div>
 
-            <!-- ROW 4: 2 items horizontal line (Setting, account) -->
+            <!-- ROW 4: Connected Feature 7, 8 -->
             <div class="grid grid-cols-2 gap-2 text-center">
-                <div onclick="alert('Setting clicked')" class="flex flex-col items-center p-2.5 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
+                <div onclick="navigateTo('setting.html')" class="flex flex-col items-center p-2.5 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
                     <span class="text-base mb-1">⚙️</span>
                     <span class="text-[11px] font-medium text-slate-700 dark:text-slate-300"><span class="lang-text" data-en="Setting" data-np="सेटिङ">Setting</span></span>
                 </div>
-                <div onclick="alert('Account clicked')" class="flex flex-col items-center p-2.5 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
+                <div onclick="navigateTo('account.html')" class="flex flex-col items-center p-2.5 rounded-xl bg-slate-200/50 dark:bg-slate-900/60 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
                     <span class="text-base mb-1">👤</span>
                     <span class="text-[11px] font-medium text-slate-700 dark:text-slate-300"><span class="lang-text" data-en="account" data-np="खाता">account</span></span>
                 </div>
@@ -267,12 +259,75 @@ tailwind.config = {
     </div>
 </div>
 
+<!-- Firebase & Application Script -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDDY_v7RHnkCTI6uyV4DNDjqoaIBGweg8c",
+      authDomain: "digital-a2552.firebaseapp.com",
+      projectId: "digital-a2552",
+      storageBucket: "digital-a2552.firebasestorage.app",
+      messagingSenderId: "218135618179",
+      appId: "1:218135618179:web:821b76920d3e5669ac31b6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    async function backupToCloud(userId = "default_user") {
+        try {
+            const localData = {
+                notes: JSON.parse(localStorage.getItem('advanced_notebook_notes') || '[]'),
+                incomes: JSON.parse(localStorage.getItem('digital_notebook_incomes') || '[]'),
+                transactions: JSON.parse(localStorage.getItem('digital_notebook_transactions') || '[]'),
+                theme: localStorage.getItem('theme') || 'dark',
+                language: localStorage.getItem('language') || 'en',
+                updatedAt: new Date().toISOString()
+            };
+            await set(ref(db, 'users/' + userId), localData);
+            return { success: true, message: "Data successfully saved to cloud!" };
+        } catch (error) {
+            return { success: false, message: error.message };
+        }
+    }
+
+    async function restoreFromCloud(userId = "default_user") {
+        try {
+            const dbRef = ref(db);
+            const snapshot = await get(child(dbRef, `users/${userId}`));
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                if (data.notes) localStorage.setItem('advanced_notebook_notes', JSON.stringify(data.notes));
+                if (data.incomes) localStorage.setItem('digital_notebook_incomes', JSON.stringify(data.incomes));
+                if (data.transactions) localStorage.setItem('digital_notebook_transactions', JSON.stringify(data.transactions));
+                if (data.theme) localStorage.setItem('theme', data.theme);
+                return { success: true, message: "Data successfully synced from cloud!" };
+            } else {
+                return { success: false, message: "No backup found in cloud!" };
+            }
+        } catch (error) {
+            return { success: false, message: error.message };
+        }
+    }
+
+    window.handleCloudBackup = async function() {
+        const result = await backupToCloud("default_user");
+        alert(result.message);
+    };
+
+    window.handleCloudRestore = async function() {
+        const result = await restoreFromCloud("default_user");
+        alert(result.message);
+        if(result.success) location.reload();
+    };
+</script>
+
 <script>
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
-        if (sidebar) {
-            sidebar.classList.toggle('-translate-x-full');
-        }
+        if (sidebar) sidebar.classList.toggle('-translate-x-full');
     }
 
     let currentLang = localStorage.getItem('lang') || 'EN';
@@ -297,9 +352,7 @@ tailwind.config = {
     function updateThemeUI() {
         const isDark = document.documentElement.classList.contains('dark');
         const themeBtn = document.getElementById('theme-toggle-btn');
-        if(themeBtn) {
-            themeBtn.innerText = isDark ? '🌛' : '🌞';
-        }
+        if(themeBtn) themeBtn.innerText = isDark ? '🌛' : '🌞';
     }
 
     function toggleTheme() {
@@ -335,12 +388,40 @@ tailwind.config = {
 
         const savedName = localStorage.getItem('profile_name') || 'Kamal G.C.';
         const greetingEl = document.getElementById('dynamic-greeting');
-        if (greetingEl) {
-            greetingEl.innerText = `${greetingText}, ${savedName}`;
-        }
+        if (greetingEl) greetingEl.innerText = `${greetingText}, ${savedName}`;
     }
 
     setInterval(updateDynamicHeader, 1000);
+
+    // Dynamic Financial Data Calculation from localStorage
+    function loadFinancialSummaries() {
+        // १. Add Income को डेटाबाट कुल आम्दानी गणना गर्ने
+        const incomes = JSON.parse(localStorage.getItem('digital_notebook_incomes') || '[]');
+        const totalIncome = incomes.reduce((sum, item) => sum + Number(item.amount || 0), 0);
+        document.getElementById('val-income').innerText = `Rs ${totalIncome.toLocaleString()}`;
+
+        // २. Add Transaction को डेटाबाट Total Invest, Total Receivable, Total Giveble गणना गर्ने
+        const transactions = JSON.parse(localStorage.getItem('digital_notebook_transactions') || '[]');
+        let totalInvest = 0;
+        let totalReceivable = 0;
+        let totalGiveble = 0;
+
+        transactions.forEach(tx => {
+            const amt = Number(tx.amount || 0);
+            if (tx.type === 'invest') totalInvest += amt;
+            if (tx.type === 'receivable') totalReceivable += amt;
+            if (tx.type === 'giveble') totalGiveble += amt;
+        });
+
+        document.getElementById('val-invest').innerText = `Rs ${totalInvest.toLocaleString()}`;
+        document.getElementById('val-receivable').innerText = `Rs ${totalReceivable.toLocaleString()}`;
+        document.getElementById('val-giveble').innerText = `Rs ${totalGiveble.toLocaleString()}`;
+    }
+
+    // Connect files navigation helper
+    function navigateTo(pageName) {
+        window.location.href = pageName;
+    }
 
     function saveProfileDetails() {
         const name = document.getElementById('input-full-name').value;
@@ -374,8 +455,7 @@ tailwind.config = {
         if (file) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                const base64Image = e.target.result;
-                localStorage.setItem('profile_avatar', base64Image);
+                localStorage.setItem('profile_avatar', e.target.result);
                 loadAvatar();
             };
             reader.readAsDataURL(file);
@@ -399,12 +479,12 @@ tailwind.config = {
         updateDynamicHeader();
         loadUserData();
         loadAvatar();
+        loadFinancialSummaries();
         
-        // Welcome splash screen duration set to 6 seconds (6000ms)
         setTimeout(() => {
             const splash = document.getElementById('splash-screen');
             if(splash) splash.remove();
-        }, 6000);
+        }, 3000);
     });
 </script>
 </body>
