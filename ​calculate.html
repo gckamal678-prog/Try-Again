@@ -1,1 +1,108 @@
-</kamal>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Nepal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+            margin: 0;
+        }
+        .calculator {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 250px;
+        }
+        input, select, button {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            font-weight: bold;
+            font-size: 18px;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="calculator">
+    <h2>Rechner</h2>
+    <input type="number" id="num1" placeholder="Erste Zahl">
+    
+    <select id="operator">
+        <option value="+">+</option>
+        <option value="-">-</option>
+        <option value="*">*</option>
+        <option value="/">/</option>
+    </select>
+    
+    <input type="number" id="num2" placeholder="Zweite Zahl">
+    
+    <button onclick="berechne()">Berechnen</button>
+    
+    <div class="result" id="ergebnis">Ergebnis: </div>
+</div>
+
+<script>
+    function berechne() {
+        const num1 = parseFloat(document.getElementById('num1').value);
+        const num2 = parseFloat(document.getElementById('num2').value);
+        const operator = document.getElementById('operator').value;
+        const ergebnisFeld = document.getElementById('ergebnis');
+
+        if (isNaN(num1) || isNaN(num2)) {
+            ergebnisFeld.innerText = "Bitte gültige Zahlen eingeben!";
+            return;
+        }
+
+        let loesung;
+        switch (operator) {
+            case '+':
+                loesung = num1 + num2;
+                break;
+            case '-':
+                loesung = num1 - num2;
+                break;
+            case '*':
+                loesung = num1 * num2;
+                break;
+            case '/':
+                if (num2 === 0) {
+                    ergebnisFeld.innerText = "Teilen durch 0 nicht möglich!";
+                    return;
+                }
+                loesung = num1 / num2;
+                break;
+            default:
+                loesung = "Ungültiger Operator";
+        }
+
+        ergebnisFeld.innerText = "Ergebnis: " + loesung;
+    }
+</script>
+
+</body>
+</html>
