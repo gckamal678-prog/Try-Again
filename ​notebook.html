@@ -26,17 +26,8 @@ tailwind.config = {
     }
 </script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Anek+Devanagari:wght@400;500;700&family=Mukta:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-    @keyframes rainbow {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-    .animate-rainbow {
-        background-size: 300% auto;
-        animation: rainbow 5s linear infinite;
-    }
     [contenteditable=true]:empty:before {
         content: attr(placeholder);
         color: #94a3b8;
@@ -45,481 +36,173 @@ tailwind.config = {
     }
 </style>
 </head>
-<body id="main-body" class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-xs">
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-xs">
 
-<!-- TOAST NOTIFICATION CONTAINER -->
+<!-- TOAST NOTIFICATION -->
 <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2"></div>
 
 <div class="flex min-h-screen w-full">
     
-    <!-- SIDEBAR SECTION -->
+    <!-- SIDEBAR -->
     <div id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 border-r border-slate-800 transform -translate-x-full transition-transform duration-300 flex flex-col text-white">
         <div class="flex items-center justify-between px-4 py-3 border-b border-slate-800">
             <div class="flex items-center space-x-2.5">
-                <div class="w-8 h-8 rounded-lg bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-md">
-                    <img src="N1024.png" alt="Logo" class="w-full h-full object-cover">
+                <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white shadow-md">
+                    <i class="fa-solid fa-book-open"></i>
                 </div>
-                <div>
-                    <h1 class="text-sm font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-white via-indigo-300 to-red-500">
-                        Digital <span class="text-red-500">NoteBook</span>
-                    </h1>
-                </div>
+                <h1 class="text-sm font-extrabold tracking-wide text-white">Digital NoteBook</h1>
             </div>
-            <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white text-lg focus:outline-none">✕</button>
+            <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white text-lg">✕</button>
         </div>
 
         <div class="p-3 space-y-3 overflow-y-auto flex-1 text-xs">
             <nav class="space-y-1 font-medium">
-                <a href="index.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl bg-indigo-600 text-white shadow-md shadow-indigo-600/20 transition"><span>📊</span> <span class="lang-text" data-en="Overview" data-np="अवलोकन">Overview</span></a>
-                <a href="setting.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl hover:bg-slate-800 text-slate-300 transition"><span>⚙️</span> <span class="lang-text" data-en="Settings & About" data-np="सेटिङ र बारेमा">Settings & About</span></a>
+                <a href="index.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl hover:bg-slate-800 text-slate-300 transition"><span>📊</span> Overview</a>
             </nav>
         </div>
     </div>
 
     <div class="flex-1 flex flex-col w-full">
-        
-        <!-- HEADER SECTION -->
-        <header class="sticky top-0 z-40 flex items-center justify-between px-3 md:px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-slate-800 shadow-md">
-            <div class="flex items-center space-x-2">
-                <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-indigo-400 transition">☰</button>
-                <div class="flex items-center space-x-1.5 cursor-pointer" onclick="toggleSidebar()">
-                    <div class="w-7 h-7 rounded-lg bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-sm">
-                        <img src="N1024.png" alt="Logo" class="w-full h-full object-cover">
-                    </div>
-                    <span class="text-xs font-bold text-white tracking-wide hidden sm:inline">Digital NoteBook</span>
-                </div>
+        <!-- HEADER -->
+        <header class="sticky top-0 z-40 flex items-center justify-between px-4 py-3 bg-slate-900 border-b border-slate-800 shadow-md">
+            <div class="flex items-center space-x-3">
+                <button onclick="toggleSidebar()" class="text-white text-lg focus:outline-none"><i class="fa-solid fa-bars"></i></button>
+                <span class="text-xs font-bold text-white tracking-wide">Digital NoteBook - NotePad</span>
             </div>
-
-            <div class="text-center px-1 hidden md:block">
-                <h1 class="text-base font-extrabold tracking-wider bg-gradient-to-r from-red-500 via-yellow-400 via-green-400 via-cyan-400 via-purple-500 to-pink-500 animate-rainbow bg-clip-text text-transparent">
-                    Digital NoteBook
-                </h1>
-            </div>
-
             <div class="flex items-center space-x-2">
-                <button onclick="toggleLanguage()" id="lang-toggle-btn" class="px-2 py-1 rounded-md bg-slate-800 border border-slate-700 text-[10px] font-bold text-slate-200 hover:bg-slate-700 transition">ENG</button>
-                <button onclick="toggleTheme()" id="theme-toggle-btn" class="w-7 h-7 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center text-sm hover:bg-slate-700 transition">🌛</button>
+                <button onclick="toggleLanguage()" id="lang-toggle-btn" class="px-2 py-1 rounded-md bg-slate-800 border border-slate-700 text-[10px] font-bold text-slate-200">ENG</button>
+                <button onclick="toggleTheme()" id="theme-toggle-btn" class="w-7 h-7 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center text-sm">🌛</button>
             </div>
         </header>
 
         <main class="p-4 md:p-6 space-y-4 flex-1 w-full text-xs">
-            
-            <!-- Top Controls: Search and New Note Button -->
             <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
                 <div class="relative flex-1 max-w-md">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><i class="fa-solid fa-search"></i></span>
-                    <input type="text" id="search-input" oninput="filterNotes()" placeholder="Search notes..." data-i18n-placeholder="search_placeholder" class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs outline-none focus:ring-2 focus:ring-indigo-500 transition">
+                    <input type="text" id="search-input" oninput="renderNotes()" placeholder="Search notes..." class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs outline-none">
                 </div>
-                <button onclick="openNoteModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-md shadow-indigo-600/20">
+                <button onclick="openNoteModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-md">
                     <i class="fa-solid fa-plus"></i> <span data-i18n="btn_new_note">New Note</span>
                 </button>
             </div>
 
-            <!-- Category Filter Tabs -->
-            <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-medium">
-                <button onclick="setCategory('All')" id="cat-All" class="px-4 py-2 rounded-xl bg-indigo-600 text-white whitespace-nowrap transition shadow-sm" data-i18n="cat_all">All Notes</button>
-                <button onclick="setCategory('Personal')" id="cat-Personal" class="px-4 py-2 rounded-xl bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800 whitespace-nowrap transition" data-i18n="cat_personal">👤 Personal</button>
-                <button onclick="setCategory('Work')" id="cat-Work" class="px-4 py-2 rounded-xl bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800 whitespace-nowrap transition" data-i18n="cat_work">💼 Work</button>
-                <button onclick="setCategory('Study')" id="cat-Study" class="px-4 py-2 rounded-xl bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800 whitespace-nowrap transition" data-i18n="cat_study">📚 Study</button>
-            </div>
-
             <!-- Notes Grid Container -->
-            <div id="notes-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                <!-- Dynamic Cards will load here -->
-            </div>
-
+            <div id="notes-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
         </main>
     </div>
 </div>
 
-<!-- Add/Edit Note Modal -->
+<!-- Modal -->
 <div id="note-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-3xl shadow-2xl w-full max-w-lg space-y-4 border border-slate-200 dark:border-slate-800 relative">
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl shadow-2xl w-full max-w-lg space-y-4 border border-slate-200 dark:border-slate-800">
         <div class="flex justify-between items-center">
             <h3 id="modal-title" class="text-base font-bold text-slate-900 dark:text-slate-100">Create New Note</h3>
-            <button onclick="closeNoteModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <button onclick="closeNoteModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
         </div>
-
         <input type="hidden" id="edit-note-id">
+        <input type="text" id="note-title-input" placeholder="Note Title..." class="w-full border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white p-3 rounded-xl text-sm font-bold outline-none">
+        
+        <div id="note-content-input" contenteditable="true" placeholder="Write your note here..." class="w-full h-40 border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white p-3 rounded-xl text-xs outline-none overflow-y-auto"></div>
 
-        <!-- Title -->
-        <input type="text" id="note-title-input" placeholder="Note Title..." data-i18n-placeholder="title_placeholder" class="w-full border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white p-3 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-indigo-500">
-
-        <!-- Rich Text Formatting Toolbar -->
-        <div class="flex flex-wrap items-center gap-1.5 bg-slate-100 dark:bg-slate-800 p-2 rounded-xl text-xs">
-            <button type="button" onmousedown="event.preventDefault(); document.execCommand('bold', false, null)" class="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-300" title="Bold"><i class="fa-solid fa-bold"></i></button>
-            <button type="button" onmousedown="event.preventDefault(); document.execCommand('italic', false, null)" class="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-300" title="Italic"><i class="fa-solid fa-italic"></i></button>
-            <button type="button" onmousedown="event.preventDefault(); document.execCommand('underline', false, null)" class="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-300" title="Underline"><i class="fa-solid fa-underline"></i></button>
-            <button type="button" onmousedown="event.preventDefault(); document.execCommand('insertUnorderedList', false, null)" class="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-300" title="Bullet List"><i class="fa-solid fa-list-ul"></i></button>
-            <div class="h-4 w-px bg-slate-300 dark:bg-slate-700 mx-1"></div>
-            <!-- Category Selector -->
-            <select id="note-category" class="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-2.5 py-1 rounded-lg text-xs outline-none">
-                <option value="Personal" data-i18n="cat_personal_opt">Personal</option>
-                <option value="Work" data-i18n="cat_work_opt">Work</option>
-                <option value="Study" data-i18n="cat_study_opt">Study</option>
-            </select>
-            <!-- Note Color Selector -->
-            <div class="flex items-center gap-1.5 ml-auto">
-                <button type="button" onclick="setNoteColor('bg-white dark:bg-slate-900')" class="w-5 h-5 rounded-full bg-slate-200 border-2 border-slate-400 transition-transform hover:scale-110" title="Default"></button>
-                <button type="button" onclick="setNoteColor('bg-amber-50 dark:bg-amber-950/30 border-amber-300 dark:border-amber-800/50')" class="w-5 h-5 rounded-full bg-amber-400 border-2 border-amber-600 transition-transform hover:scale-110" title="Yellow"></button>
-                <button type="button" onclick="setNoteColor('bg-emerald-50 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-800/50')" class="w-5 h-5 rounded-full bg-emerald-400 border-2 border-emerald-600 transition-transform hover:scale-110" title="Green"></button>
-                <button type="button" onclick="setNoteColor('bg-sky-50 dark:bg-sky-950/30 border-sky-300 dark:border-sky-800/50')" class="w-5 h-5 rounded-full bg-sky-400 border-2 border-sky-600 transition-transform hover:scale-110" title="Blue"></button>
-            </div>
-        </div>
-
-        <input type="hidden" id="note-bg-color" value="bg-white dark:bg-slate-900">
-
-        <!-- Rich Text Content Editor -->
-        <div id="note-content-input" contenteditable="true" placeholder="Write your note here..." data-i18n-placeholder="content_placeholder" oninput="updateCounters()" class="w-full h-40 border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white p-3 rounded-2xl text-xs outline-none focus:ring-2 focus:ring-indigo-500 overflow-y-auto"></div>
-
-        <!-- Live Word & Character Counter -->
-        <div class="flex justify-between items-center text-[11px] text-slate-500 dark:text-slate-400 px-1">
-            <span id="counter-display">Words: 0 | Characters: 0</span>
-            <span id="save-indicator" class="text-emerald-600 dark:text-emerald-500 font-medium" data-i18n="saved_text">Auto-saved</span>
-        </div>
-
-        <!-- Action Buttons with Firebase Cloud Backup -->
-        <div class="flex justify-between items-center pt-2">
-            <button onclick="backupToFirebase()" type="button" class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-2.5 rounded-xl text-xs font-medium transition flex items-center gap-1.5 shadow-sm">
-                <i class="fa-solid fa-cloud-arrow-up"></i> <span>Firebase Save</span>
-            </button>
-            <div class="flex gap-2">
-                <button onclick="closeNoteModal()" class="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-white px-5 py-2.5 rounded-xl text-xs font-medium transition" data-i18n="btn_cancel">Cancel</button>
-                <button onclick="saveNote()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl text-xs font-medium shadow-md transition" data-i18n="btn_save_note">Save Note</button>
-            </div>
+        <div class="flex justify-end gap-2 pt-2">
+            <button onclick="closeNoteModal()" class="bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-white px-4 py-2 rounded-xl text-xs font-medium">Cancel</button>
+            <button onclick="saveNote()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-xs font-medium shadow-md">Save Note</button>
         </div>
     </div>
-</div>
-
-<!-- Custom Confirmation Modal -->
-<div id="confirm-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[60] flex items-center justify-center p-4 hidden">
-    <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl shadow-2xl w-full max-w-sm space-y-4 border border-slate-200 dark:border-slate-800 text-center">
-        <div class="text-rose-500 text-3xl mb-2"><i class="fa-solid fa-triangle-exclamation"></i></div>
-        <p id="confirm-modal-text" class="text-xs font-medium text-slate-800 dark:text-slate-200">Are you sure you want to delete this note?</p>
-        <div class="flex justify-center gap-3 pt-2">
-            <button id="confirm-cancel-btn" class="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-white px-4 py-2 rounded-xl text-xs font-medium transition">Cancel</button>
-            <button id="confirm-ok-btn" class="bg-rose-600 hover:bg-rose-700 text-white px-5 py-2 rounded-xl text-xs font-medium transition shadow-md">Delete</button>
-        </div>
-    </div>
-</div>
-
-<!-- Custom Clean Toast Notification -->
-<div id="toast-notification" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-5 py-2.5 rounded-2xl shadow-2xl text-xs font-semibold z-[90] transition-all duration-300 opacity-0 pointer-events-none border border-slate-700 dark:border-slate-200">
-    <span id="toast-message">Notification message</span>
 </div>
 
 <script>
-const translations = {
-    en: {
-        notepad_title: "NotePad Studio",
-        search_placeholder: "Search notes...",
-        btn_new_note: "New Note",
-        cat_all: "All Notes",
-        cat_personal: "👤 Personal",
-        cat_work: "💼 Work",
-        cat_study: "📚 Study",
-        cat_personal_opt: "Personal",
-        cat_work_opt: "Work",
-        cat_study_opt: "Study",
-        modal_create: "Create New Note",
-        modal_edit: "Edit Note",
-        title_placeholder: "Note Title...",
-        content_placeholder: "Write your note here...",
-        saved_text: "Auto-saved",
-        btn_cancel: "Cancel",
-        btn_save_note: "Save Note",
-        no_notes: "No notes found. Click 'New Note' to create one!",
-        delete_confirm: "Are you sure you want to delete this note?",
-        empty_alert: "Note cannot be empty!",
-        share_copied: "Note copied to clipboard for sharing!",
-        share_btn: "Share"
-    },
-    np: {
-        notepad_title: "नोटप्याड स्टुडियो",
-        search_placeholder: "नोटहरू खोज्नुहोस्...",
-        btn_new_note: "नयाँ नोट",
-        cat_all: "सबै नोटहरू",
-        cat_personal: "👤 व्यक्तिगत",
-        cat_work: "💼 काम (Work)",
-        cat_study: "📚 अध्ययन",
-        cat_personal_opt: "व्यक्तिगत",
-        cat_work_opt: "काम",
-        cat_study_opt: "अध्ययन",
-        modal_create: "नयाँ नोट सिर्जना गर्नुहोस्",
-        modal_edit: "नोट सम्पादन गर्नुहोस्",
-        title_placeholder: "नोटको शिर्षक...",
-        content_placeholder: "यहाँ आफ्नो नोट लेख्नुहोस्...",
-        saved_text: "स्वचालित सेभ भयो",
-        btn_cancel: "रद्द गर्नुहोस्",
-        btn_save_note: "नोट सेभ गर्नुहोस्",
-        no_notes: "कुनै नोट फेला परेन। नयाँ बनाउन 'नयाँ नोट' मा क्लिक गर्नुहोस्!",
-        delete_confirm: "के तपाईं यो नोट मेटाउन चाहनुहुन्छ?",
-        empty_alert: "नोट खाली हुन सक्दैन!",
-        share_copied: "शेयर गर्नको लागि नोट क्लिपबोर्डमा कपी भयो!",
-        share_btn: "शेयर"
-    }
-};
-
-let currentLang = localStorage.getItem('lang') || 'en';
-let currentCategory = 'All';
-let notes = JSON.parse(localStorage.getItem('digital_notebook_notes')) || [
-    { id: 1, title: 'Welcome Note', content: 'Welcome to your Digital NoteBook Studio! You can format text, add categories, and store notes.', category: 'Personal', color: 'bg-white dark:bg-slate-900', date: '2026-06-07' }
-];
+let notes = JSON.parse(localStorage.getItem('digital_notebook_notes')) || [];
 
 function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    if (sidebar) sidebar.classList.toggle('-translate-x-full');
-}
-
-function toggleLanguage() {
-    currentLang = currentLang === 'en' ? 'np' : 'en';
-    localStorage.setItem('lang', currentLang);
-    updateLanguageUI();
-    renderNotes();
-}
-
-function updateLanguageUI() {
-    const langBtn = document.getElementById('lang-toggle-btn');
-    if(langBtn) langBtn.innerText = currentLang === 'en' ? 'ENG' : 'नेपाली';
-
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (translations[currentLang] && translations[currentLang][key]) {
-            el.innerText = translations[currentLang][key];
-        }
-    });
-
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-        const key = el.getAttribute('data-i18n-placeholder');
-        if (translations[currentLang] && translations[currentLang][key]) {
-            el.setAttribute('placeholder', translations[currentLang][key]);
-        }
-    });
+    document.getElementById('sidebar').classList.toggle('-translate-x-full');
 }
 
 function toggleTheme() {
     const htmlEl = document.documentElement;
-    const themeBtn = document.getElementById('theme-toggle-btn');
     if (htmlEl.classList.contains('dark')) {
         htmlEl.classList.remove('dark');
         localStorage.setItem('theme', 'light');
-        if(themeBtn) themeBtn.innerText = '🌞';
     } else {
         htmlEl.classList.add('dark');
         localStorage.setItem('theme', 'dark');
-        if(themeBtn) themeBtn.innerText = '🌛';
     }
-}
-
-function showToast(message) {
-    const toast = document.getElementById('toast-notification');
-    const msgEl = document.getElementById('toast-message');
-    if(!toast || !msgEl) return;
-    msgEl.innerText = message;
-    toast.classList.remove('opacity-0', 'pointer-events-none');
-    setTimeout(() => {
-        toast.classList.add('opacity-0', 'pointer-events-none');
-    }, 2500);
 }
 
 function openNoteModal(id = null) {
-    const modal = document.getElementById('note-modal');
-    const modalTitle = document.getElementById('modal-title');
-    const editIdInput = document.getElementById('edit-note-id');
-    const titleInput = document.getElementById('note-title-input');
-    const contentInput = document.getElementById('note-content-input');
-    const categorySelect = document.getElementById('note-category');
-    const colorInput = document.getElementById('note-bg-color');
-
-    modal.classList.remove('hidden');
-    if (id) {
+    document.getElementById('note-modal').classList.remove('hidden');
+    if(id) {
         const note = notes.find(n => n.id === id);
-        if (note) {
-            modalTitle.innerText = translations[currentLang].modal_edit;
-            editIdInput.value = note.id;
-            titleInput.value = note.title;
-            contentInput.innerHTML = note.content;
-            categorySelect.value = note.category;
-            colorInput.value = note.color;
+        if(note) {
+            document.getElementById('edit-note-id').value = note.id;
+            document.getElementById('note-title-input').value = note.title;
+            document.getElementById('note-content-input').innerHTML = note.content;
         }
     } else {
-        modalTitle.innerText = translations[currentLang].modal_create;
-        editIdInput.value = '';
-        titleInput.value = '';
-        contentInput.innerHTML = '';
-        categorySelect.value = 'Personal';
-        colorInput.value = 'bg-white dark:bg-slate-900';
+        document.getElementById('edit-note-id').value = '';
+        document.getElementById('note-title-input').value = '';
+        document.getElementById('note-content-input').innerHTML = '';
     }
-    updateCounters();
 }
 
 function closeNoteModal() {
     document.getElementById('note-modal').classList.add('hidden');
 }
 
-function setNoteColor(colorClass) {
-    document.getElementById('note-bg-color').value = colorClass;
-    showToast('Note color updated!');
-}
-
-function updateCounters() {
-    const content = document.getElementById('note-content-input').innerText || '';
-    const words = content.trim() ? content.trim().split(/\s+/).length : 0;
-    const chars = content.length;
-    const display = document.getElementById('counter-display');
-    if(display) {
-        display.innerText = `Words: ${words} | Characters: ${chars}`;
-    }
-}
-
-function setCategory(cat) {
-    currentCategory = cat;
-    ['All', 'Personal', 'Work', 'Study'].forEach(c => {
-        const btn = document.getElementById(`cat-${c}`);
-        if(btn) {
-            if(c === cat) {
-                btn.className = "px-4 py-2 rounded-xl bg-indigo-600 text-white whitespace-nowrap transition shadow-sm";
-            } else {
-                btn.className = "px-4 py-2 rounded-xl bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800 whitespace-nowrap transition";
-            }
-        }
-    });
-    renderNotes();
-}
-
 function saveNote() {
     const id = document.getElementById('edit-note-id').value;
     const title = document.getElementById('note-title-input').value.trim();
     const content = document.getElementById('note-content-input').innerHTML.trim();
-    const category = document.getElementById('note-category').value;
-    const color = document.getElementById('note-bg-color').value;
 
-    if (!title && !content) {
-        showToast(translations[currentLang].empty_alert);
-        return;
-    }
+    if(!title && !content) return;
 
-    const currentDate = new Date().toISOString().split('T')[0];
-
-    if (id) {
-        const index = notes.findIndex(n => n.id == id);
-        if (index !== -1) {
-            notes[index] = { ...notes[index], title: title || 'Untitled', content, category, color, date: currentDate };
-        }
+    if(id) {
+        notes = notes.map(n => n.id == id ? {...n, title, content} : n);
     } else {
-        const newNote = {
-            id: Date.now(),
-            title: title || 'Untitled',
-            content,
-            category,
-            color,
-            date: currentDate
-        };
-        notes.unshift(newNote);
+        notes.unshift({id: Date.now(), title: title || 'Untitled', content, date: new Date().toLocaleDateString()});
     }
 
     localStorage.setItem('digital_notebook_notes', JSON.stringify(notes));
     closeNoteModal();
     renderNotes();
-    showToast('Note saved successfully!');
 }
 
-function backupToFirebase() {
-    showToast('Backing up notes to Firebase cloud...');
-    setTimeout(() => {
-        showToast('Successfully backed up to Firebase!');
-    }, 1500);
-}
-
-function confirmDelete(id) {
-    const confirmModal = document.getElementById('confirm-modal');
-    const confirmText = document.getElementById('confirm-modal-text');
-    const okBtn = document.getElementById('confirm-ok-btn');
-    const cancelBtn = document.getElementById('confirm-cancel-btn');
-
-    confirmText.innerText = translations[currentLang].delete_confirm;
-    confirmModal.classList.remove('hidden');
-
-    const handleOk = () => {
+function deleteNote(id) {
+    if(confirm('Delete this note?')) {
         notes = notes.filter(n => n.id !== id);
         localStorage.setItem('digital_notebook_notes', JSON.stringify(notes));
         renderNotes();
-        showToast('Note deleted.');
-        cleanup();
-    };
-
-    const handleCancel = () => {
-        cleanup();
-    };
-
-    const cleanup = () => {
-        confirmModal.classList.add('hidden');
-        okBtn.removeEventListener('click', handleOk);
-        cancelBtn.removeEventListener('click', handleCancel);
-    };
-
-    okBtn.addEventListener('click', handleOk);
-    cancelBtn.addEventListener('click', handleCancel);
-}
-
-function shareNote(id) {
-    const note = notes.find(n => n.id === id);
-    if(note) {
-        const shareText = `${note.title}\n\n${note.content.replace(/<[^>]*>?/gm, '')}`;
-        navigator.clipboard.writeText(shareText).then(() => {
-            showToast(translations[currentLang].share_copied);
-        });
     }
-}
-
-function filterNotes() {
-    renderNotes();
 }
 
 function renderNotes() {
     const grid = document.getElementById('notes-grid');
-    const searchQuery = document.getElementById('search-input').value.toLowerCase();
-    if(!grid) return;
+    const query = document.getElementById('search-input').value.toLowerCase();
+    const filtered = notes.filter(n => n.title.toLowerCase().includes(query) || n.content.toLowerCase().includes(query));
 
-    let filtered = notes.filter(n => {
-        const matchesCategory = currentCategory === 'All' || n.category === currentCategory;
-        const matchesSearch = n.title.toLowerCase().includes(searchQuery) || n.content.toLowerCase().includes(searchQuery);
-        return matchesCategory && matchesSearch;
-    });
-
-    if (filtered.length === 0) {
-        grid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-400 text-xs">${translations[currentLang].no_notes}</div>`;
+    if(filtered.length === 0) {
+        grid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-400">No notes found.</div>`;
         return;
     }
 
-    grid.innerHTML = filtered.map(note => `
-        <div class="${note.color} p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between space-y-3 transition hover:shadow-md">
+    grid.innerHTML = filtered.map(n => `
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between space-y-3">
             <div>
-                <div class="flex justify-between items-start gap-2 mb-1.5">
-                    <h4 class="font-bold text-slate-900 dark:text-white text-sm line-clamp-1">${note.title}</h4>
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-100 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400">${note.category}</span>
-                </div>
-                <div class="text-slate-600 dark:text-slate-300 text-xs line-clamp-3 prose dark:prose-invert">${note.content}</div>
+                <h4 class="font-bold text-slate-900 dark:text-white text-sm mb-1">${n.title}</h4>
+                <div class="text-slate-600 dark:text-slate-300 text-xs line-clamp-3">${n.content}</div>
             </div>
             <div class="flex justify-between items-center pt-2 border-t border-slate-100 dark:border-slate-800 text-[10px] text-slate-400">
-                <span>${note.date}</span>
-                <div class="flex items-center gap-1.5">
-                    <button onclick="shareNote(${note.id})" class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg text-slate-500 transition" title="Share"><i class="fa-solid fa-share-nodes"></i></button>
-                    <button onclick="openNoteModal(${note.id})" class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg text-indigo-500 transition" title="Edit"><i class="fa-solid fa-pen"></i></button>
-                    <button onclick="confirmDelete(${note.id})" class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg text-rose-500 transition" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                <span>${n.date}</span>
+                <div class="flex gap-2">
+                    <button onclick="openNoteModal(${n.id})" class="text-indigo-500 hover:text-indigo-600"><i class="fa-solid fa-pen"></i></button>
+                    <button onclick="deleteNote(${n.id})" class="text-rose-500 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button>
                 </div>
             </div>
         </div>
     `).join('');
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    updateLanguageUI();
-    const isDark = document.documentElement.classList.contains('dark');
-    const themeBtn = document.getElementById('theme-toggle-btn');
-    if(themeBtn) themeBtn.innerText = isDark ? '🌛' : '🌞';
-    renderNotes();
-});
+document.addEventListener("DOMContentLoaded", renderNotes);
 </script>
 </body>
 </html>
