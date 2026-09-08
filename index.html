@@ -391,39 +391,47 @@ tailwind.config = {
     setInterval(updateDynamicHeader, 1000);
 
     function loadFinancialSummaries() {
-        // सबै सम्भावित लोकलस्टोरेज की (keys) हरूबाट डेटा लोड गर्ने
+        // १. आम्दानीको कुल योग निकाल्ने
         const incomesData = localStorage.getItem('digital_notebook_incomes') || localStorage.getItem('incomes') || '[]';
-        const incomes = JSON.parse(incomesData);
+        let incomes = [];
+        try { incomes = JSON.parse(incomesData); } catch(e) { incomes = []; }
         
         const totalIncome = incomes.reduce((sum, item) => {
             const val = Number(item.amount || item.incomeAmount || item.val || 0);
             return sum + val;
         }, 0);
-        document.getElementById('val-income').innerText = `Rs ${totalIncome.toLocaleString()}`;
+        
+        const incomeEl = document.getElementById('val-income');
+        if(incomeEl) incomeEl.innerText = `Rs ${totalIncome.toLocaleString()}`;
 
+        // २. कारोबार (Transactions) को डेटा लोड गर्ने र प्रकार छुट्याउने
         const transactionsData = localStorage.getItem('digital_notebook_transactions') || localStorage.getItem('transactions') || localStorage.getItem('advanced_notebook_notes') || '[]';
-        const transactions = JSON.parse(transactionsData);
+        let transactions = [];
+        try { transactions = JSON.parse(transactionsData); } catch(e) { transactions = []; }
 
         let totalInvest = 0;
         let totalReceivable = 0;
         let totalGiveble = 0;
 
         transactions.forEach(tx => {
-            const amt = Number(tx.amount || tx.txAmount || tx.val || 0);
-            const tType = (tx.type || tx.category || '').toLowerCase();
+            const amt = Number(tx.amount || tx.txAmount || tx.val || tx.principalAmount || 0);
+            const tType = String(tx.type || tx.category || '').toLowerCase();
             
-            if (tType.includes('invest') || tType.includes(' लगानी')) {
+            if (tType.includes('invest') || tType.includes('लगानी')) {
                 totalInvest += amt;
-            } else if (tType.includes('receive') || tType.includes('पाउनुपर्ने')) {
+            } else if (tType.includes('receive') || tType.includes('लिनु') || tType.includes('पाउनुपर्ने')) {
                 totalReceivable += amt;
-            } else if (tType.includes('give') || tType.includes('payable') || tType.includes('दिनुपर्ने')) {
+            } else if (tType.includes('give') || tType.includes('payable') || tType.includes('दिनुपर्ने') || tType.includes('दिनु')) {
                 totalGiveble += amt;
+            } else {
+                // यदि टाइप स्पष्ट छैन भने डिफल्ट रूपमा Receivable मा गणना गर्ने
+                totalReceivable += amt;
             }
         });
 
-        document.getElementById('val-invest').innerText = `Rs ${totalInvest.toLocaleString()}`;
-        document.getElementById('val-receivable').innerText = `Rs ${totalReceivable.toLocaleString()}`;
-        document.getElementById('val-giveble').innerText = `Rs ${totalGiveble.toLocaleString()}`;
+        if(document.getElementById('val-invest')) document.getElementById('val-invest').innerText = `Rs ${totalInvest.toLocaleString()}`;
+        if(document.getElementById('val-receivable')) document.getElementById('val-receivable').innerText = `Rs ${totalReceivable.toLocaleString()}`;
+        if(document.getElementById('val-giveble')) document.getElementById('val-giveble').innerText = `Rs ${totalGiveble.toLocaleString()}`;
     }
 
     function saveProfileDetails() {
