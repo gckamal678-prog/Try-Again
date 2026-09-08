@@ -67,24 +67,21 @@
                 <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="scanImageFromFile(event)">
 
                 <!-- Scanner Viewfinder Box -->
-                <div class="bg-slate-950 border-2 border-dashed border-slate-800 rounded-2xl p-4 text-center relative overflow-hidden min-h-[280px] flex flex-col justify-center items-center">
+                <div class="bg-slate-950 border-2 border-dashed border-slate-800 rounded-2xl p-2 text-center relative overflow-hidden min-h-[280px] flex flex-col justify-center items-center">
                     <div id="reader" class="w-full rounded-xl overflow-hidden"></div>
-                    
-                    <div id="scannerPlaceholder" class="flex flex-col items-center justify-center p-6 text-slate-400">
-                        <p class="text-xs font-medium mb-3">Camera is inactive</p>
-                        <button onclick="startRealScanner()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition shadow-md shadow-indigo-600/20">
-                            Start Camera
-                        </button>
-                    </div>
-                    
-                    <div id="scannerLoading" class="hidden text-amber-400 text-xs font-medium animate-pulse mt-2">
-                        Initializing camera...
+                    <div id="scannerLoading" class="text-amber-400 text-xs font-medium animate-pulse mt-2">
+                        Camera active & scanning...
                     </div>
                 </div>
 
-                <button onclick="stopRealScanner()" class="w-full bg-slate-800 hover:bg-slate-700 py-2.5 rounded-xl text-xs font-bold text-slate-300 transition">
-                    Stop Camera
-                </button>
+                <!-- Manual Code Input Section (Replacing Stop Camera) -->
+                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-3 space-y-2">
+                    <label class="text-[11px] font-bold text-slate-300">Code Manual Entry</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="manualTokenInput" placeholder="Paste sync token here..." class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-indigo-500">
+                        <button onclick="submitManualToken()" class="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-xl font-bold text-xs transition">Sync</button>
+                    </div>
+                </div>
             </div>
 
             <!-------------------------------------------------->
@@ -101,14 +98,23 @@
                         </div>
                         <p id="profilePhone" class="text-[11px] text-slate-400 mt-0.5">Digital NoteBook ID</p>
                     </div>
-                    <button onclick="openNativeShareSheet()" class="p-2.5 bg-slate-800 hover:bg-slate-700 rounded-xl transition text-slate-200">
+                    <button onclick="openNativeShareSheet()" class="p-2.5 bg-slate-800 hover:bg-slate-700 rounded-xl transition text-slate-200 flex items-center gap-1.5 font-bold">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+                        Share QR & Token
                     </button>
                 </div>
 
-                <!-- QR Display Card -->
+                <!-- QR Display Card with Logo in Center -->
                 <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col items-center text-center space-y-3">
-                    <div id="qrcode" class="p-3 bg-white rounded-xl shadow-inner inline-block"></div>
+                    <div id="qrcodeWrapper" class="relative inline-block p-3 bg-white rounded-xl shadow-inner">
+                        <div id="qrcode"></div>
+                        <!-- Logo in Center of QR -->
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <div class="w-10 h-10 rounded-full bg-white border-2 border-indigo-600 p-0.5 shadow-md overflow-hidden flex items-center justify-center">
+                                <img src="N1024.png" alt="Logo" class="w-full h-full object-cover rounded-full">
+                            </div>
+                        </div>
+                    </div>
                     <p class="text-[11px] text-slate-400">Scan this QR code within <span id="expiryCountdown" class="text-amber-400 font-bold">2:00 minutes</span> to securely sync data.</p>
                     <button onclick="generateSecureQRToken()" class="text-indigo-400 hover:underline text-[11px] font-semibold">Generate New QR</button>
                 </div>
@@ -169,6 +175,11 @@
             document.getElementById('profileName').textContent = savedName;
             document.getElementById('profilePhone').textContent = "ID: " + CURRENT_USER_ID;
             generateSecureQRToken();
+            
+            // Auto start camera on load
+            setTimeout(() => {
+                startRealScanner();
+            }, 500);
         };
 
         window.switchTab = function(tab) {
@@ -182,6 +193,7 @@
                 shareTabBtn.className = "flex-1 py-2.5 rounded-lg font-bold text-xs transition text-slate-400";
                 scanView.classList.remove('hidden');
                 shareView.classList.add('hidden');
+                startRealScanner();
             } else {
                 shareTabBtn.className = "flex-1 py-2.5 rounded-lg font-bold text-xs transition text-indigo-400 bg-slate-800 shadow";
                 scanTabBtn.className = "flex-1 py-2.5 rounded-lg font-bold text-xs transition text-slate-400";
@@ -191,14 +203,13 @@
             }
         };
 
-        // Generate QR with 2 Minutes Expiry Timer
         window.generateSecureQRToken = function() {
             const qrcodeContainer = document.getElementById('qrcode');
             if (!qrcodeContainer) return;
             qrcodeContainer.innerHTML = ""; 
             
             const uniqueHash = Math.random().toString(36).substring(2, 8);
-            tokenExpiryTimestamp = Date.now() + (2 * 60 * 1000); // 2 minutes from now
+            tokenExpiryTimestamp = Date.now() + (2 * 60 * 1000); 
             const secureToken = `NOTEBOOK_SYNC_${CURRENT_USER_ID}_${tokenExpiryTimestamp}_${uniqueHash}`;
             lastGeneratedToken = secureToken;
 
@@ -237,6 +248,7 @@
             }, 1000);
         }
 
+        // Share QR image + text token together
         window.openNativeShareSheet = async function() {
             if (!lastGeneratedToken) generateSecureQRToken();
             if (Date.now() > tokenExpiryTimestamp) {
@@ -244,20 +256,36 @@
                 return;
             }
 
-            if (navigator.share) {
-                try {
+            try {
+                const qrCanvas = document.querySelector('#qrcode canvas');
+                if (qrCanvas && navigator.share) {
+                    qrCanvas.toBlob(async (blob) => {
+                        const file = new File([blob], "digital-notebook-qr.png", { type: "image/png" });
+                        try {
+                            await navigator.share({
+                                title: 'Digital NoteBook QR Sync',
+                                text: `Secure Sync Token: ${lastGeneratedToken}`,
+                                files: [file]
+                            });
+                        } catch (err) {
+                            // Fallback if file share fails
+                            await navigator.share({
+                                title: 'Digital NoteBook QR Sync',
+                                text: `Secure Sync Token: ${lastGeneratedToken}`
+                            });
+                        }
+                    });
+                } else if (navigator.share) {
                     await navigator.share({
                         title: 'Digital NoteBook QR Sync',
                         text: `Secure Sync Token: ${lastGeneratedToken}`
                     });
-                } catch (err) {}
-            } else {
-                try {
+                } else {
                     await navigator.clipboard.writeText(lastGeneratedToken);
                     showFeedback("Token copied to clipboard!", "success");
-                } catch (err) {
-                    showFeedback("Sharing failed!", "error");
                 }
+            } catch (err) {
+                showFeedback("Sharing failed!", "error");
             }
         };
 
@@ -269,6 +297,8 @@
                 if (snapshot.exists()) {
                     const data = snapshot.val();
                     if (data.notes) localStorage.setItem('advanced_notebook_notes', JSON.stringify(data.notes));
+                    if (data.incomes) localStorage.setItem('digital_notebook_incomes', JSON.stringify(data.incomes));
+                    if (data.transactions) localStorage.setItem('digital_notebook_transactions', JSON.stringify(data.transactions));
                     return { success: true, message: "Synced successfully!" };
                 } else {
                     return { success: false, message: "No cloud backup found for this user!" };
@@ -294,6 +324,7 @@
                     }
 
                     if (targetUserId === CURRENT_USER_ID) {
+                        playBeep(false);
                         showFeedback("You cannot scan your own QR code!", "error");
                         return;
                     }
@@ -301,7 +332,7 @@
                     if (navigator.vibrate) navigator.vibrate(200);
                     playBeep(true);
 
-                    showFeedback("Connecting to cloud...", "success");
+                    showFeedback("Valid QR! Connecting to cloud...", "success");
 
                     window.restoreFromCloud(targetUserId).then(res => {
                         if (res.success) {
@@ -317,6 +348,15 @@
             playBeep(false);
             showFeedback("Invalid Digital NoteBook QR format!", "error");
         }
+
+        window.submitManualToken = function() {
+            const token = document.getElementById('manualTokenInput').value.trim();
+            if(!token) {
+                showFeedback("Please enter a token!", "error");
+                return;
+            }
+            handleScanSuccess(token);
+        };
 
         window.scanImageFromFile = function(e) {
             if (!e.target.files || e.target.files.length === 0) return;
@@ -355,7 +395,7 @@
 
         window.toggleTorch = function() {
             if (!html5QrCode || !html5QrCode.isScanning) {
-                showFeedback("Start camera first!", "error");
+                showFeedback("Camera is not active!", "error");
                 return;
             }
             torchOn = !torchOn;
@@ -363,27 +403,24 @@
         };
 
         window.startRealScanner = function() {
-            const placeholder = document.getElementById('scannerPlaceholder');
             const spinner = document.getElementById('scannerLoading');
             if (spinner) spinner.classList.remove('hidden');
-            if (placeholder) placeholder.style.display = 'none';
             
             if (!html5QrCode) html5QrCode = new Html5Qrcode("reader");
 
-            html5QrCode.start(
-                { facingMode: "environment" },
-                { fps: 10, qrbox: { width: 170, height: 170 } },
-                (decodedText) => {
+            if (!html5QrCode.isScanning) {
+                html5QrCode.start(
+                    { facingMode: "environment" },
+                    { fps: 10, qrbox: { width: 170, height: 170 } },
+                    (decodedText) => {
+                        handleScanSuccess(decodedText);
+                    },
+                    () => {}
+                ).catch((err) => {
                     if (spinner) spinner.classList.add('hidden');
-                    handleScanSuccess(decodedText);
-                    stopRealScanner();
-                },
-                () => {}
-            ).catch((err) => {
-                if (spinner) spinner.classList.add('hidden');
-                showFeedback("Camera permission denied!", "error");
-                if (placeholder) placeholder.style.display = 'flex';
-            });
+                    showFeedback("Camera permission needed or unavailable.", "error");
+                });
+            }
         };
 
         window.stopRealScanner = function() {
@@ -391,10 +428,7 @@
             if (spinner) spinner.classList.add('hidden');
 
             if (html5QrCode && html5QrCode.isScanning) {
-                html5QrCode.stop().then(() => {
-                    const placeholder = document.getElementById('scannerPlaceholder');
-                    if (placeholder) placeholder.style.display = 'flex';
-                }).catch(err => {});
+                html5QrCode.stop().catch(err => {});
             }
         };
 
