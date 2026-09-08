@@ -102,6 +102,7 @@ tailwind.config = {
 
             <nav class="space-y-1 font-medium">
                 <a href="index.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl bg-indigo-600 text-white shadow-md shadow-indigo-600/20 transition"><span>📊</span> <span class="lang-text" data-en="Overview" data-np="अवलोकन">Overview</span></a>
+                <a href="pages/qrscan.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl hover:bg-slate-800 text-slate-300 transition"><span>📷</span> <span class="lang-text" data-en="QR Scan & Share" data-np="क्यूआर स्क्यान र सेयर">QR Scan & Share</span></a>
             </nav>
 
             <div class="space-y-2.5 bg-slate-800/50 p-3 rounded-xl border border-slate-700/60">
@@ -176,12 +177,13 @@ tailwind.config = {
                     <h2 id="dynamic-greeting" class="text-base md:text-lg font-bold text-slate-800 dark:text-white tracking-tight"></h2>
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5"><span class="lang-text" data-en="Here is what is happening with your money today." data-np="आज तपाईंको पैसाको स्थिति यहाँ छ।">Here is what is happening with your money today.</span></p>
                 </div>
-                <div class="bg-white dark:bg-slate-900 p-1.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col items-center shrink-0">
+                <!-- Connected QR Scan Link -->
+                <a href="pages/qrscan.html" class="bg-white dark:bg-slate-900 p-1.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col items-center shrink-0 hover:border-indigo-500 transition">
                     <div class="w-12 h-12 bg-white flex items-center justify-center p-0.5 rounded">
                         <img src="N1024.png" alt="QR Code" class="w-full h-full object-contain">
                     </div>
                     <span class="text-[9px] text-slate-400 mt-0.5 font-medium"><span class="lang-text" data-en="QR Scan" data-np="क्यूआर स्क्यान">QR Scan</span></span>
-                </div>
+                </a>
             </div>
 
             <!-- ROW 1: Dynamic Calculated Financial Summaries -->
@@ -210,7 +212,7 @@ tailwind.config = {
 
             <hr class="border-slate-200 dark:border-slate-800 my-2">
 
-            <!-- ROW 2: Connected Feature 1, 2, 3 (Updated with pages/ folder path) -->
+            <!-- ROW 2: Connected Features -->
             <div class="grid grid-cols-3 gap-2 text-center">
                 <a href="pages/add-transaction.html" class="flex flex-col items-center p-2 rounded-xl bg-slate-200/50 dark:bg-slate-900/65 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
                     <span class="text-base mb-1">💳</span>
@@ -226,7 +228,7 @@ tailwind.config = {
                 </a>
             </div>
 
-            <!-- Row 3 (Updated with pages/ folder path) -->
+            <!-- Row 3 -->
             <div class="grid grid-cols-3 gap-2 text-center">
                 <a href="pages/calculate.html" class="flex flex-col items-center p-2 rounded-xl bg-slate-200/50 dark:bg-slate-900/65 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
                     <span class="text-base mb-1">🧮</span>
@@ -242,7 +244,7 @@ tailwind.config = {
                 </a>
             </div>
 
-            <!-- Row 4 (Updated with pages/ folder path) -->
+            <!-- Row 4 -->
             <div class="grid grid-cols-2 gap-2 text-center">
                 <a href="pages/setting.html" class="flex flex-col items-center p-2.5 rounded-xl bg-slate-200/50 dark:bg-slate-900/65 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 transition">
                     <span class="text-base mb-1">⚙️</span>
@@ -312,12 +314,14 @@ tailwind.config = {
     }
 
     window.handleCloudBackup = async function() {
-        const result = await backupToCloud("default_user");
+        let userId = localStorage.getItem('my_unique_userid') || "default_user";
+        const result = await backupToCloud(userId);
         alert(result.message);
     };
 
     window.handleCloudRestore = async function() {
-        const result = await restoreFromCloud("default_user");
+        let userId = localStorage.getItem('my_unique_userid') || "default_user";
+        const result = await restoreFromCloud(userId);
         alert(result.message);
         if(result.success) location.reload();
     };
@@ -392,7 +396,6 @@ tailwind.config = {
 
     setInterval(updateDynamicHeader, 1000);
 
-    // Dynamic Financial Data Calculation from localStorage
     function loadFinancialSummaries() {
         const incomes = JSON.parse(localStorage.getItem('digital_notebook_incomes') || '[]');
         const totalIncome = incomes.reduce((sum, item) => sum + Number(item.amount || 0), 0);
@@ -420,7 +423,10 @@ tailwind.config = {
         const address = document.getElementById('input-address').value;
         const mobile = document.getElementById('input-mobile').value;
 
-        if(name) localStorage.setItem('profile_name', name);
+        if(name) {
+            localStorage.setItem('profile_name', name);
+            localStorage.setItem('user_profile_name', name);
+        }
         localStorage.setItem('profile_address', address);
         localStorage.setItem('profile_mobile', mobile);
 
