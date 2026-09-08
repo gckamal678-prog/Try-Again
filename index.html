@@ -424,7 +424,7 @@ tailwind.config = {
         const mobile = document.getElementById('input-mobile').value;
 
         if(name) {
-            localStorage.setItem('profile_name', name);
+            localStorage.getItem('profile_name', name);
             localStorage.setItem('user_profile_name', name);
         }
         localStorage.setItem('profile_address', address);
