@@ -154,7 +154,7 @@ tailwind.config = {
                 </div>
             </div>
 
-            <div class="text-center px-1 hidden md:block">
+            <div class="text-center px-1">
                 <h1 class="text-base font-extrabold tracking-wider bg-gradient-to-r from-red-500 via-yellow-400 via-green-400 via-cyan-400 via-purple-500 to-pink-500 animate-rainbow bg-clip-text text-transparent">
                     Digital NoteBook
                 </h1>
@@ -500,7 +500,7 @@ tailwind.config = {
 
     function handleAvatarUpload(event) {
         const file = event.target.files[0];
-        if (file) {
+        if (file, img) {
             const reader = new FileReader();
             reader.onload = function(e) {
                 const base64Image = e.target.result;
