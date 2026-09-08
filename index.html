@@ -139,7 +139,7 @@ tailwind.config = {
 
     <div class="flex-1 flex flex-col w-full">
         
-        <!-- HEADER SECTION (Emerald Mint & Inter Styled) -->
+        <!-- HEADER SECTION -->
         <header class="sticky top-0 z-40 flex items-center justify-between px-3 md:px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-emerald-500/20 shadow-md">
             <div class="flex items-center space-x-2.5">
                 <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-emerald-400 transition">☰</button>
@@ -172,7 +172,6 @@ tailwind.config = {
                     <h2 id="dynamic-greeting" class="text-base md:text-lg font-bold text-slate-800 dark:text-white tracking-tight"></h2>
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5"><span class="lang-text" data-en="Here is what is happening with your money today." data-np="आज तपाईंको पैसाको स्थिति यहाँ छ।">Here is what is happening with your money today.</span></p>
                 </div>
-                <!-- QR Scan Link -->
                 <a href="qrscan.html" class="bg-white dark:bg-slate-900 p-1.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col items-center shrink-0 hover:border-emerald-500 transition">
                     <div class="w-12 h-12 bg-white flex items-center justify-center p-0.5 rounded">
                         <img src="N1024.png" alt="QR Code" class="w-full h-full object-contain">
@@ -181,7 +180,7 @@ tailwind.config = {
                 </a>
             </div>
 
-            <!-- ROW 1: Dynamic Calculated Financial Summaries -->
+            <!-- ROW 1: Financial Summaries -->
             <div class="grid grid-cols-4 gap-2 text-center pt-2">
                 <div class="flex flex-col items-center p-1">
                     <span class="text-base mb-0.5">💵</span>
@@ -255,7 +254,7 @@ tailwind.config = {
     </div>
 </div>
 
-<!-- Firebase & Application Script -->
+<!-- Firebase Script -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
@@ -392,20 +391,23 @@ tailwind.config = {
     setInterval(updateDynamicHeader, 1000);
 
     function loadFinancialSummaries() {
+        // आम्दानी गणना र शून्य समस्या समाधानका लागि सुरक्षित पार्सिङ
         const incomes = JSON.parse(localStorage.getItem('digital_notebook_incomes') || '[]');
-        const totalIncome = incomes.reduce((sum, item) => sum + Number(item.amount || 0), 0);
+        const totalIncome = incomes.reduce((sum, item) => sum + Number(item.amount || item.incomeAmount || 0), 0);
         document.getElementById('val-income').innerText = `Rs ${totalIncome.toLocaleString()}`;
 
+        // कारोबार / ट्रान्जेक्सन गणना
         const transactions = JSON.parse(localStorage.getItem('digital_notebook_transactions') || '[]');
         let totalInvest = 0;
         let totalReceivable = 0;
         let totalGiveble = 0;
 
         transactions.forEach(tx => {
-            const amt = Number(tx.amount || 0);
-            if (tx.type === 'invest') totalInvest += amt;
-            if (tx.type === 'receivable') totalReceivable += amt;
-            if (tx.type === 'giveble') totalGiveble += amt;
+            const amt = Number(tx.amount || tx.txAmount || 0);
+            const tType = (tx.type || '').toLowerCase();
+            if (tType === 'invest' || tType === 'investment') totalInvest += amt;
+            else if (tType === 'receivable' || tType === 'receive') totalReceivable += amt;
+            else if (tType === 'giveble' || tType === 'give' || tType === 'payable') totalGiveble += amt;
         });
 
         document.getElementById('val-invest').innerText = `Rs ${totalInvest.toLocaleString()}`;
