@@ -304,7 +304,7 @@ tailwind.config = {
             restore_cloud: "Restore from Cloud"
         },
         NEP: {
-            reset_title: "मार्जिन रिसेट पुष्टि",
+            reset_title: "मास्टर रिसेट पुष्टि",
             reset_desc: "तपाईंको सम्पूर्ण डाटा मेटिनेछ। पुष्टि गर्न 'RESET' टाइप गर्नुहोस् र पिन (PIN) प्रविष्ट गर्नुहोस्:",
             use_fingerprint: "फिंगरप्रिन्ट / बायोमेट्रिक प्रयोग गर्नुहोस्",
             btn_cancel: "रद्द गर्नुहोस्",
@@ -500,12 +500,13 @@ tailwind.config = {
 
     function handleAvatarUpload(event) {
         const file = event.target.files[0];
-        if (file, img) {
+        if (file) {
             const reader = new FileReader();
             reader.onload = function(e) {
                 const base64Image = e.target.result;
                 localStorage.setItem('profile_avatar', base64Image);
                 loadAvatar();
+                showToast(currentLang === 'NEP' ? 'प्रोफाइल फोटो सफलतापूर्वकअपडेट भयो!' : 'Profile photo updated successfully!', 'success');
             };
             reader.readAsDataURL(file);
         }
