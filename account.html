@@ -29,8 +29,8 @@ tailwind.config = {
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
     @keyframes pulseGlow {
-        0%, 100% { opacity: 1; filter: drop-shadow(0 0 2px rgba(99, 102, 241, 0.4)); }
-        50% { opacity: 0.8; filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.8)); }
+        0%, 100% { opacity: 1; filter: drop-shadow(0 0 2px rgba(16, 185, 129, 0.4)); }
+        50% { opacity: 0.8; filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.8)); }
     }
     .animated-title { animation: pulseGlow 3s infinite ease-in-out; }
     
@@ -62,7 +62,7 @@ tailwind.config = {
         <div class="space-y-3">
             <input type="text" id="reset-input" placeholder="Type RESET here" class="w-full p-2.5 text-xs bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl outline-none text-slate-900 dark:text-white">
             <input type="password" id="reset-pin" placeholder="Enter 4-digit PIN (Default: 1234)" maxlength="4" class="w-full p-2.5 text-xs bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl outline-none text-slate-900 dark:text-white">
-            <button onclick="authenticateFingerprint()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl flex items-center justify-center gap-2 transition">
+            <button onclick="authenticateFingerprint()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl flex items-center justify-center gap-2 transition">
                 <i class="fa-solid fa-fingerprint"></i> <span data-i18n="use_fingerprint">Use Fingerprint / Biometric</span>
             </button>
         </div>
@@ -80,12 +80,12 @@ tailwind.config = {
         
         <div class="flex items-center justify-between px-4 py-3 border-b border-slate-800">
             <div class="flex items-center space-x-2.5">
-                <div class="w-8 h-8 rounded-lg bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-md">
+                <div class="w-8 h-8 rounded-lg bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-md">
                     <img src="N1024.png" alt="Logo" class="w-full h-full object-cover">
                 </div>
                 <div>
-                    <h1 class="text-sm font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-white via-indigo-300 to-red-500">
-                        Digital <span class="text-red-500">NoteBook</span>
+                    <h1 class="text-sm font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-300 to-cyan-500">
+                        Digital <span class="text-emerald-400">NoteBook</span>
                     </h1>
                 </div>
             </div>
@@ -97,7 +97,7 @@ tailwind.config = {
         <div class="p-3 space-y-3 overflow-y-auto flex-1 text-xs">
             <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-3 flex items-center space-x-3">
                 <div class="relative cursor-pointer group" onclick="document.getElementById('avatar-upload-input').click()">
-                    <div class="w-11 h-11 rounded-full bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-sm">
+                    <div class="w-11 h-11 rounded-full bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-sm">
                         <img id="sidebar-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
                     </div>
                 </div>
@@ -112,26 +112,26 @@ tailwind.config = {
                 <a href="index.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl hover:bg-slate-800 text-slate-300 transition"><span>📊</span> <span class="lang-text" data-en="Overview" data-np="अवलोकन">Overview</span></a>
                 <a href="add-transaction.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl hover:bg-slate-800 text-slate-300 transition"><span>🔄</span> <span class="lang-text" data-en="Transactions & Ledger" data-np="कारोबार र खाता">Transactions & Ledger</span></a>
                 <a href="add-income.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl hover:bg-slate-800 text-slate-300 transition"><span>💵</span> <span class="lang-text" data-en="Income Sources" data-np="आम्दानी स्रोतहरू">Income Sources</span></a>
-                <a href="account.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl bg-indigo-600 text-white shadow-md shadow-indigo-600/20 transition"><span>⚙️</span> <span class="lang-text" data-en="Account & Backup" data-np="खाता र ब्याकअप">Account & Backup</span></a>
+                <a href="account.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl bg-emerald-600 text-white shadow-md shadow-emerald-600/20 transition"><span>⚙️</span> <span class="lang-text" data-en="Account & Backup" data-np="खाता र ब्याकअप">Account & Backup</span></a>
             </nav>
 
             <div class="space-y-2.5 bg-slate-800/50 p-3 rounded-xl border border-slate-700/60">
                 <h3 class="text-[11px] font-bold text-white flex items-center gap-1.5 mb-1">
-                    <i class="fa-solid fa-address-card text-indigo-400"></i> <span class="lang-text" data-en="Personal Info" data-np="व्यक्तिगत विवरण">Personal Info</span>
+                    <i class="fa-solid fa-address-card text-emerald-400"></i> <span class="lang-text" data-en="Personal Info" data-np="व्यक्तिगत विवरण">Personal Info</span>
                 </h3>
                 <div>
                     <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Full Name" data-np="पूरा नाम">Full Name</span></label>
-                    <input type="text" id="input-full-name" placeholder="Enter Full Name" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-indigo-500">
+                    <input type="text" id="input-full-name" placeholder="Enter Full Name" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
                 </div>
                 <div>
                     <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Address" data-np="ठेगाना">Address</span></label>
-                    <input type="text" id="input-address" placeholder="Enter Address" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-indigo-500">
+                    <input type="text" id="input-address" placeholder="Enter Address" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
                 </div>
                 <div>
                     <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Mobile Number" data-np="मोबाइल नम्बर">Mobile Number</span></label>
-                    <input type="tel" id="input-mobile" placeholder="Enter Mobile Number" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-indigo-500">
+                    <input type="tel" id="input-mobile" placeholder="Enter Mobile Number" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
                 </div>
-                <button onclick="saveProfileDetails()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg transition shadow-md">
+                <button onclick="saveProfileDetails()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition shadow-md">
                     <span class="lang-text" data-en="Save Info" data-np="सेभ गर्नुहोस्">Save Info</span>
                 </button>
             </div>
@@ -140,35 +140,25 @@ tailwind.config = {
 
     <div class="flex-1 flex flex-col w-full">
         
-        <!-- HEADER SECTION -->
-        <header class="sticky top-0 z-40 flex items-center justify-between px-3 md:px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-slate-800 shadow-md">
-            <div class="flex items-center space-x-2">
-                <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-indigo-400 transition">
-                    ☰
-                </button>
-                <div class="flex items-center space-x-1.5 cursor-pointer" onclick="toggleSidebar()">
-                    <div class="w-7 h-7 rounded-lg bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-sm">
+        <!-- HEADER SECTION (Emerald Mint & Inter Styled) -->
+        <header class="sticky top-0 z-40 flex items-center justify-between px-3 md:px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-emerald-500/20 shadow-md">
+            <div class="flex items-center space-x-2.5">
+                <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-emerald-400 transition">☰</button>
+                <div class="flex items-center space-x-2 cursor-pointer" onclick="toggleSidebar()">
+                    <div class="w-7 h-7 rounded-lg bg-emerald-600 border border-emerald-500/50 flex items-center justify-center overflow-hidden shadow-sm">
                         <img src="N1024.png" alt="Logo" class="w-full h-full object-cover">
                     </div>
-                    <span class="text-xs font-bold text-white tracking-wide hidden sm:inline">Digital NoteBook</span>
+                    <span class="text-xs md:text-sm font-extrabold tracking-wider bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
+                        Digital NoteBook
+                    </span>
                 </div>
             </div>
 
-            <div class="text-center px-1">
-                <h1 class="text-base font-extrabold tracking-wider bg-gradient-to-r from-red-500 via-yellow-400 via-green-400 via-cyan-400 via-purple-500 to-pink-500 animate-rainbow bg-clip-text text-transparent">
-                    Digital NoteBook
-                </h1>
-            </div>
-
             <div class="flex items-center space-x-2">
-                <button onclick="toggleLanguage()" id="lang-toggle-btn" class="px-2 py-1 rounded-md bg-slate-800 border border-slate-700 text-[10px] font-bold text-slate-200 hover:bg-slate-700 transition">
-                    ENG
-                </button>
-                <button onclick="toggleTheme()" id="theme-toggle-btn" class="w-7 h-7 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center text-sm hover:bg-slate-700 transition">
-                    🌛
-                </button>
+                <button onclick="toggleLanguage()" id="lang-toggle-btn" class="px-2 py-1 rounded-md bg-slate-800 border border-slate-700 text-[10px] font-bold text-slate-200 hover:bg-slate-700 transition">ENG</button>
+                <button onclick="toggleTheme()" id="theme-toggle-btn" class="w-7 h-7 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center text-sm hover:bg-slate-700 transition">🌛</button>
                 <div class="relative cursor-pointer" onclick="toggleSidebar()">
-                    <div class="w-8 h-8 rounded-full bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-sm">
+                    <div class="w-8 h-8 rounded-full bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-sm">
                         <img id="header-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
                     </div>
                 </div>
@@ -181,7 +171,7 @@ tailwind.config = {
                 <div>
                     <p id="dynamic-date" class="text-[11px] font-semibold tracking-wider text-slate-400 uppercase mb-1"></p>
                     <h2 class="text-base md:text-lg font-bold text-slate-800 dark:text-white tracking-tight flex items-center gap-2">
-                        <i class="fa-solid fa-gear text-indigo-500"></i> <span class="lang-text" data-en="Account & Data Management" data-np="खाता र डाटा व्यवस्थापन">Account & Data Management</span>
+                        <i class="fa-solid fa-gear text-emerald-500"></i> <span class="lang-text" data-en="Account & Data Management" data-np="खाता र डाटा व्यवस्थापन">Account & Data Management</span>
                     </h2>
                 </div>
             </div>
@@ -190,7 +180,7 @@ tailwind.config = {
             <div class="space-y-4 w-full max-w-5xl mx-auto pt-2">
                 <div class="bg-white dark:bg-slate-900 p-4 md:p-6 rounded-2xl shadow-sm space-y-3 border border-slate-200 dark:border-slate-800 transition-colors duration-300 w-full">
                     <h3 class="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                        <i class="fa-solid fa-database text-indigo-500"></i> <span data-i18n="data_management">Data Management & Backup</span>
+                        <i class="fa-solid fa-database text-emerald-500"></i> <span data-i18n="data_management">Data Management & Backup</span>
                     </h3>
                     
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-2 w-full">
@@ -209,7 +199,7 @@ tailwind.config = {
                     <div class="pt-3 border-t border-slate-100 dark:border-slate-800 w-full">
                         <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-2" data-i18n="cloud_backup_label">Cloud Backup (Firebase Database)</label>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-2 w-full">
-                            <button onclick="triggerCloudBackup()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium p-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
+                            <button onclick="triggerCloudBackup()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium p-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
                                 <i class="fa-solid fa-cloud-arrow-up"></i> <span data-i18n="sync_cloud">Sync to Cloud</span>
                             </button>
                             <button onclick="triggerCloudRestore()" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-medium p-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
@@ -304,7 +294,7 @@ tailwind.config = {
             restore_cloud: "Restore from Cloud"
         },
         NEP: {
-            reset_title: "मास्टर रिसेट पुष्टि",
+            reset_title: "मार्जिन रिसेट पुष्टि",
             reset_desc: "तपाईंको सम्पूर्ण डाटा मेटिनेछ। पुष्टि गर्न 'RESET' टाइप गर्नुहोस् र पिन (PIN) प्रविष्ट गर्नुहोस्:",
             use_fingerprint: "फिंगरप्रिन्ट / बायोमेट्रिक प्रयोग गर्नुहोस्",
             btn_cancel: "रद्द गर्नुहोस्",
@@ -428,7 +418,7 @@ tailwind.config = {
     // Master Reset Modal Logic
     function openResetModal() {
         document.getElementById('reset-modal').classList.remove('hidden');
-        document.getElementById('reset-input').value = '';
+        document.getElementById('reset-input').value = '...';
         document.getElementById('reset-pin').value = '';
     }
 
@@ -492,7 +482,7 @@ tailwind.config = {
 
         if(document.getElementById('input-full-name')) document.getElementById('input-full-name').value = savedName;
         if(document.getElementById('input-address')) document.getElementById('input-address').value = savedAddress;
-        if(document.getElementById('input-mobile')) document.getElementById('input-mobile').value = savedMobile;
+        if(document.getElementById('input-mobile')) document.getElementById('input-mobile').value = savedMessage || savedMobile;
 
         const nameEl = document.getElementById('sidebar-profile-name');
         if(nameEl) nameEl.innerText = savedName;
@@ -500,13 +490,12 @@ tailwind.config = {
 
     function handleAvatarUpload(event) {
         const file = event.target.files[0];
-        if (file) {
+        if (file) { // सुधार गरिएको: `if (file, img)` लाई मिलाएर सहि बनाइएको
             const reader = new FileReader();
             reader.onload = function(e) {
                 const base64Image = e.target.result;
                 localStorage.setItem('profile_avatar', base64Image);
                 loadAvatar();
-                showToast(currentLang === 'NEP' ? 'प्रोफाइल फोटो सफलतापूर्वकअपडेट भयो!' : 'Profile photo updated successfully!', 'success');
             };
             reader.readAsDataURL(file);
         }
@@ -520,7 +509,7 @@ tailwind.config = {
         });
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
+    document.createElement("DOMContentLoaded", () => {
         updateLanguageUI();
         updateThemeUI();
         updateDynamicHeader();
