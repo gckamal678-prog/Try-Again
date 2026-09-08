@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Digital NoteBook - Transactions & Ledger</title>
-<script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+<script src="https://cdn.tailwindcss.com"></script>
 <script>
 tailwind.config = {
 darkMode: 'class',
@@ -25,8 +25,8 @@ document.documentElement.classList.remove('dark');
 document.documentElement.classList.add('dark');
 }
 </script>
-<link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)">
-<link href="[https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap](https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap)" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 @keyframes pulseGlow {
 0%, 100% { opacity: 1; filter: drop-shadow(0 0 2px rgba(99, 102, 241, 0.4)); }
@@ -52,9 +52,6 @@ animation: rainbow 5s linear infinite;
 <div id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 border-r border-slate-800 transform -translate-x-full transition-transform duration-300 flex flex-col text-white">
 <div class="flex items-center justify-between px-4 py-3 border-b border-slate-800">
 <div class="flex items-center space-x-2.5">
-<div class="w-8 h-8 rounded-lg bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-md">
-<img src="N1024.png" alt="Logo" class="w-full h-full object-cover">
-</div>
 <div>
 <h1 class="text-sm font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-white via-indigo-300 to-red-500">
 Digital <span class="text-red-500">NoteBook</span>
@@ -67,15 +64,9 @@ Digital <span class="text-red-500">NoteBook</span>
 </div>
 <div class="p-3 space-y-3 overflow-y-auto flex-1 text-xs">
 <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-3 flex items-center space-x-3">
-<div class="relative cursor-pointer group" onclick="document.getElementById('avatar-upload-input').click()">
-<div class="w-11 h-11 rounded-full bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-sm">
-<img id="sidebar-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
-</div>
-</div>
-<input type="file" id="avatar-upload-input" accept="image/*" class="hidden" onchange="handleAvatarUpload(event)">
 <div>
-<h3 id="sidebar-profile-name" class="text-white font-bold text-sm">Kamal G.C.</h3>
-<p class="text-[10px] text-slate-400"><span class="lang-text" data-en="Click icon to set photo" data-np="फोटो राख्न क्लिक गर्नुहोस्">Click icon to set photo</span></p>
+<h3 id="sidebar-profile-name" class="text-white font-bold text-sm">User Profile</h3>
+<p class="text-[10px] text-slate-400"><span class="lang-text" data-en="Digital Ledger User" data-np="डिजिटल लेजर प्रयोगकर्ता">Digital Ledger User</span></p>
 </div>
 </div>
 <nav class="space-y-1 font-medium">
@@ -126,10 +117,7 @@ Digital <span class="text-red-500">NoteBook</span>
 ☰
 </button>
 <div class="flex items-center space-x-1.5 cursor-pointer" onclick="toggleSidebar()">
-<div class="w-7 h-7 rounded-lg bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-sm">
-<img src="N1024.png" alt="Logo" class="w-full h-full object-cover">
-</div>
-<span class="text-xs font-bold text-white tracking-wide hidden sm:inline">Digital NoteBook</span>
+<span class="text-xs font-bold text-white tracking-wide">Digital NoteBook</span>
 </div>
 </div>
 <div class="text-center px-1 hidden md:block">
@@ -144,11 +132,6 @@ ENG
 <button onclick="toggleTheme()" id="theme-toggle-btn" class="w-7 h-7 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center text-sm hover:bg-slate-700 transition">
 🌛
 </button>
-<div class="relative cursor-pointer" onclick="toggleSidebar()">
-<div class="w-8 h-8 rounded-full bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-sm">
-<img id="header-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
-</div>
-</div>
 </div>
 </header>
 <main class="p-4 md:p-6 space-y-4 flex-1 w-full text-xs">
@@ -223,17 +206,17 @@ ENG
 </form>
 </div>
 </div>
-<!-- ACCORDION CARD 2: PARTY ACCOUNTS & LEDGER -->
+<!-- ACCORDION CARD 2: PARTY ACCOUNTS & LEDGER TABLE -->
 <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden transition-colors">
 <button onclick="toggleAccordion('section-party')" class="w-full flex justify-between items-center p-4 md:p-5 text-left font-bold text-sm text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
-<span class="flex items-center gap-2"><i class="fa-solid fa-users text-purple-500"></i> <span class="lang-text" data-en="Party Accounts & Ledger" data-np="पार्टी खाता र लेजर">Party Accounts & Ledger</span></span>
+<span class="flex items-center gap-2"><i class="fa-solid fa-users text-purple-500"></i> <span class="lang-text" data-en="Party Accounts & Ledger Table" data-np="पार्टी खाता र लेजर टेबल">Party Accounts & Ledger Table</span></span>
 <i id="icon-section-party" class="fa-solid fa-chevron-down transition-transform"></i>
 </button>
 <div id="content-section-party" class="p-4 md:p-6 border-t border-slate-100 dark:border-slate-800 space-y-4">
 <div class="flex justify-between items-center gap-2">
 <input type="text" id="search-party" placeholder="Search party name..." oninput="renderPartyAccounts()" class="w-full md:w-64 border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 rounded-xl text-xs outline-none">
 </div>
-<div id="party-list-container" class="space-y-3"></div>
+<div id="party-list-container" class="space-y-3 overflow-x-auto"></div>
 </div>
 </div>
 </main>
@@ -271,7 +254,7 @@ showToast(error.message, 'error');
 async function restoreFromCloud(userId = "default_user") {
 try {
 const dbRef = ref(db);
-const snapshot = await get(child(dbRef, users/${userId}));
+const snapshot = await get(child(dbRef, `users/${userId}`));
 if (snapshot.exists()) {
 const data = snapshot.val();
 if (data.transactions) localStorage.setItem('digital_notebook_transactions', JSON.stringify(data.transactions));
@@ -334,7 +317,7 @@ const dateString = now.toLocaleDateString(currentLang === 'NEP' ? 'ne-NP' : 'en-
 const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
 const timeString = now.toLocaleTimeString('en-US', timeOptions);
 const dateEl = document.getElementById('dynamic-date');
-if (dateEl) dateEl.innerText = ${dateString} | ${timeString};
+if (dateEl) dateEl.innerText = `${dateString} | ${timeString}`;
 }
 setInterval(updateDynamicHeader, 1000);
 function showToast(message, type = 'success') {
@@ -342,8 +325,8 @@ const container = document.getElementById('toast-container');
 if(!container) return;
 const toast = document.createElement('div');
 const bgColor = type === 'success' ? 'bg-emerald-600' : 'bg-rose-600';
-toast.className = ${bgColor} text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold transform transition-all duration-300 translate-y-2 opacity-0 flex items-center gap-2;
-toast.innerHTML = <span>${type === 'success' ? '✅' : '⚠️'}</span> <span>${message}</span>;
+toast.className = `${bgColor} text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold transform transition-all duration-300 translate-y-2 opacity-0 flex items-center gap-2`;
+toast.innerHTML = `<span>${type === 'success' ? '✅' : '⚠️'}</span> <span>${message}</span>`;
 container.appendChild(toast);
 setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 50);
 setTimeout(() => {
@@ -352,8 +335,8 @@ setTimeout(() => toast.remove(), 300);
 }, 3000);
 }
 function toggleAccordion(id) {
-const content = document.getElementById(content-${id});
-const icon = document.getElementById(icon-${id});
+const content = document.getElementById(`content-${id}`);
+const icon = document.getElementById(`icon-${id}`);
 if(content) content.classList.toggle('hidden');
 if(icon) icon.classList.toggle('rotate-180');
 }
@@ -379,7 +362,6 @@ const type = document.getElementById('txn-type').value;
 if (type !== 'Expense') {
 const rate = parseFloat(document.getElementById('txn-interest-rate').value) || 0;
 const period = parseFloat(document.getElementById('txn-period').value) || 0;
-// Simple interest calculation: Principal + (Principal * Rate * Period / 100)
 const interest = (principal * rate * period) / 100;
 principal += interest;
 }
@@ -425,10 +407,9 @@ if(!container) return;
 let transactions = JSON.parse(localStorage.getItem('digital_notebook_transactions') || '[]');
 container.innerHTML = '';
 if (transactions.length === 0) {
-container.innerHTML = <p class="text-slate-400 text-center py-3">${currentLang === 'NEP' ? 'कुनै कारोबार रेकर्ड फेला परेन।' : 'No transaction records found.'}</p>;
+container.innerHTML = `<p class="text-slate-400 text-center py-3">${currentLang === 'NEP' ? 'कुनै कारोबार रेकर्ड फेला परेन।' : 'No transaction records found.'}</p>`;
 return;
 }
-// Group transactions by party name
 const parties = {};
 transactions.forEach((tx, idx) => {
 const pName = tx.party || 'Unknown';
@@ -449,16 +430,16 @@ foundMatch = true;
 const partyData = parties[partyName];
 const partyDiv = document.createElement('div');
 partyDiv.className = "bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/60 p-3.5 rounded-xl space-y-2";
-let headerHtml = <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-700 pb-2"> <div> <h4 class="font-bold text-slate-900 dark:text-white text-sm"><i class="fa-solid fa-user text-indigo-400 mr-1.5"></i>${partyName}</h4> <p class="text-[10px] text-slate-500 dark:text-slate-400">Net Balance: <span class="font-bold ${partyData.balance >= 0 ? 'text-emerald-500' : 'text-rose-500'}">Rs ${partyData.balance.toFixed(2)}</span></p> </div> </div> <div class="space-y-1.5 pt-1">;
+let headerHtml = `<div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-700 pb-2"> <div> <h4 class="font-bold text-slate-900 dark:text-white text-sm"><i class="fa-solid fa-user text-indigo-400 mr-1.5"></i>${partyName}</h4> <p class="text-[10px] text-slate-500 dark:text-slate-400">Net Balance: <span class="font-bold ${partyData.balance >= 0 ? 'text-emerald-500' : 'text-rose-500'}">Rs ${partyData.balance.toFixed(2)}</span></p> </div> </div> <div class="overflow-x-auto"><table class="w-full text-left border-collapse"><thead><tr class="border-b border-slate-200 dark:border-slate-700 text-[10px] text-slate-400"><th class="py-1 px-2">Date</th><th class="py-1 px-2">Type</th><th class="py-1 px-2">NPR/INR</th><th class="py-1 px-2">Total</th><th class="py-1 px-2 text-right">Actions</th></tr></thead><tbody>`;
 partyData.items.forEach(tx => {
-headerHtml += <div class="flex justify-between items-center bg-white dark:bg-slate-900/60 p-2 rounded-lg border border-slate-200 dark:border-slate-800 text-[11px]"> <div> <span class="font-semibold text-slate-800 dark:text-slate-200">${tx.date}</span> •  <span class="px-1.5 py-0.5 rounded text-[9px] font-bold ${tx.type === 'Receivable' ? 'bg-emerald-500/10 text-emerald-500' : tx.type === 'Payable' ? 'bg-amber-500/10 text-amber-500' : 'bg-rose-500/10 text-rose-500'}">${tx.type}</span> <p class="text-[10px] text-slate-500">NPR: ${tx.npr} | INR: ${tx.inr} ${tx.note ? '• ' + tx.note : ''}</p> </div> <div class="flex items-center gap-2"> <span class="font-bold text-blue-500">Rs ${tx.total.toFixed(2)}</span> <button onclick="editTransaction(${tx.originalIndex})" class="text-blue-500 hover:text-blue-600"><i class="fa-solid fa-pen-to-square"></i></button> <button onclick="deleteTransaction(${tx.originalIndex})" class="text-rose-500 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button> </div> </div>;
+headerHtml += `<tr class="border-b border-slate-100 dark:border-slate-800 text-[11px]"><td class="py-1.5 px-2 font-semibold text-slate-800 dark:text-slate-200">${tx.date}</td><td class="py-1.5 px-2"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold ${tx.type === 'Receivable' ? 'bg-emerald-500/10 text-emerald-500' : tx.type === 'Payable' ? 'bg-amber-500/10 text-amber-500' : 'bg-rose-500/10 text-rose-500'}">${tx.type}</span></td><td class="py-1.5 px-2 text-slate-500">NPR: ${tx.npr} | INR: ${tx.inr}</td><td class="py-1.5 px-2 font-bold text-blue-500">Rs ${tx.total.toFixed(2)}</td><td class="py-1.5 px-2 text-right space-x-2"><button onclick="editTransaction(${tx.originalIndex})" class="text-blue-500 hover:text-blue-600"><i class="fa-solid fa-pen-to-square"></i></button><button onclick="deleteTransaction(${tx.originalIndex})" class="text-rose-500 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>`;
 });
-headerHtml += </div>;
+headerHtml += `</tbody></table></div>`;
 partyDiv.innerHTML = headerHtml;
 container.appendChild(partyDiv);
 });
 if (!foundMatch) {
-container.innerHTML = <p class="text-slate-400 text-center py-3">No matching party found.</p>;
+container.innerHTML = `<p class="text-slate-400 text-center py-3">No matching party found.</p>`;
 }
 }
 function editTransaction(idx) {
@@ -478,7 +459,6 @@ document.getElementById('txn-note').value = tx.note;
 handleTypeChange();
 document.getElementById('txn-submit-btn').innerText = currentLang === 'NEP' ? 'अपडेट गर्नुहोस्' : 'Update Transaction';
 document.getElementById('txn-cancel-btn').classList.remove('hidden');
-// Open transaction accordion if closed
 const content = document.getElementById('content-section-transaction');
 if (content && content.classList.contains('hidden')) {
 toggleAccordion('section-transaction');
@@ -504,40 +484,20 @@ loadUserData();
 showToast(currentLang === 'NEP' ? 'विवरण सफलतापूर्वक सेभ भयो!' : 'Details saved successfully!', 'success');
 }
 function loadUserData() {
-const savedName = localStorage.getItem('profile_name') || 'Kamal G.C.';
+const savedName = localStorage.getItem('profile_name') || '';
 const savedAddress = localStorage.getItem('profile_address') || '';
 const savedMobile = localStorage.getItem('profile_mobile') || '';
 if(document.getElementById('input-full-name')) document.getElementById('input-full-name').value = savedName;
 if(document.getElementById('input-address')) document.getElementById('input-address').value = savedAddress;
 if(document.getElementById('input-mobile')) document.getElementById('input-mobile').value = savedMobile;
 const nameEl = document.getElementById('sidebar-profile-name');
-if(nameEl) nameEl.innerText = savedName;
-}
-function handleAvatarUpload(event) {
-const file = event.target.files[0];
-if (file) {
-const reader = new FileReader();
-reader.onload = function(e) {
-const base64Image = e.target.result;
-localStorage.setItem('profile_avatar', base64Image);
-loadAvatar();
-};
-reader.readAsDataURL(file);
-}
-}
-function loadAvatar() {
-const savedImage = localStorage.getItem('profile_avatar') || 'N1024.png';
-['sidebar-avatar-img', 'header-avatar-img'].forEach(id => {
-const img = document.getElementById(id);
-if(img) img.src = savedImage;
-});
+if(nameEl) nameEl.innerText = savedName ? savedName : 'User Profile';
 }
 document.addEventListener("DOMContentLoaded", () => {
 updateLanguageUI();
 updateThemeUI();
 updateDynamicHeader();
 loadUserData();
-loadAvatar();
 renderPartyAccounts();
 const dateInput = document.getElementById('txn-date');
 if(dateInput && !dateInput.value) {
