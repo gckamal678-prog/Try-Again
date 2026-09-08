@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Digital NoteBook - Digital Calculator</title>
+<title>Digital NoteBook - Calculator</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
 tailwind.config = {
@@ -26,7 +26,7 @@ tailwind.config = {
     }
 </script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Anek+Devanagari:wght@400;500;700&family=Mukta:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
     @keyframes rainbow {
         0% { background-position: 0% 50%; }
@@ -39,249 +39,245 @@ tailwind.config = {
     }
 </style>
 </head>
-<body id="main-body" class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-xs">
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-xs">
 
-<!-- TOAST NOTIFICATION CONTAINER -->
+<!-- TOAST NOTIFICATION -->
 <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2"></div>
 
 <div class="flex min-h-screen w-full">
     
-    <!-- SIDEBAR SECTION -->
+    <!-- SIDEBAR -->
     <div id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 border-r border-slate-800 transform -translate-x-full transition-transform duration-300 flex flex-col text-white">
         <div class="flex items-center justify-between px-4 py-3 border-b border-slate-800">
             <div class="flex items-center space-x-2.5">
                 <div class="w-8 h-8 rounded-lg bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-md">
-                    <img src="N1024.png" alt="Logo" class="w-full h-full object-cover">
+                    <i class="fa-solid fa-book-open text-white"></i>
                 </div>
-                <div>
-                    <h1 class="text-sm font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-white via-indigo-300 to-red-500">
-                        Digital <span class="text-red-500">NoteBook</span>
-                    </h1>
-                </div>
+                <h1 class="text-sm font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-white via-indigo-300 to-red-500">
+                    Digital <span class="text-red-500">NoteBook</span>
+                </h1>
             </div>
             <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white text-lg focus:outline-none">✕</button>
         </div>
 
         <div class="p-3 space-y-3 overflow-y-auto flex-1 text-xs">
+            <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-3 flex items-center space-x-3">
+                <div class="relative cursor-pointer group" onclick="document.getElementById('avatar-upload-input').click()">
+                    <div class="w-11 h-11 rounded-full bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-sm">
+                        <img id="sidebar-avatar-img" src="" alt="Profile" class="w-full h-full object-cover hidden" onerror="this.classList.add('hidden')">
+                        <i id="sidebar-avatar-icon" class="fa-solid fa-user text-white"></i>
+                    </div>
+                </div>
+                <input type="file" id="avatar-upload-input" accept="image/*" class="hidden" onchange="handleAvatarUpload(event)">
+                <div>
+                    <h3 id="sidebar-profile-name" class="text-white font-bold text-sm">Kamal G.C.</h3>
+                    <p class="text-[10px] text-slate-400"><span class="lang-text" data-en="Click icon to set photo" data-np="फोटो राख्न क्लिक गर्नुहोस्">Click icon to set photo</span></p>
+                </div>
+            </div>
+
             <nav class="space-y-1 font-medium">
-                <a href="index.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl hover:bg-slate-800 text-slate-300 transition"><span>📊</span> <span class="lang-text" data-en="Overview" data-np="अवलोकन">Overview</span></a>
-                <a href="notebook.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl hover:bg-slate-800 text-slate-300 transition"><span>📝</span> <span class="lang-text" data-en="NotePad Studio" data-np="नोटप्याड स्टुडियो">NotePad Studio</span></a>
-                <a href="calculate.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl bg-indigo-600 text-white shadow-md shadow-indigo-600/20 transition"><span>🧮</span> <span class="lang-text" data-en="Digital Calculator" data-np="डिजिटल क्याल्कुलेटर">Digital Calculator</span></a>
-                <a href="setting.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl hover:bg-slate-800 text-slate-300 transition"><span>⚙️</span> <span class="lang-text" data-en="Settings & About" data-np="सेटिङ र बारेमा">Settings & About</span></a>
+                <a href="#" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl bg-indigo-600 text-white shadow-md transition"><span>🧮</span> <span class="lang-text" data-en="Digital Calculator" data-np="डिजिटल क्याल्कुलेटर">Digital Calculator</span></a>
             </nav>
+
+            <div class="space-y-2.5 bg-slate-800/50 p-3 rounded-xl border border-slate-700/60">
+                <h3 class="text-[11px] font-bold text-white flex items-center gap-1.5 mb-1">
+                    <i class="fa-solid fa-address-card text-indigo-400"></i> <span class="lang-text" data-en="Personal Info" data-np="व्यक्तिगत विवरण">Personal Info</span>
+                </h3>
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Full Name</label>
+                    <input type="text" id="input-full-name" placeholder="Enter Full Name" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs outline-none">
+                </div>
+                <button onclick="saveProfileDetails()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg transition shadow-md mt-2">
+                    Save Info
+                </button>
+            </div>
         </div>
     </div>
 
     <div class="flex-1 flex flex-col w-full">
-        
-        <!-- HEADER SECTION -->
+        <!-- HEADER -->
         <header class="sticky top-0 z-40 flex items-center justify-between px-3 md:px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-slate-800 shadow-md">
             <div class="flex items-center space-x-2">
-                <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-indigo-400 transition">☰</button>
-                <div class="flex items-center space-x-1.5 cursor-pointer" onclick="toggleSidebar()">
-                    <div class="w-7 h-7 rounded-lg bg-indigo-600 border border-indigo-500 flex items-center justify-center overflow-hidden shadow-sm">
-                        <img src="N1024.png" alt="Logo" class="w-full h-full object-cover">
-                    </div>
-                    <span class="text-xs font-bold text-white tracking-wide hidden sm:inline">Digital NoteBook</span>
-                </div>
+                <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none">☰</button>
+                <span class="text-xs font-bold text-white tracking-wide">Digital NoteBook</span>
             </div>
-
-            <div class="text-center px-1 hidden md:block">
-                <h1 class="text-base font-extrabold tracking-wider bg-gradient-to-r from-red-500 via-yellow-400 via-green-400 via-cyan-400 via-purple-500 to-pink-500 animate-rainbow bg-clip-text text-transparent">
-                    Digital NoteBook
-                </h1>
-            </div>
-
             <div class="flex items-center space-x-2">
-                <button onclick="toggleLanguage()" id="lang-toggle-btn" class="px-2 py-1 rounded-md bg-slate-800 border border-slate-700 text-[10px] font-bold text-slate-200 hover:bg-slate-700 transition">ENG</button>
-                <button onclick="toggleTheme()" id="theme-toggle-btn" class="w-7 h-7 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center text-sm hover:bg-slate-700 transition">🌛</button>
+                <button onclick="toggleLanguage()" id="lang-toggle-btn" class="px-2 py-1 rounded-md bg-slate-800 border border-slate-700 text-[10px] font-bold text-slate-200">ENG</button>
+                <button onclick="toggleTheme()" id="theme-toggle-btn" class="w-7 h-7 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center text-sm">🌛</button>
             </div>
         </header>
 
+        <!-- MAIN CONTENT -->
         <main class="p-4 md:p-6 space-y-4 flex-1 w-full text-xs flex flex-col items-center justify-center">
-            
-            <!-- Calculator Card Wrapper -->
-            <div class="w-full max-w-sm bg-white dark:bg-slate-900 p-5 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 space-y-4">
-                
-                <!-- Calculator Header / Mode -->
-                <div class="flex justify-between items-center pb-2 border-b border-slate-100 dark:border-slate-800">
-                    <span class="font-bold text-slate-700 dark:text-slate-300" data-i18n="calc_title">Digital Calculator</span>
-                    <button onclick="clearHistory()" class="text-[10px] text-indigo-600 dark:text-indigo-400 font-semibold hover:underline" data-i18n="clear_history">Clear History</button>
+            <div class="w-full max-w-sm">
+                <div class="flex justify-between items-center px-1 mb-3">
+                    <div>
+                        <p id="dynamic-date" class="text-[11px] font-semibold tracking-wider text-slate-400 uppercase mb-1"></p>
+                        <h2 class="text-base md:text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                            <i class="fa-solid fa-calculator text-indigo-500"></i> <span class="lang-text" data-en="Digital Calculator" data-np="डिजिटल क्याल्कुलेटर">Digital Calculator</span>
+                        </h2>
+                    </div>
                 </div>
 
-                <!-- Display Screen -->
-                <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 text-right space-y-1">
-                    <div id="calc-history" class="text-[11px] text-slate-400 min-h-[16px] overflow-x-auto"></div>
-                    <div id="calc-display" class="text-2xl font-bold text-slate-900 dark:text-white tracking-wider overflow-x-auto">0</div>
-                </div>
+                <!-- CALCULATOR CONTAINER -->
+                <div class="bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 p-5 space-y-4">
+                    <!-- Screen Display -->
+                    <div class="bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 text-right flex flex-col justify-end h-24 overflow-hidden shadow-inner">
+                        <div id="calc-history" class="text-slate-400 text-xs tracking-wide h-5 overflow-x-auto whitespace-nowrap"></div>
+                        <div id="calc-display" class="text-slate-900 dark:text-white text-3xl font-bold tracking-wider overflow-x-auto whitespace-nowrap">0</div>
+                    </div>
 
-                <!-- Keypad Grid -->
-                <div class="grid grid-cols-4 gap-2">
-                    <!-- Row 1 -->
-                    <button onclick="clearAll()" class="p-3 rounded-xl bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 font-bold hover:bg-rose-200 transition">C</button>
-                    <button onclick="deleteDigit()" class="p-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition"><i class="fa-solid fa-delete-left"></i></button>
-                    <button onclick="appendOperator('%')" class="p-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition">%</button>
-                    <button onclick="appendOperator('/')" class="p-3 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 font-bold hover:bg-indigo-100 transition">÷</button>
-                    
-                    <!-- Row 2 -->
-                    <button onclick="appendNumber('7')" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 text-slate-800 dark:text-slate-200 font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition">7</button>
-                    <button onclick="appendNumber('8')" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 text-slate-800 dark:text-slate-200 font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition">8</button>
-                    <button onclick="appendNumber('9')" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 text-slate-800 dark:text-slate-200 font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition">9</button>
-                    <button onclick="appendOperator('*')" class="p-3 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 font-bold hover:bg-indigo-100 transition">×</button>
-                    
-                    <!-- Row 3 -->
-                    <button onclick="appendNumber('4')" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 text-slate-800 dark:text-slate-200 font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition">4</button>
-                    <button onclick="appendNumber('5')" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 text-slate-800 dark:text-slate-200 font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition">5</button>
-                    <button onclick="appendNumber('6')" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 text-slate-800 dark:text-slate-200 font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition">6</button>
-                    <button onclick="appendOperator('-')" class="p-3 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 font-bold hover:bg-indigo-100 transition">-</button>
-                    
-                    <!-- Row 4 -->
-                    <button onclick="appendNumber('1')" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 text-slate-800 dark:text-slate-200 font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition">1</button>
-                    <button onclick="appendNumber('2')" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 text-slate-800 dark:text-slate-200 font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition">2</button>
-                    <button onclick="appendNumber('3')" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 text-slate-800 dark:text-slate-200 font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition">3</button>
-                    <button onclick="appendOperator('+')" class="p-3 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 font-bold hover:bg-indigo-100 transition">+</button>
-                    
-                    <!-- Row 5 -->
-                    <button onclick="appendNumber('0')" class="col-span-2 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 text-slate-800 dark:text-slate-200 font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition">0</button>
-                    <button onclick="appendDecimal('.')" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 text-slate-800 dark:text-slate-200 font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition">.</button>
-                    <button onclick="calculateResult()" class="p-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold shadow-md shadow-indigo-600/20 transition">=</button>
-                </div>
+                    <!-- Keypad Grid -->
+                    <div class="grid grid-cols-4 gap-2.5">
+                        <button onclick="clearCalculator()" class="bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white font-bold p-3.5 rounded-2xl transition text-sm">C</button>
+                        <button onclick="appendValue('%')" class="bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-indigo-600 hover:text-white font-bold p-3.5 rounded-2xl transition text-sm">%</button>
+                        <button onclick="deleteLast()" class="bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-indigo-600 hover:text-white font-bold p-3.5 rounded-2xl transition text-sm"><i class="fa-solid fa-delete-left"></i></button>
+                        <button onclick="appendValue('/')" class="bg-indigo-500/10 text-indigo-500 hover:bg-indigo-600 hover:text-white font-bold p-3.5 rounded-2xl transition text-sm">÷</button>
 
+                        <button onclick="appendValue('7')" class="bg-slate-100 dark:bg-slate-800/60 text-slate-800 dark:text-white hover:bg-indigo-600 hover:text-white font-bold p-3.5 rounded-2xl transition text-sm">7</button>
+                        <button onclick="appendValue('8')" class="bg-slate-100 dark:bg-slate-800/60 text-slate-800 dark:text-white hover:bg-indigo-600 hover:text-white font-bold p-3.5 rounded-2xl transition text-sm">8</button>
+                        <button onclick="appendValue('9')" class="bg-slate-100 dark:bg-slate-800/60 text-slate-800 dark:text-white hover:bg-indigo-600 hover:text-white font-bold p-3.5 rounded-2xl transition text-sm">9</button>
+                        <button onclick="appendValue('*')" class="bg-indigo-500/10 text-indigo-500 hover:bg-indigo-600 hover:text-white font-bold p-3.5 rounded-2xl transition text-sm">×</button>
+
+                        <button onclick="appendValue('4')" class="bg-slate-100 dark:bg-slate-800/60 text-slate-800 dark:text-white hover:bg-indigo-600 hover:text-white font-bold p-3.5 rounded-2xl transition text-sm">4</button>
+                        <button onclick="appendValue('5')" class="bg-slate-100 dark:bg-slate-800/60 text-slate-800 dark:text-white hover:bg-indigo-600 hover:text-white font-bold p-3.5 rounded-2xl transition text-sm">5</button>
+                        <button onclick="appendValue('6')" class="bg-slate-100 dark:bg-slate-800/60 text-slate-800 dark:text-white hover:bg-indigo-600 hover:text-white font-bold p-3.5 rounded-2xl transition text-sm">6</button>
+                        <button onclick="appendValue('-')" class="bg-indigo-500/10 text-indigo-500 hover:bg-indigo-600 hover:text-white font-bold p-3.5 rounded-2xl transition text-sm">-</button>
+
+                        <button onclick="appendValue('1')" class="bg-slate-100 dark:bg-slate-800/60 text-slate-800 dark:text-white hover:bg-indigo-600 hover:text-white font-bold p-3.5 rounded-2xl transition text-sm">1</button>
+                        <button onclick="appendValue('2')" class="bg-slate-100 dark:bg-slate-800/60 text-slate-800 dark:text-white hover:bg-indigo-600 hover:text-white font-bold p-3.5 rounded-2xl transition text-sm">2</button>
+                        <button onclick="appendValue('3')" class="bg-slate-100 dark:bg-slate-800/60 text-slate-800 dark:text-white hover:bg-indigo-600 hover:text-white font-bold p-3.5 rounded-2xl transition text-sm">3</button>
+                        <button onclick="appendValue('+')" class="bg-indigo-500/10 text-indigo-500 hover:bg-indigo-600 hover:text-white font-bold p-3.5 rounded-2xl transition text-sm">+</button>
+
+                        <button onclick="appendValue('0')" class="col-span-2 bg-slate-100 dark:bg-slate-800/60 text-slate-800 dark:text-white hover:bg-indigo-600 hover:text-white font-bold p-3.5 rounded-2xl transition text-sm">0</button>
+                        <button onclick="appendValue('.')" class="bg-slate-100 dark:bg-slate-800/60 text-slate-800 dark:text-white hover:bg-indigo-600 hover:text-white font-bold p-3.5 rounded-2xl transition text-sm">.</button>
+                        <button onclick="calculateResult()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold p-3.5 rounded-2xl transition shadow-md text-sm">=</button>
+                    </div>
+                </div>
             </div>
-
         </main>
     </div>
 </div>
 
 <script>
-const translations = {
-    en: {
-        calc_title: "Digital Calculator",
-        clear_history: "Clear History"
-    },
-    np: {
-        calc_title: "डिजिटल क्याल्कुलेटर",
-        clear_history: "इतिहास मेटाउनुहोस्"
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar) sidebar.classList.toggle('-translate-x-full');
     }
-};
 
-let currentLang = localStorage.getItem('lang') || 'en';
-let currentInput = '0';
-let expressionHistory = '';
+    let currentLang = localStorage.getItem('lang') || 'EN';
 
-function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    if (sidebar) sidebar.classList.toggle('-translate-x-full');
-}
+    function updateLanguageUI() {
+        const btn = document.getElementById('lang-toggle-btn');
+        if(btn) btn.innerText = currentLang;
 
-function toggleLanguage() {
-    currentLang = currentLang === 'en' ? 'np' : 'en';
-    localStorage.setItem('lang', currentLang);
-    updateLanguageUI();
-}
+        document.querySelectorAll('.lang-text').forEach(el => {
+            const text = currentLang === 'NEP' ? el.getAttribute('data-np') : el.getAttribute('data-en');
+            if(text) el.innerText = text;
+        });
+    }
 
-function updateLanguageUI() {
-    const langBtn = document.getElementById('lang-toggle-btn');
-    if(langBtn) langBtn.innerText = currentLang === 'en' ? 'ENG' : 'नेपाली';
+    function toggleLanguage() {
+        currentLang = currentLang === 'EN' ? 'NEP' : 'EN';
+        localStorage.setItem('lang', currentLang);
+        updateLanguageUI();
+    }
 
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (translations[currentLang] && translations[currentLang][key]) {
-            el.innerText = translations[currentLang][key];
+    function toggleTheme() {
+        const htmlEl = document.documentElement;
+        if (htmlEl.classList.contains('dark')) {
+            htmlEl.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+            document.getElementById('theme-toggle-btn').innerText = '🌞';
+        } else {
+            htmlEl.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+            document.getElementById('theme-toggle-btn').innerText = '🌛';
         }
-    });
-}
-
-function toggleTheme() {
-    const htmlEl = document.documentElement;
-    const themeBtn = document.getElementById('theme-toggle-btn');
-    if (htmlEl.classList.contains('dark')) {
-        htmlEl.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-        if(themeBtn) themeBtn.innerText = '🌞';
-    } else {
-        htmlEl.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-        if(themeBtn) themeBtn.innerText = '🌛';
     }
-}
 
-function updateDisplay() {
-    document.getElementById('calc-display').innerText = currentInput;
-    document.getElementById('calc-history').innerText = expressionHistory;
-}
-
-function appendNumber(num) {
-    if (currentInput === '0' || currentInput === 'Error') {
-        currentInput = num;
-    } else {
-        currentInput += num;
+    function updateDynamicHeader() {
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const dateString = now.toLocaleDateString(currentLang === 'NEP' ? 'ne-NP' : 'en-US', options).toUpperCase();
+        const dateEl = document.getElementById('dynamic-date');
+        if (dateEl) dateEl.innerText = dateString;
     }
-    updateDisplay();
-}
 
-function appendDecimal(dot) {
-    const lastNum = currentInput.split(/[\+\-\*\/\%]/).pop();
-    if (!lastNum.includes('.')) {
-        currentInput += dot;
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toast-container');
+        if(!container) return;
+        const toast = document.createElement('div');
+        toast.className = `${type === 'success' ? 'bg-indigo-600' : 'bg-rose-600'} text-white px-4 py-2 rounded-xl shadow-lg text-xs font-semibold`;
+        toast.innerText = message;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    // CALCULATOR LOGIC
+    let currentInput = "0";
+    let historyInput = "";
+
+    function updateDisplay() {
+        document.getElementById('calc-display').innerText = currentInput;
+        document.getElementById('calc-history').innerText = historyInput;
+    }
+
+    function appendValue(val) {
+        if (currentInput === "0" && val !== '.') {
+            currentInput = val;
+        } else {
+            currentInput += val;
+        }
         updateDisplay();
     }
-}
 
-function appendOperator(op) {
-    const lastChar = currentInput.slice(-1);
-    if (['+', '-', '*', '/', '%'].includes(lastChar)) {
-        currentInput = currentInput.slice(0, -1) + op;
-    } else {
-        currentInput += op;
+    function clearCalculator() {
+        currentInput = "0";
+        historyInput = "";
+        updateDisplay();
     }
-    updateDisplay();
-}
 
-function clearAll() {
-    currentInput = '0';
-    expressionHistory = '';
-    updateDisplay();
-}
-
-function deleteDigit() {
-    if (currentInput.length > 1 && currentInput !== 'Error') {
-        currentInput = currentInput.slice(0, -1);
-    } else {
-        currentInput = '0';
-    }
-    updateDisplay();
-}
-
-function calculateResult() {
-    try {
-        expressionHistory = currentInput;
-        // Safe evaluation simulation for standard arithmetic
-        let sanitized = currentInput.replace(/×/g, '*').replace(/÷/g, '/');
-        let result = eval(sanitized);
-        if (!isFinite(result)) {
-            currentInput = 'Error';
+    function deleteLast() {
+        if (currentInput.length > 1) {
+            currentInput = currentInput.slice(0, -1);
         } else {
-            currentInput = String(parseFloat(result.toFixed(6)));
+            currentInput = "0";
         }
-    } catch (error) {
-        currentInput = 'Error';
+        updateDisplay();
     }
-    updateDisplay();
-}
 
-function clearHistory() {
-    expressionHistory = '';
-    updateDisplay();
-}
+    function calculateResult() {
+        try {
+            historyInput = currentInput;
+            // प्रतिशत (percentage) हिसाब गर्नका लागि मिलाइएको
+            let sanitized = currentInput.replace(/×/g, '*').replace(/÷/g, '/');
+            let result = eval(sanitized);
+            currentInput = Number.isFinite(result) ? String(result) : "Error";
+            updateDisplay();
+        } catch (error) {
+            currentInput = "Error";
+            updateDisplay();
+        }
+    }
 
-document.addEventListener("DOMContentLoaded", () => {
-    updateLanguageUI();
-    const isDark = document.documentElement.classList.contains('dark');
-    const themeBtn = document.getElementById('theme-toggle-btn');
-    if(themeBtn) themeBtn.innerText = isDark ? '🌛' : '🌞';
-    updateDisplay();
-});
+    function saveProfileDetails() {
+        const name = document.getElementById('input-full-name').value;
+        if(name) localStorage.setItem('profile_name', name);
+        document.getElementById('sidebar-profile-name').innerText = name || 'Kamal G.C.';
+        showToast('विवरण सेभ भयो!', 'success');
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        updateLanguageUI();
+        updateDynamicHeader();
+        
+        const savedName = localStorage.getItem('profile_name');
+        if(savedName) {
+            document.getElementById('sidebar-profile-name').innerText = savedName;
+            document.getElementById('input-full-name').value = savedName;
+        }
+    });
 </script>
 </body>
 </html>
