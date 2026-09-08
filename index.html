@@ -274,9 +274,9 @@ tailwind.config = {
     async function backupToCloud(userId = "default_user") {
         try {
             const localData = {
-                notes: JSON.parse(localStorage.getItem('advanced_notebook_notes') || '[]'),
-                incomes: JSON.parse(localStorage.getItem('digital_notebook_incomes') || '[]'),
-                transactions: JSON.parse(localStorage.getItem('digital_notebook_transactions') || '[]'),
+                notes: JSON.parse(localStorage.getItem('advanced_notebook_notes') || localStorage.getItem('notes') || '[]'),
+                incomes: JSON.parse(localStorage.getItem('digital_notebook_incomes') || localStorage.getItem('incomes') || '[]'),
+                transactions: JSON.parse(localStorage.getItem('digital_notebook_transactions') || localStorage.getItem('transactions') || '[]'),
                 theme: localStorage.getItem('theme') || 'dark',
                 language: localStorage.getItem('language') || 'en',
                 updatedAt: new Date().toISOString()
@@ -294,7 +294,7 @@ tailwind.config = {
             const snapshot = await get(child(dbRef, `users/${userId}`));
             if (snapshot.exists()) {
                 const data = snapshot.val();
-                if (data.notes) localStorage.setItem('advanced_notebook_notes', JSON.stringify(data.notes));
+                if (data.notes) localStorage.setItem('digital_notebook_transactions', JSON.stringify(data.notes));
                 if (data.incomes) localStorage.setItem('digital_notebook_incomes', JSON.stringify(data.incomes));
                 if (data.transactions) localStorage.setItem('digital_notebook_transactions', JSON.stringify(data.transactions));
                 if (data.theme) localStorage.setItem('theme', data.theme);
@@ -383,7 +383,7 @@ tailwind.config = {
             greetingText = currentLang === 'NEP' ? 'शुभ साँझ' : 'Good evening';
         }
 
-        const savedName = localStorage.getItem('profile_name') || 'Kamal G.C.';
+        const savedName = localStorage.getItem('profile_name') || localStorage.getItem('user_profile_name') || 'Kamal G.C.';
         const greetingEl = document.getElementById('dynamic-greeting');
         if (greetingEl) greetingEl.innerText = `${greetingText}, ${savedName}`;
     }
@@ -391,23 +391,34 @@ tailwind.config = {
     setInterval(updateDynamicHeader, 1000);
 
     function loadFinancialSummaries() {
-        // आम्दानी गणना र शून्य समस्या समाधानका लागि सुरक्षित पार्सिङ
-        const incomes = JSON.parse(localStorage.getItem('digital_notebook_incomes') || '[]');
-        const totalIncome = incomes.reduce((sum, item) => sum + Number(item.amount || item.incomeAmount || 0), 0);
+        // सबै सम्भावित लोकलस्टोरेज की (keys) हरूबाट डेटा लोड गर्ने
+        const incomesData = localStorage.getItem('digital_notebook_incomes') || localStorage.getItem('incomes') || '[]';
+        const incomes = JSON.parse(incomesData);
+        
+        const totalIncome = incomes.reduce((sum, item) => {
+            const val = Number(item.amount || item.incomeAmount || item.val || 0);
+            return sum + val;
+        }, 0);
         document.getElementById('val-income').innerText = `Rs ${totalIncome.toLocaleString()}`;
 
-        // कारोबार / ट्रान्जेक्सन गणना
-        const transactions = JSON.parse(localStorage.getItem('digital_notebook_transactions') || '[]');
+        const transactionsData = localStorage.getItem('digital_notebook_transactions') || localStorage.getItem('transactions') || localStorage.getItem('advanced_notebook_notes') || '[]';
+        const transactions = JSON.parse(transactionsData);
+
         let totalInvest = 0;
         let totalReceivable = 0;
         let totalGiveble = 0;
 
         transactions.forEach(tx => {
-            const amt = Number(tx.amount || tx.txAmount || 0);
-            const tType = (tx.type || '').toLowerCase();
-            if (tType === 'invest' || tType === 'investment') totalInvest += amt;
-            else if (tType === 'receivable' || tType === 'receive') totalReceivable += amt;
-            else if (tType === 'giveble' || tType === 'give' || tType === 'payable') totalGiveble += amt;
+            const amt = Number(tx.amount || tx.txAmount || tx.val || 0);
+            const tType = (tx.type || tx.category || '').toLowerCase();
+            
+            if (tType.includes('invest') || tType.includes(' लगानी')) {
+                totalInvest += amt;
+            } else if (tType.includes('receive') || tType.includes('पाउनुपर्ने')) {
+                totalReceivable += amt;
+            } else if (tType.includes('give') || tType.includes('payable') || tType.includes('दिनुपर्ने')) {
+                totalGiveble += amt;
+            }
         });
 
         document.getElementById('val-invest').innerText = `Rs ${totalInvest.toLocaleString()}`;
@@ -433,7 +444,7 @@ tailwind.config = {
     }
 
     function loadUserData() {
-        const savedName = localStorage.getItem('profile_name') || 'Kamal G.C.';
+        const savedName = localStorage.getItem('profile_name') || localStorage.getItem('user_profile_name') || 'Kamal G.C.';
         const savedAddress = localStorage.getItem('profile_address') || '';
         const savedMobile = localStorage.getItem('profile_mobile') || '';
 
@@ -479,7 +490,7 @@ tailwind.config = {
         setTimeout(() => {
             const splash = document.getElementById('splash-screen');
             if(splash) splash.remove();
-        }, 3000);
+        }, 1500);
     });
 </script>
 </body>
