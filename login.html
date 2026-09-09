@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Digital NoteBook - Login</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+    darkMode: 'class',
+    theme: {
+        extend: {
+            fontFamily: {
+                sans: ['Poppins', 'sans-serif'],
+            }
+        }
+    }
+}
+</script>
+<script>
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    if (savedTheme === 'light') {
+        document.documentElement.classList.remove('dark');
+    } else {
+        document.documentElement.classList.add('dark');
+    }
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Firebase App & Auth SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+</head>
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-xs min-h-screen flex items-center justify-center p-4">
+
+<!-- TOAST NOTIFICATION CONTAINER -->
+<div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2"></div>
+
+<div class="w-full max-w-md bg-white dark:bg-slate-900 p-6 md:p-8 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 space-y-6 text-center">
+    
+    <div class="flex flex-col items-center space-y-3">
+        <div class="w-14 h-14 rounded-2xl bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-lg">
+            <img src="N1024.png" alt="Logo" class="w-full h-full object-cover">
+        </div>
+        <div>
+            <h1 class="text-lg font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">
+                Digital NoteBook
+            </h1>
+            <p class="text-slate-500 dark:text-slate-400 text-xs mt-1">लगइन गरेर आफ्नो डिजिटल नोटबुकमा प्रवेश गर्नुहोस्</p>
+        </div>
+    </div>
+
+    <div class="space-y-4 pt-4">
+        <button onclick="loginWithGoogle()" class="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-white p-3 rounded-2xl text-xs font-semibold flex items-center justify-center gap-3 shadow-md hover:bg-slate-50 dark:hover:bg-slate-750 transition transform active:scale-95">
+            <i class="fa-brands fa-google text-red-500 text-base"></i> Google बाट लगइन गर्नुहोस्
+        </button>
+    </div>
+
+    <div class="text-[11px] text-slate-400 pt-4 border-t border-slate-100 dark:border-slate-800">
+        सुरक्षित क्लाउड सिंक र डाटा ब्याकअपको लागि फायरबेसद्वारा संचालित।
+    </div>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toast-container');
+        if(!container) return;
+        const toast = document.createElement('div');
+        const bgColor = type === 'success' ? 'bg-emerald-600' : 'bg-rose-600';
+        
+        toast.className = `${bgColor} text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold transform transition-all duration-100 translate-y-2 opacity-0 flex items-center gap-2`;
+        toast.innerHTML = `<span>${type === 'success' ? '✅' : '⚠️'}</span> <span>${message}</span>`;
+        container.appendChild(toast);
+        
+        setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 20);
+        
+        setTimeout(() => {
+            toast.classList.add('translate-y-2', 'opacity-0');
+            setTimeout(() => toast.remove(), 100);
+        }, 150);
+    }
+
+    function loginWithGoogle() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        
+        firebase.auth().signInWithPopup(provider)
+            .then((result) => {
+                const user = result.user;
+                showToast("लगइन सफल भयो!", "success");
+                setTimeout(() => {
+                    window.location.href = "account.html";
+                }, 500);
+            })
+            .catch((error) => {
+                console.error("Login Error:", error.message);
+                showToast("लगइन असफल भयो: " + error.message, "error");
+            });
+    }
+
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            window.location.href = "account.html";
+        }
+    });
+</script>
+</body>
+</html>
