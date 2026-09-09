@@ -70,7 +70,7 @@ tailwind.config = {
 
             <!-- SIDEBAR NAVIGATION -->
             <nav class="space-y-1 font-medium">
-                <a href="#" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl bg-emerald-600 text-white shadow-md transition"><span>📊</span> <span class="lang-text" data-en="Overview" data-np="अवलोकन">Overview</span></a>
+                <a href="index.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl bg-emerald-600 text-white shadow-md transition"><span>📊</span> <span class="lang-text" data-en="Overview" data-np="अवलोकन">Overview</span></a>
                 <a href="income.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl hover:bg-slate-800 text-slate-300 transition"><span>💰</span> <span class="lang-text" data-en="Income Sources" data-np="आम्दानी स्रोतहरू">Income Sources</span></a>
             </nav>
 
@@ -97,7 +97,7 @@ tailwind.config = {
         </div>
     </div>
 
-    <div class="flex-1 flex flex-col h-full w-full overflow-hidden">
+    <div class="flex-1 flex flex-col w-full h-full overflow-hidden">
         
         <!-- HEADER SECTION (Navbar) -->
         <header class="sticky top-0 z-40 flex items-center justify-between px-3 md:px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-emerald-500/20 shadow-md">
@@ -116,7 +116,7 @@ tailwind.config = {
             <div class="flex items-center space-x-2">
                 <button onclick="toggleLanguage()" id="lang-toggle-btn" class="px-2 py-1 rounded-md bg-slate-800 border border-slate-700 text-[10px] font-bold text-slate-200 hover:bg-slate-700 transition">ENG</button>
                 <button onclick="toggleTheme()" id="theme-toggle-btn" class="w-7 h-7 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center text-sm hover:bg-slate-700 transition">🌛</button>
-                <div class="relative cursor-pointer" onclick="toggleSidebar()">
+                <div class="relative cursor-pointer group" onclick="document.getElementById('avatar-upload-input').click()">
                     <div class="w-8 h-8 rounded-full bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-sm">
                         <img id="header-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
                     </div>
@@ -124,45 +124,11 @@ tailwind.config = {
             </div>
         </header>
 
-        <!-- MAIN CONTENT (Overview Dashboard) -->
-        <main class="p-4 space-y-4 flex-1 w-full max-w-2xl mx-auto overflow-y-auto">
-            <div>
-                <p id="dynamic-date" class="text-[11px] font-semibold tracking-wider text-slate-400 uppercase mb-1"></p>
-                <h2 class="text-base font-bold text-slate-800 dark:text-white flex items-center gap-2">
-                    <i class="fa-solid fa-chart-pie text-emerald-500"></i> <span class="lang-text" data-en="Dashboard Overview" data-np="ड्यासबोर्ड अवलोकन">Dashboard Overview</span>
-                </h2>
-            </div>
-
-            <!-- OVERVIEW SUMMARY CARDS -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-2xl shadow-sm flex items-center justify-between">
-                    <div>
-                        <p class="text-[11px] font-semibold text-slate-400"><span class="lang-text" data-en="Total Income Sources" data-np="कुल आम्दानी स्रोतहरू">Total Income Sources</span></p>
-                        <h3 id="overview-total-income" class="text-lg font-bold text-emerald-500 mt-1">Rs 0.00</h3>
-                    </div>
-                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center text-lg">
-                        <i class="fa-solid fa-wallet"></i>
-                    </div>
-                </div>
-
-                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-2xl shadow-sm flex items-center justify-between">
-                    <div>
-                        <p class="text-[11px] font-semibold text-slate-400"><span class="lang-text" data-en="Total Records Count" data-np="जम्मा रेकर्ड संख्या">Total Records Count</span></p>
-                        <h3 id="overview-total-records" class="text-lg font-bold text-blue-500 mt-1">0</h3>
-                    </div>
-                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center text-lg">
-                        <i class="fa-solid fa-file-lines"></i>
-                    </div>
-                </div>
-            </div>
-
-            <!-- QUICK ACTIONS / RECENT TRANSACTIONS PREVIEW -->
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-2xl shadow-sm space-y-3">
-                <h3 class="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
-                    <i class="fa-solid fa-clock-rotate-left text-emerald-500"></i> <span class="lang-text" data-en="Recent Income Transactions" data-np="हालका आम्दानी कारोबारहरू">Recent Income Transactions</span>
-                </h3>
-                <div id="recent-transactions-list" class="space-y-2">
-                    <!-- Dynamic Recent Records Will Render Here -->
+        <!-- Dynamic Date & Time Section -->
+        <main class="p-4 md:p-6 space-y-4 flex-1 w-full text-xs overflow-y-auto">
+            <div class="flex justify-between items-center px-1 py-1 text-white">
+                <div>
+                    <p id="dynamic-date" class="text-[11px] font-semibold tracking-wider text-slate-400 uppercase mb-1"></p>
                 </div>
             </div>
         </main>
@@ -192,7 +158,6 @@ tailwind.config = {
         localStorage.setItem('lang', currentLang);
         updateLanguageUI();
         updateDynamicHeader();
-        loadOverviewData();
     }
 
     function updateThemeUI() {
@@ -284,47 +249,12 @@ tailwind.config = {
         });
     }
 
-    function loadOverviewData() {
-        let incomes = JSON.parse(localStorage.getItem('digital_notebook_incomes') || '[]');
-        let totalIncome = 0;
-        incomes.forEach(i => totalIncome += i.total);
-
-        const totalIncomeEl = document.getElementById('overview-total-income');
-        const totalRecordsEl = document.getElementById('overview-total-records');
-        const recentListEl = document.getElementById('recent-transactions-list');
-
-        if(totalIncomeEl) totalIncomeEl.innerText = `Rs ${totalIncome.toFixed(2)}`;
-        if(totalRecordsEl) totalRecordsEl.innerText = incomes.length;
-
-        if(recentListEl) {
-            recentListEl.innerHTML = '';
-            if(incomes.length === 0) {
-                recentListEl.innerHTML = `<p class="text-slate-400 text-center py-2">कुनै हालको कारोबार छैन।</p>`;
-                return;
-            }
-
-            let recent = incomes.slice(0, 5);
-            recent.forEach(item => {
-                recentListEl.innerHTML += `
-                    <div class="flex justify-between items-center bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/60 p-2.5 rounded-xl text-xs">
-                        <div>
-                            <h4 class="font-bold text-slate-900 dark:text-white">${item.sourceName}</h4>
-                            <p class="text-[10px] text-slate-400">${item.date}</p>
-                        </div>
-                        <span class="font-bold text-emerald-500">Rs ${item.total.toFixed(2)}</span>
-                    </div>
-                `;
-            });
-        }
-    }
-
     document.addEventListener("DOMContentLoaded", () => {
         updateLanguageUI();
         updateThemeUI();
         updateDynamicHeader();
         loadUserData();
         loadAvatar();
-        loadOverviewData();
     });
 </script>
 </body>
