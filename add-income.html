@@ -48,11 +48,7 @@ tailwind.config = {
     </div>
 
     <div class="p-3 space-y-3 overflow-y-auto flex-1 text-xs">
-        <!-- SIDEBAR PROFILE SECTION -->
         <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-3 flex items-center space-x-3">
-            <div class="w-10 h-10 rounded-full bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-sm flex-shrink-0">
-                <img id="sidebar-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
-            </div>
             <div>
                 <h3 id="sidebar-profile-name" class="text-white font-bold text-sm">Kamal G.C.</h3>
                 <p class="text-[10px] text-slate-400"><span class="lang-text" data-en="Digital NoteBook User" data-np="डिजिटल नोटबुक प्रयोगकर्ता">Digital NoteBook User</span></p>
@@ -225,25 +221,8 @@ tailwind.config = {
         if (dateEl) dateEl.innerText = dateString;
     }
     
+    // हर सेकेन्डमा समय अपडेट गर्न
     setInterval(updateDynamicHeader, 1000);
-
-    // प्रयोगकर्ताको प्रोफाइल फोटो र नाम लोड गर्ने फंक्सन
-    function loadUserProfile() {
-        const savedImage = localStorage.getItem('user_profile_image');
-        const savedName = localStorage.getItem('user_profile_name');
-
-        if (savedImage) {
-            const headerAvatar = document.getElementById('header-avatar-img');
-            const sidebarAvatar = document.getElementById('sidebar-avatar-img');
-            if (headerAvatar) headerAvatar.src = savedImage;
-            if (sidebarAvatar) sidebarAvatar.src = savedImage;
-        }
-
-        if (savedName) {
-            const profileNameEl = document.getElementById('sidebar-profile-name');
-            if (profileNameEl) profileNameEl.innerText = savedName;
-        }
-    }
 
     function showToast(message, type = 'success') {
         const container = document.getElementById('toast-container');
@@ -344,8 +323,6 @@ tailwind.config = {
 
         let grandTotal = 0;
 
-        groupArray.exportGroupItems = ...; // code preserves logic
-
         groupArray.forEach((group, gIdx) => {
             grandTotal += group.total;
 
@@ -434,7 +411,7 @@ tailwind.config = {
 
     function printIncomePDF() {
         let incomes = JSON.parse(localStorage.getItem('digital_notebook_incomes') || '[]');
-        if(incomes.length === 0) {
+        if(incomes.length ===0) {
             showToast('प्रिन्ट गर्न कुनै डाटा छैन!', 'error');
             return;
         }
@@ -458,7 +435,6 @@ tailwind.config = {
     document.addEventListener("DOMContentLoaded", () => {
         updateLanguageUI();
         updateDynamicHeader();
-        loadUserProfile(); // यहाँ प्रोफाइल लोड हुने फंक्सन थपिएको छ
         renderIncomes();
         const dateInput = document.getElementById('income-date');
         if(dateInput && !dateInput.value) {
