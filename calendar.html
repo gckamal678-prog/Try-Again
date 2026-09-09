@@ -32,105 +32,141 @@ tailwind.config = {
 </head>
 <body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-xs flex flex-col h-screen overflow-hidden select-none">
 
-<!-- SIDEBAR -->
-<div id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 border-r border-slate-800 transform -translate-x-full transition-transform duration-300 flex flex-col text-white">
-    <div class="flex items-center justify-between px-4 py-3 border-b border-slate-800">
-        <div class="flex items-center space-x-2.5">
-            <div class="w-8 h-8 rounded-lg bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-md">
-                <img src="N1024.png" alt="Logo" class="w-full h-full object-cover">
-            </div>
-            <h1 class="text-sm font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">
-                Digital NoteBook
-            </h1>
-        </div>
-        <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white text-lg focus:outline-none">✕</button>
-    </div>
-
-    <div class="p-3 space-y-3 overflow-y-auto flex-1 text-xs">
-        <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-3 flex items-center space-x-3">
-            <div>
-                <h3 id="sidebar-profile-name" class="text-white font-bold text-sm">Kamal G.C.</h3>
-                <p class="text-[10px] text-slate-400"><span class="lang-text" data-en="Digital NoteBook User" data-np="डिजिटल नोटबुक प्रयोगकर्ता">Digital NoteBook User</span></p>
-            </div>
-        </div>
-
-        <nav class="space-y-1 font-medium">
-            <a href="index.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl hover:bg-slate-800 text-slate-300 transition"><span>🏠</span> <span class="lang-text" data-en="Home / Dashboard" data-np="गृहपृष्ठ / ड्यासबोर्ड">Home / Dashboard</span></a>
-            <a href="#" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl bg-emerald-600 text-white shadow-md transition"><span>📅</span> <span class="lang-text" data-en="Nepali Calendar" data-np="नेपाली क्यालेन्डर">Nepali Calendar</span></a>
-        </nav>
-    </div>
-</div>
-
-<!-- MAIN LAYOUT -->
-<div class="flex-1 flex flex-col h-full w-full">
+<div class="flex min-h-screen w-full">
     
-    <!-- HEADER SECTION -->
-    <header class="sticky top-0 z-40 flex items-center justify-between px-3 md:px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-emerald-500/20 shadow-md">
-        <div class="flex items-center space-x-2.5">
-            <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-emerald-400 transition">☰</button>
-            <div class="flex items-center space-x-2 cursor-pointer" onclick="toggleSidebar()">
-                <div class="w-7 h-7 rounded-lg bg-emerald-600 border border-emerald-500/50 flex items-center justify-center overflow-hidden shadow-sm">
+    <!-- SIDEBAR SECTION -->
+    <div id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 border-r border-slate-800 transform -translate-x-full transition-transform duration-300 flex flex-col text-white">
+        
+        <div class="flex items-center justify-between px-4 py-3 border-b border-slate-800">
+            <div class="flex items-center space-x-2.5">
+                <div class="w-8 h-8 rounded-lg bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-md">
                     <img src="N1024.png" alt="Logo" class="w-full h-full object-cover">
                 </div>
-                <span class="text-xs md:text-sm font-extrabold tracking-wider bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
-                    Digital NoteBook
-                </span>
-            </div>
-        </div>
-
-        <div class="flex items-center space-x-2">
-            <button onclick="toggleLanguage()" id="lang-toggle-btn" class="px-2 py-1 rounded-md bg-slate-800 border border-slate-700 text-[10px] font-bold text-slate-200 hover:bg-slate-700 transition">ENG</button>
-            <button onclick="toggleTheme()" id="theme-toggle-btn" class="w-7 h-7 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center text-sm hover:bg-slate-700 transition">🌛</button>
-            <div class="relative cursor-pointer" onclick="toggleSidebar()">
-                <div class="w-8 h-8 rounded-full bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-sm">
-                    <img id="header-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
+                <div>
+                    <h1 class="text-sm font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">
+                        Digital NoteBook
+                    </h1>
                 </div>
             </div>
+            <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white text-lg focus:outline-none">
+                ✕
+            </button>
         </div>
-    </header>
 
-    <!-- CALENDAR FULL SCREEN CONTENT -->
-    <main class="flex-1 flex flex-col items-center justify-center p-4 w-full bg-slate-100 dark:bg-slate-950 overflow-y-auto space-y-4">
+        <div class="p-3 space-y-3 overflow-y-auto flex-1 text-xs">
+            <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-3 flex items-center space-x-3">
+                <div class="relative cursor-pointer group" onclick="document.getElementById('avatar-upload-input').click()">
+                    <div class="w-11 h-11 rounded-full bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-sm">
+                        <img id="sidebar-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <input type="file" id="avatar-upload-input" accept="image/*" class="hidden" onchange="handleAvatarUpload(event)">
+                <div>
+                    <h3 id="sidebar-profile-name" class="text-white font-bold text-sm">Kamal G.C.</h3>
+                    <p class="text-[10px] text-slate-400"><span class="lang-text" data-en="Click icon to set photo" data-np="फोटो राख्न क्लिक गर्नुहोस्">Click icon to set photo</span></p>
+                </div>
+            </div>
+
+            <!-- SIDEBAR NAVIGATION -->
+            <nav class="space-y-1 font-medium">
+                <a href="index.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl hover:bg-slate-800 text-slate-300 transition"><span>📊</span> <span class="lang-text" data-en="Overview" data-np="अवलोकन">Overview</span></a>
+                <a href="#" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl bg-emerald-600 text-white shadow-md transition"><span>📅</span> <span class="lang-text" data-en="Nepali Calendar" data-np="नेपाली क्यालेन्डर">Nepali Calendar</span></a>
+            </nav>
+
+            <div class="space-y-2.5 bg-slate-800/50 p-3 rounded-xl border border-slate-700/60">
+                <h3 class="text-[11px] font-bold text-white flex items-center gap-1.5 mb-1">
+                    <i class="fa-solid fa-address-card text-emerald-400"></i> <span class="lang-text" data-en="Personal Info" data-np="व्यक्तिगत विवरण">Personal Info</span>
+                </h3>
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Full Name" data-np="पूरा नाम">Full Name</span></label>
+                    <input type="text" id="input-full-name" placeholder="Enter Full Name" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Address" data-np="ठेगाना">Address</span></label>
+                    <input type="text" id="input-address" placeholder="Enter Address" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Mobile Number" data-np="मोबाइल नम्बर">Mobile Number</span></label>
+                    <input type="tel" id="input-mobile" placeholder="Enter Mobile Number" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
+                </div>
+                <button onclick="saveProfileDetails()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition shadow-md">
+                    <span class="lang-text" data-en="Save Info" data-np="सेभ गर्नुहोस्">Save Info</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN LAYOUT -->
+    <div class="flex-1 flex flex-col h-full w-full">
         
-        <!-- Calendar Card -->
-        <div class="w-full max-w-md bg-white dark:bg-slate-900 p-5 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 space-y-4">
-            
-            <!-- Header with Nepali Month & Navigation -->
-            <div class="flex justify-between items-center px-1">
-                <h2 id="calendar-month-year" class="text-sm font-bold text-slate-900 dark:text-white tracking-wide"></h2>
-                <div class="flex items-center gap-1.5">
-                    <button onclick="changeNepaliMonth(-1)" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-emerald-600 hover:text-white text-xs transition border border-slate-200 dark:border-slate-700">
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </button>
-                    <button onclick="changeNepaliMonth(1)" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-emerald-600 hover:text-white text-xs transition border border-slate-200 dark:border-slate-700">
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </button>
+        <!-- HEADER SECTION -->
+        <header class="sticky top-0 z-40 flex items-center justify-between px-3 md:px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-emerald-500/20 shadow-md">
+            <div class="flex items-center space-x-2.5">
+                <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-emerald-400 transition">☰</button>
+                <div class="flex items-center space-x-2 cursor-pointer" onclick="toggleSidebar()">
+                    <div class="w-7 h-7 rounded-lg bg-emerald-600 border border-emerald-500/50 flex items-center justify-center overflow-hidden shadow-sm">
+                        <img src="N1024.png" alt="Logo" class="w-full h-full object-cover">
+                    </div>
+                    <span class="text-xs md:text-sm font-extrabold tracking-wider bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
+                        Digital NoteBook
+                    </span>
                 </div>
             </div>
 
-            <!-- Week Days Header (Nepali) -->
-            <div class="grid grid-cols-7 text-center text-xs font-semibold py-1">
-                <span class="text-rose-500 font-bold">आइत</span>
-                <span class="text-slate-500 dark:text-slate-400">सोम</span>
-                <span class="text-slate-500 dark:text-slate-400">मङ्गल</span>
-                <span class="text-slate-500 dark:text-slate-400">बुध</span>
-                <span class="text-slate-500 dark:text-slate-400">बिही</span>
-                <span class="text-slate-500 dark:text-slate-400">शुक्र</span>
-                <span class="text-slate-500 dark:text-slate-400">शनि</span>
+            <div class="flex items-center space-x-2">
+                <button onclick="toggleLanguage()" id="lang-toggle-btn" class="px-2 py-1 rounded-md bg-slate-800 border border-slate-700 text-[10px] font-bold text-slate-200 hover:bg-slate-700 transition">ENG</button>
+                <button onclick="toggleTheme()" id="theme-toggle-btn" class="w-7 h-7 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center text-sm hover:bg-slate-700 transition">🌛</button>
+                <div class="relative cursor-pointer" onclick="toggleSidebar()">
+                    <div class="w-8 h-8 rounded-full bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-sm">
+                        <img id="header-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- CALENDAR FULL SCREEN CONTENT -->
+        <main class="flex-1 flex flex-col items-center justify-center p-4 w-full bg-slate-100 dark:bg-slate-950 overflow-y-auto space-y-4">
+            
+            <!-- Calendar Card -->
+            <div class="w-full max-w-md bg-white dark:bg-slate-900 p-5 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 space-y-4">
+                
+                <!-- Header with Nepali Month & Navigation -->
+                <div class="flex justify-between items-center px-1">
+                    <h2 id="calendar-month-year" class="text-sm font-bold text-slate-900 dark:text-white tracking-wide"></h2>
+                    <div class="flex items-center gap-1.5">
+                        <button onclick="changeNepaliMonth(-1)" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-emerald-600 hover:text-white text-xs transition border border-slate-200 dark:border-slate-700">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <button onclick="changeNepaliMonth(1)" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-emerald-600 hover:text-white text-xs transition border border-slate-200 dark:border-slate-700">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Week Days Header (Nepali) -->
+                <div class="grid grid-cols-7 text-center text-xs font-semibold py-1">
+                    <span class="text-rose-500 font-bold">आइत</span>
+                    <span class="text-slate-500 dark:text-slate-400">सोम</span>
+                    <span class="text-slate-500 dark:text-slate-400">मङ्गल</span>
+                    <span class="text-slate-500 dark:text-slate-400">बुध</span>
+                    <span class="text-slate-500 dark:text-slate-400">बिही</span>
+                    <span class="text-slate-500 dark:text-slate-400">शुक्र</span>
+                    <span class="text-slate-500 dark:text-slate-400">शनि</span>
+                </div>
+
+                <!-- Days Grid -->
+                <div id="calendar-days" class="grid grid-cols-7 gap-1.5 text-center text-xs">
+                    <!-- Dynamic Nepali Days will load here -->
+                </div>
             </div>
 
-            <!-- Days Grid -->
-            <div id="calendar-days" class="grid grid-cols-7 gap-1.5 text-center text-xs">
-                <!-- Dynamic Nepali Days will load here -->
+            <!-- Selected Date Details Box -->
+            <div class="w-full max-w-md bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-3 text-center">
+                <p class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">मिति विवरण</p>
+                <p id="selected-date-info" class="text-xs font-bold text-slate-800 dark:text-slate-200 mt-0.5">लोड हुँदैछ...</p>
             </div>
-        </div>
-
-        <!-- Selected Date Details Box -->
-        <div class="w-full max-w-md bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-3 text-center">
-            <p class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">मिति विवरण</p>
-            <p id="selected-date-info" class="text-xs font-bold text-slate-800 dark:text-slate-200 mt-0.5">लोड हुँदैछ...</p>
-        </div>
-    </main>
+        </main>
+    </div>
 </div>
 
 <script>
@@ -158,17 +194,22 @@ tailwind.config = {
         renderNepaliCalendar();
     }
 
+    function updateThemeUI() {
+        const isDark = document.documentElement.classList.contains('dark');
+        const themeBtn = document.getElementById('theme-toggle-btn');
+        if(themeBtn) themeBtn.innerText = isDark ? '🌛' : '🌞';
+    }
+
     function toggleTheme() {
         const htmlEl = document.documentElement;
         if (htmlEl.classList.contains('dark')) {
             htmlEl.classList.remove('dark');
             localStorage.setItem('theme', 'light');
-            document.getElementById('theme-toggle-btn').innerText = '🌞';
         } else {
             htmlEl.classList.add('dark');
             localStorage.setItem('theme', 'dark');
-            document.getElementById('theme-toggle-btn').innerText = '🌛';
         }
+        updateThemeUI();
     }
 
     // NEPALI CALENDAR LOGIC 
@@ -271,28 +312,59 @@ tailwind.config = {
         }
     }
 
-    function goToToday() {
-        currentBsDate = new NepaliDate();
-        viewYear = currentBsDate.getYear();
-        viewMonth = currentBsDate.getMonth();
-        renderNepaliCalendar();
+    function saveProfileDetails() {
+        const name = document.getElementById('input-full-name').value;
+        const address = document.getElementById('input-address').value;
+        const mobile = document.getElementById('input-mobile').value;
+
+        if(name) localStorage.setItem('profile_name', name);
+        localStorage.setItem('profile_address', address);
+        localStorage.setItem('profile_mobile', mobile);
+
+        loadUserData();
+        alert(currentLang === 'NEP' ? 'विवरण सफलतापूर्वक सेभ भयो!' : 'Details saved successfully!');
+    }
+
+    function loadUserData() {
+        const savedName = localStorage.getItem('profile_name') || 'Kamal G.C.';
+        const savedAddress = localStorage.getItem('profile_address') || '';
+        const savedMobile = localStorage.getItem('profile_mobile') || '';
+
+        if(document.getElementById('input-full-name')) document.getElementById('input-full-name').value = savedName;
+        if(document.getElementById('input-address')) document.getElementById('input-address').value = savedAddress;
+        if(document.getElementById('input-mobile')) document.getElementById('input-mobile').value = savedMobile;
+
+        const nameEl = document.getElementById('sidebar-profile-name');
+        if(nameEl) nameEl.innerText = savedName;
+    }
+
+    function handleAvatarUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Image = e.target.result;
+                localStorage.setItem('profile_avatar', base64Image);
+                loadAvatar();
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function loadAvatar() {
+        const savedImage = localStorage.getItem('profile_avatar') || 'N1024.png';
+        ['sidebar-avatar-img', 'header-avatar-img'].forEach(id => {
+            const img = document.getElementById(id);
+            if(img) img.src = savedImage;
+        });
     }
 
     document.addEventListener("DOMContentLoaded", () => {
         updateLanguageUI();
+        updateThemeUI();
         renderNepaliCalendar();
-        
-        const savedName = localStorage.getItem('profile_name');
-        if(savedName) {
-            document.getElementById('sidebar-profile-name').innerText = savedName;
-        }
-
-        const htmlEl = document.documentElement;
-        if(htmlEl.classList.contains('dark')) {
-            document.getElementById('theme-toggle-btn').innerText = '🌛';
-        } else {
-            document.getElementById('theme-toggle-btn').innerText = '🌞';
-        }
+        loadUserData();
+        loadAvatar();
     });
 </script>
 </body>
