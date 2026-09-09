@@ -393,19 +393,23 @@ tailwind.config = {
     setInterval(updateDynamicHeader, 1000);
 
     function showToast(message, type = 'success') {
-        const container = document.getElementById('toast-container');
-        if(!container) return;
-        const toast = document.createElement('div');
-        const bgColor = type === 'success' ? 'bg-emerald-600' : 'bg-rose-600';
-        toast.className = `${bgColor} text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold transform transition-all duration-300 translate-y-2 opacity-0 flex items-center gap-2`;
-        toast.innerHTML = `<span>${type === 'success' ? '✅' : '⚠️'}</span> <span>${message}</span>`;
-        container.appendChild(toast);
-        setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 50);
-        setTimeout(() => {
-            toast.classList.add('translate-y-2', 'opacity-0');
-            setTimeout(() => toast.remove(), 300);
-        }, 500);
-    }
+    const container = document.getElementById('toast-container');
+    if(!container) return;
+    const toast = document.createElement('div');
+    const bgColor = type === 'success' ? 'bg-emerald-600' : 'bg-rose-600';
+    
+    toast.className = `${bgColor} text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold transform transition-all duration-100 translate-y-2 opacity-0 flex items-center gap-2`;
+    toast.innerHTML = `<span>${type === 'success' ? '✅' : '⚠️'}</span> <span>${message}</span>`;
+    container.appendChild(toast);
+    
+    setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 20);
+    
+    setTimeout(() => {
+        toast.classList.add('translate-y-2', 'opacity-0');
+        setTimeout(() => toast.remove(), 100);
+    }, 150);
+}
+
 
     // Typography and Styling Functions
     function changeFontSize(size) {
