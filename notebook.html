@@ -68,7 +68,7 @@ tailwind.config = {
                 </div>
                 <input type="file" id="avatar-upload-input" accept="image/*" class="hidden" onchange="handleAvatarUpload(event)">
                 <div>
-                    <h3 id="sidebar-profile-name" class="text-white font-bold text-sm">Kamal G.C.</h3>
+                    <h3 id="sidebar-profile-name" class="text-white font-bold text-sm"></h3>
                     <p class="text-[10px] text-slate-400"><span class="lang-text" data-en="Click icon to set photo" data-np="फोटो राख्न क्लिक गर्नुहोस्">Click icon to set photo</span></p>
                 </div>
             </div>
@@ -243,7 +243,7 @@ tailwind.config = {
     }
 
     function loadUserData() {
-        const savedName = localStorage.getItem('profile_name') || 'Kamal G.C.';
+        const savedName = localStorage.getItem('profile_name') || '';
         const savedAddress = localStorage.getItem('profile_address') || '';
         const savedMobile = localStorage.getItem('profile_mobile') || '';
 
