@@ -46,16 +46,43 @@ tailwind.config = {
 
     <div class="p-3 space-y-3 overflow-y-auto flex-1 text-xs">
         <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-3 flex items-center space-x-3">
+            <div class="relative cursor-pointer group" onclick="document.getElementById('avatar-upload-input').click()">
+                <div class="w-11 h-11 rounded-full bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-sm">
+                    <img id="sidebar-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
+                </div>
+            </div>
+            <input type="file" id="avatar-upload-input" accept="image/*" class="hidden" onchange="handleAvatarUpload(event)">
             <div>
                 <h3 id="sidebar-profile-name" class="text-white font-bold text-sm">Kamal G.C.</h3>
-                <p class="text-[10px] text-slate-400"><span class="lang-text" data-en="Digital NoteBook User" data-np="डिजिटल नोटबुक प्रयोगकर्ता">Digital NoteBook User</span></p>
+                <p class="text-[10px] text-slate-400"><span class="lang-text" data-en="Click icon to set photo" data-np="फोटो राख्न क्लिक गर्नुहोस्">Click icon to set photo</span></p>
             </div>
         </div>
 
         <nav class="space-y-1 font-medium">
-            <a href="index.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl hover:bg-slate-800 text-slate-300 transition"><span>🏠</span> <span class="lang-text" data-en="Home / Dashboard" data-np="गृहपृष्ठ / ड्यासबोर्ड">Home / Dashboard</span></a>
+            <a href="index.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl hover:bg-slate-800 text-slate-300 transition"><span>📊</span> <span class="lang-text" data-en="Overview" data-np="अवलोकन">Overview</span></a>
             <a href="#" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl bg-emerald-600 text-white shadow-md transition"><span>🧮</span> <span class="lang-text" data-en="Digital Calculator" data-np="डिजिटल क्याल्कुलेटर">Digital Calculator</span></a>
         </nav>
+
+        <div class="space-y-2.5 bg-slate-800/50 p-3 rounded-xl border border-slate-700/60">
+            <h3 class="text-[11px] font-bold text-white flex items-center gap-1.5 mb-1">
+                <i class="fa-solid fa-address-card text-emerald-400"></i> <span class="lang-text" data-en="Personal Info" data-np="व्यक्तिगत विवरण">Personal Info</span>
+            </h3>
+            <div>
+                <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Full Name" data-np="पूरा नाम">Full Name</span></label>
+                <input type="text" id="input-full-name" placeholder="Enter Full Name" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
+            </div>
+            <div>
+                <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Address" data-np="ठेगाना">Address</span></label>
+                <input type="text" id="input-address" placeholder="Enter Address" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
+            </div>
+            <div>
+                <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Mobile Number" data-np="मोबाइल नम्बर">Mobile Number</span></label>
+                <input type="tel" id="input-mobile" placeholder="Enter Mobile Number" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
+            </div>
+            <button onclick="saveProfileDetails()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition shadow-md">
+                <span class="lang-text" data-en="Save Info" data-np="सेभ गर्नुहोस्">Save Info</span>
+            </button>
+        </div>
     </div>
 </div>
 
@@ -163,17 +190,22 @@ tailwind.config = {
         updateDynamicHeader();
     }
 
+    function updateThemeUI() {
+        const isDark = document.documentElement.classList.contains('dark');
+        const themeBtn = document.getElementById('theme-toggle-btn');
+        if(themeBtn) themeBtn.innerText = isDark ? '🌛' : '🌞';
+    }
+
     function toggleTheme() {
         const htmlEl = document.documentElement;
         if (htmlEl.classList.contains('dark')) {
             htmlEl.classList.remove('dark');
             localStorage.setItem('theme', 'light');
-            document.getElementById('theme-toggle-btn').innerText = '🌞';
         } else {
             htmlEl.classList.add('dark');
             localStorage.setItem('theme', 'dark');
-            document.getElementById('theme-toggle-btn').innerText = '🌛';
         }
+        updateThemeUI();
     }
 
     function updateDynamicHeader() {
@@ -255,14 +287,59 @@ tailwind.config = {
         }
     }
 
+    function saveProfileDetails() {
+        const name = document.getElementById('input-full-name').value;
+        const address = document.getElementById('input-address').value;
+        const mobile = document.getElementById('input-mobile').value;
+
+        if(name) localStorage.setItem('profile_name', name);
+        localStorage.setItem('profile_address', address);
+        localStorage.setItem('profile_mobile', mobile);
+
+        loadUserData();
+        alert(currentLang === 'NEP' ? 'विवरण सफलतापूर्वक सेभ भयो!' : 'Details saved successfully!');
+    }
+
+    function loadUserData() {
+        const savedName = localStorage.getItem('profile_name') || 'Kamal G.C.';
+        const savedAddress = localStorage.getItem('profile_address') || '';
+        const savedMobile = localStorage.getItem('profile_mobile') || '';
+
+        if(document.getElementById('input-full-name')) document.getElementById('input-full-name').value = savedName;
+        if(document.getElementById('input-address')) document.getElementById('input-address').value = savedAddress;
+        if(document.getElementById('input-mobile')) document.getElementById('input-mobile').value = savedMobile;
+
+        const nameEl = document.getElementById('sidebar-profile-name');
+        if(nameEl) nameEl.innerText = savedName;
+    }
+
+    function handleAvatarUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Image = e.target.result;
+                localStorage.setItem('profile_avatar', base64Image);
+                loadAvatar();
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function loadAvatar() {
+        const savedImage = localStorage.getItem('profile_avatar') || 'N1024.png';
+        ['sidebar-avatar-img', 'header-avatar-img'].forEach(id => {
+            const img = document.getElementById(id);
+            if(img) img.src = savedImage;
+        });
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
         updateLanguageUI();
+        updateThemeUI();
         updateDynamicHeader();
-        
-        const savedName = localStorage.getItem('profile_name');
-        if(savedName) {
-            document.getElementById('sidebar-profile-name').innerText = savedName;
-        }
+        loadUserData();
+        loadAvatar();
     });
 </script>
 </body>
