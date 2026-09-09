@@ -1,11 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Digital NoteBook - QR Scan & Share</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: {
+                    sans: ['Poppins', 'sans-serif'],
+                }
+            }
+        }
+    }
+    </script>
+    <script>
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        if (savedTheme === 'light') {
+            document.documentElement.classList.remove('dark');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- QRCode Generator -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <!-- HTML5 QR Scanner -->
@@ -14,128 +38,209 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen font-sans text-xs">
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-xs flex flex-col h-screen overflow-hidden select-none">
 
     <!-- FEEDBACK TOAST -->
     <div id="feedbackMsg" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-50 px-4 py-2 rounded-xl text-xs font-bold shadow-lg transition-all"></div>
 
-    <!-- MAIN APP CONTAINER -->
-    <div class="max-w-md mx-auto min-h-screen flex flex-col bg-slate-900 shadow-2xl border-x border-slate-800">
-
-        <!-- HEADER -->
-        <div class="bg-slate-900 border-b border-slate-800 p-4 flex items-center justify-between shadow-md">
-            <div class="flex items-center space-x-2">
-                <a href="index.html" class="text-slate-400 hover:text-white text-sm">←</a>
-                <h1 class="text-sm font-bold tracking-wide text-white">Scan Or Share</h1>
-            </div>
-            <span id="timerBadge" class="text-[10px] bg-red-950 text-red-400 border border-red-800/50 px-2 py-0.5 rounded-full font-mono">2:00</span>
-        </div>
-
-        <!-- TOGGLE SWITCH (Scan / Share) -->
-        <div class="p-4 bg-slate-900">
-            <div class="bg-slate-950 p-1 rounded-xl flex border border-slate-800">
-                <button onclick="switchTab('scan')" id="scanTabBtn" class="flex-1 py-2.5 rounded-lg font-bold text-xs transition text-indigo-400 bg-slate-800 shadow">
-                    Scan QR
-                </button>
-                <button onclick="switchTab('share')" id="shareTabBtn" class="flex-1 py-2.5 rounded-lg font-bold text-xs transition text-slate-400">
-                    Share QR
-                </button>
-            </div>
-        </div>
-
-        <!-- CONTENT SECTION -->
-        <div class="flex-1 p-4 overflow-y-auto space-y-4">
-
-            <!-------------------------------------------------->
-            <!-- VIEW 1: SCAN TAB -->
-            <!-------------------------------------------------->
-            <div id="scanView" class="space-y-4">
-                
-                <!-- Utilities Toolbar -->
-                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-3 flex justify-around items-center">
-                    <button onclick="toggleTorch()" class="flex flex-col items-center gap-1 text-slate-300 hover:text-white transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                        <span class="text-[10px]">Flash</span>
-                    </button>
-                    <div class="h-6 w-[1px] bg-slate-800"></div>
-                    <button onclick="document.getElementById('fileInput').click()" class="flex flex-col items-center gap-1 text-slate-300 hover:text-white transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                        <span class="text-[10px]">Gallery</span>
-                    </button>
-                </div>
-
-                <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="scanImageFromFile(event)">
-
-                <!-- Scanner Viewfinder Box -->
-                <div class="bg-slate-950 border-2 border-dashed border-slate-800 rounded-2xl p-2 text-center relative overflow-hidden min-h-[280px] flex flex-col justify-center items-center">
-                    <div id="reader" class="w-full rounded-xl overflow-hidden"></div>
-                    <div id="scannerLoading" class="text-amber-400 text-xs font-medium animate-pulse mt-2">
-                        Camera active & scanning...
+    <div class="flex min-h-screen w-full">
+        
+        <!-- SIDEBAR SECTION -->
+        <div id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 border-r border-slate-800 transform -translate-x-full transition-transform duration-300 flex flex-col text-white">
+            
+            <div class="flex items-center justify-between px-4 py-3 border-b border-slate-800">
+                <div class="flex items-center space-x-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-md">
+                        <img src="N1024.png" alt="Logo" class="w-full h-full object-cover">
                     </div>
-                </div>
-
-                <!-- Manual Code Input Section (Replacing Stop Camera) -->
-                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-3 space-y-2">
-                    <label class="text-[11px] font-bold text-slate-300">Code Manual Entry</label>
-                    <div class="flex gap-2">
-                        <input type="text" id="manualTokenInput" placeholder="Paste sync token here..." class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-indigo-500">
-                        <button onclick="submitManualToken()" class="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-xl font-bold text-xs transition">Sync</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-------------------------------------------------->
-            <!-- VIEW 2: SHARE TAB -->
-            <!-------------------------------------------------->
-            <div id="shareView" class="space-y-4 hidden">
-                
-                <!-- Profile Header Card -->
-                <div class="bg-slate-950 border border-slate-800 text-slate-100 rounded-2xl p-4 shadow-lg flex justify-between items-center">
                     <div>
-                        <div class="flex items-center gap-2">
-                            <h3 id="profileName" class="text-sm font-bold tracking-tight"></h3>
-                            <span class="bg-indigo-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-full">Active User</span>
-                        </div>
-                        <p id="profilePhone" class="text-[11px] text-slate-400 mt-0.5">Digital NoteBook ID</p>
+                        <h1 class="text-sm font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">
+                            Digital NoteBook
+                        </h1>
                     </div>
-                    <button onclick="openNativeShareSheet()" class="p-2.5 bg-slate-800 hover:bg-slate-700 rounded-xl transition text-slate-200 flex items-center gap-1.5 font-bold">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
-                        Share QR & Token
+                </div>
+                <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white text-lg focus:outline-none">
+                    ✕
+                </button>
+            </div>
+
+            <div class="p-3 space-y-3 overflow-y-auto flex-1 text-xs">
+                <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-3 flex items-center space-x-3">
+                    <div class="relative cursor-pointer group" onclick="document.getElementById('avatar-upload-input').click()">
+                        <div class="w-11 h-11 rounded-full bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-sm">
+                            <img id="sidebar-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                    <input type="file" id="avatar-upload-input" accept="image/*" class="hidden" onchange="handleAvatarUpload(event)">
+                    <div>
+                        <h3 id="sidebar-profile-name" class="text-white font-bold text-sm"></h3>
+                        <p class="text-[10px] text-slate-400"><span class="lang-text" data-en="Click icon to set photo" data-np="फोटो राख्न क्लिक गर्नुहोस्">Click icon to set photo</span></p>
+                    </div>
+                </div>
+
+                <!-- SIDEBAR NAVIGATION -->
+                <nav class="space-y-1 font-medium">
+                    <a href="index.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl hover:bg-slate-800 text-slate-300 transition"><span>📊</span> <span class="lang-text" data-en="Overview" data-np="अवलोकन">Overview</span></a>
+                </nav>
+
+                <div class="space-y-2.5 bg-slate-800/50 p-3 rounded-xl border border-slate-700/60">
+                    <h3 class="text-[11px] font-bold text-white flex items-center gap-1.5 mb-1">
+                        <i class="fa-solid fa-address-card text-emerald-400"></i> <span class="lang-text" data-en="Personal Info" data-np="व्यक्तिगत विवरण">Personal Info</span>
+                    </h3>
+                    <div>
+                        <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Full Name" data-np="पूरा नाम">Full Name</span></label>
+                        <input type="text" id="input-full-name" placeholder="Enter Full Name" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Address" data-np="ठेगाना">Address</span></label>
+                        <input type="text" id="input-address" placeholder="Enter Address" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Mobile Number" data-np="मोबाइल नम्बर">Mobile Number</span></label>
+                        <input type="tel" id="input-mobile" placeholder="Enter Mobile Number" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <button onclick="saveProfileDetails()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition shadow-md">
+                        <span class="lang-text" data-en="Save Info" data-np="सेभ गर्नुहोस्">Save Info</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-1 flex flex-col w-full h-full overflow-hidden">
+            
+            <!-- HEADER SECTION (Navbar) -->
+            <header class="sticky top-0 z-40 flex items-center justify-between px-3 md:px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-emerald-500/20 shadow-md">
+                <div class="flex items-center space-x-2.5">
+                    <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-emerald-400 transition">☰</button>
+                    <div class="flex items-center space-x-2 cursor-pointer" onclick="toggleSidebar()">
+                        <div class="w-7 h-7 rounded-lg bg-emerald-600 border border-emerald-500/50 flex items-center justify-center overflow-hidden shadow-sm">
+                            <img src="N1024.png" alt="Logo" class="w-full h-full object-cover">
+                        </div>
+                        <span class="text-xs md:text-sm font-extrabold tracking-wider bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
+                            Digital NoteBook
+                        </span>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    <span id="timerBadge" class="text-[10px] bg-rose-950 text-rose-400 border border-rose-800/50 px-2 py-0.5 rounded-full font-mono">2:00</span>
+                    <button onclick="toggleLanguage()" id="lang-toggle-btn" class="px-2 py-1 rounded-md bg-slate-800 border border-slate-700 text-[10px] font-bold text-slate-200 hover:bg-slate-700 transition">ENG</button>
+                    <button onclick="toggleTheme()" id="theme-toggle-btn" class="w-7 h-7 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center text-sm hover:bg-slate-700 transition">🌛</button>
+                    <div class="relative cursor-pointer" onclick="toggleSidebar()">
+                        <div class="w-8 h-8 rounded-full bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-sm">
+                            <img id="header-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- MAIN CONTENT CONTAINER -->
+            <main class="p-3 md:p-6 space-y-3 flex-1 w-full overflow-y-auto bg-slate-100 dark:bg-slate-950">
+                
+                <!-- Dynamic Date & Time Section -->
+                <div class="flex justify-between items-center px-1 text-slate-700 dark:text-white">
+                    <div>
+                        <p id="dynamic-date" class="text-[11px] font-semibold tracking-wider text-slate-400 uppercase mb-1"></p>
+                    </div>
+                </div>
+
+                <!-- TOGGLE SWITCH (Scan / Share) -->
+                <div class="bg-white dark:bg-slate-900 p-1 rounded-xl flex border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <button onclick="switchTab('scan')" id="scanTabBtn" class="flex-1 py-2.5 rounded-lg font-bold text-xs transition text-emerald-500 bg-slate-100 dark:bg-slate-800 shadow">
+                        Scan QR
+                    </button>
+                    <button onclick="switchTab('share')" id="shareTabBtn" class="flex-1 py-2.5 rounded-lg font-bold text-xs transition text-slate-400">
+                        Share QR
                     </button>
                 </div>
 
-                <!-- QR Display Card with Logo in Center -->
-                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col items-center text-center space-y-3">
-                    <div id="qrcodeWrapper" class="relative inline-block p-3 bg-white rounded-xl shadow-inner">
-                        <div id="qrcode"></div>
-                        <!-- Logo in Center of QR -->
-                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            <div class="w-10 h-10 rounded-full bg-white border-2 border-indigo-600 p-0.5 shadow-md overflow-hidden flex items-center justify-center">
-                                <img src="N1024.png" alt="Logo" class="w-full h-full object-cover rounded-full">
+                <!-- VIEW 1: SCAN TAB -->
+                <div id="scanView" class="space-y-3">
+                    
+                    <!-- Utilities Toolbar -->
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3 flex justify-around items-center shadow-sm">
+                        <button onclick="toggleTorch()" class="flex flex-col items-center gap-1 text-slate-600 dark:text-slate-300 hover:text-emerald-500 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                            <span class="text-[10px]">Flash</span>
+                        </button>
+                        <div class="h-6 w-[1px] bg-slate-200 dark:bg-slate-800"></div>
+                        <button onclick="document.getElementById('fileInput').click()" class="flex flex-col items-center gap-1 text-slate-600 dark:text-slate-300 hover:text-emerald-500 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            <span class="text-[10px]">Gallery</span>
+                        </button>
+                    </div>
+
+                    <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="scanImageFromFile(event)">
+
+                    <!-- Scanner Viewfinder Box -->
+                    <div class="bg-white dark:bg-slate-900 border-2 border-dashed border-slate-300 dark:border-slate-800 rounded-2xl p-2 text-center relative overflow-hidden min-h-[260px] flex flex-col justify-center items-center shadow-sm">
+                        <div id="reader" class="w-full rounded-xl overflow-hidden"></div>
+                        <div id="scannerLoading" class="text-emerald-500 text-xs font-medium animate-pulse mt-2">
+                            Camera active & scanning...
+                        </div>
+                    </div>
+
+                    <!-- Manual Code Input Section -->
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3 space-y-2 shadow-sm">
+                        <label class="text-[11px] font-bold text-slate-700 dark:text-slate-300">Code Manual Entry</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="manualTokenInput" placeholder="Paste sync token here..." class="flex-1 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-slate-800 dark:text-white text-xs focus:outline-none focus:border-emerald-500">
+                            <button onclick="submitManualToken()" class="bg-emerald-600 hover:bg-emerald-700 px-4 py-2 text-white rounded-xl font-bold text-xs transition shadow-md">Sync</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 2: SHARE TAB -->
+                <div id="shareView" class="space-y-3 hidden">
+                    
+                    <!-- Profile Header Card -->
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 rounded-2xl p-4 shadow-sm flex justify-between items-center">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 id="profileName" class="text-sm font-bold tracking-tight"></h3>
+                                <span class="bg-emerald-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-full">Active User</span>
+                            </div>
+                            <p id="profilePhone" class="text-[11px] text-slate-400 mt-0.5">Digital NoteBook ID</p>
+                        </div>
+                        <button onclick="openNativeShareSheet()" class="p-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition text-slate-700 dark:text-slate-200 flex items-center gap-1.5 font-bold">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+                            Share QR & Token
+                        </button>
+                    </div>
+
+                    <!-- QR Display Card with Logo in Center -->
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex flex-col items-center text-center space-y-3">
+                        <div id="qrcodeWrapper" class="relative inline-block p-3 bg-white rounded-xl shadow-inner">
+                            <div id="qrcode"></div>
+                            <!-- Logo in Center of QR -->
+                            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <div class="w-10 h-10 rounded-full bg-white border-2 border-emerald-600 p-0.5 shadow-md overflow-hidden flex items-center justify-center">
+                                    <img src="N1024.png" alt="Logo" class="w-full h-full object-cover rounded-full">
+                                </div>
                             </div>
                         </div>
+                        <p class="text-[11px] text-slate-400">Scan this QR code within <span id="expiryCountdown" class="text-amber-400 font-bold">2:00 minutes</span> to securely sync data.</p>
+                        <button onclick="generateSecureQRToken()" class="text-emerald-500 hover:underline text-[11px] font-semibold">Generate New QR</button>
                     </div>
-                    <p class="text-[11px] text-slate-400">Scan this QR code within <span id="expiryCountdown" class="text-amber-400 font-bold">2:00 minutes</span> to securely sync data.</p>
-                    <button onclick="generateSecureQRToken()" class="text-indigo-400 hover:underline text-[11px] font-semibold">Generate New QR</button>
+
                 </div>
 
-            </div>
-
+            </main>
         </div>
     </div>
 
     <!-- CROPPER MODAL -->
     <div id="cropperModal" style="display:none;" class="fixed inset-0 bg-slate-950/90 z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl max-w-sm w-full text-white shadow-2xl space-y-3">
-            <h3 class="text-xs font-bold text-indigo-400">Crop & Zoom QR Code</h3>
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-2xl max-w-sm w-full text-slate-800 dark:text-white shadow-2xl space-y-3">
+            <h3 class="text-xs font-bold text-emerald-500">Crop & Zoom QR Code</h3>
             
             <div class="max-h-64 overflow-hidden bg-black rounded-xl flex justify-center items-center">
                 <img id="imageToCrop" src="" class="max-w-full">
             </div>
             
             <div class="flex gap-2">
-                <button onclick="closeCropper()" class="w-1/2 bg-slate-800 hover:bg-slate-700 py-2.5 rounded-xl text-xs font-bold transition">Cancel</button>
-                <button onclick="performCroppedScan()" class="w-1/2 bg-indigo-600 hover:bg-indigo-700 py-2.5 rounded-xl text-xs font-bold transition">Crop & Scan</button>
+                <button onclick="closeCropper()" class="w-1/2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 py-2.5 rounded-xl text-xs font-bold transition">Cancel</button>
+                <button onclick="performCroppedScan()" class="w-1/2 bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl text-xs font-bold transition">Crop & Scan</button>
             </div>
         </div>
     </div>
@@ -169,17 +274,119 @@
         let torchOn = false;
         let qrTimerInterval = null;
         let tokenExpiryTimestamp = 0;
+        let currentLang = localStorage.getItem('lang') || 'EN';
 
         window.onload = function() {
-            const savedName = localStorage.getItem('user_profile_name') || "Kamal G.C.";
-            document.getElementById('profileName').textContent = savedName;
-            document.getElementById('profilePhone').textContent = "ID: " + CURRENT_USER_ID;
+            updateLanguageUI();
+            updateThemeUI();
+            updateDynamicHeader();
+            loadUserData();
+            loadAvatar();
+            
             generateSecureQRToken();
             
             // Auto start camera on load
             setTimeout(() => {
                 startRealScanner();
             }, 500);
+        };
+
+        window.toggleSidebar = function() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar) sidebar.classList.toggle('-translate-x-full');
+        };
+
+        window.updateLanguageUI = function() {
+            const btn = document.getElementById('lang-toggle-btn');
+            if(btn) btn.innerText = currentLang;
+
+            document.querySelectorAll('.lang-text').forEach(el => {
+                const text = currentLang === 'NEP' ? el.getAttribute('data-np') : el.getAttribute('data-en');
+                if(text) el.innerText = text;
+            });
+        };
+
+        window.toggleLanguage = function() {
+            currentLang = currentLang === 'EN' ? 'NEP' : 'EN';
+            localStorage.setItem('lang', currentLang);
+            updateLanguageUI();
+            updateDynamicHeader();
+        };
+
+        window.updateThemeUI = function() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const themeBtn = document.getElementById('theme-toggle-btn');
+            if(themeBtn) themeBtn.innerText = isDark ? '🌛' : '🌞';
+        };
+
+        window.toggleTheme = function() {
+            const htmlEl = document.documentElement;
+            if (htmlEl.classList.contains('dark')) {
+                htmlEl.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                htmlEl.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+            updateThemeUI();
+        };
+
+        window.updateDynamicHeader = function() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateString = now.toLocaleDateString(currentLang === 'NEP' ? 'ne-NP' : 'en-US', options).toUpperCase();
+            const dateEl = document.getElementById('dynamic-date');
+            if (dateEl) dateEl.innerText = dateString;
+        };
+
+        window.saveProfileDetails = function() {
+            const name = document.getElementById('input-full-name').value;
+            const address = document.getElementById('input-address').value;
+            const mobile = document.getElementById('input-mobile').value;
+
+            if(name) localStorage.setItem('profile_name', name);
+            localStorage.setItem('profile_address', address);
+            localStorage.setItem('profile_mobile', mobile);
+
+            loadUserData();
+            alert(currentLang === 'NEP' ? 'विवरण सफलतापूर्वक सेभ भयो!' : 'Details saved successfully!');
+        };
+
+        window.loadUserData = function() {
+            const savedName = localStorage.getItem('profile_name') || '';
+            const savedAddress = localStorage.getItem('profile_address') || '';
+            const savedMobile = localStorage.getItem('profile_mobile') || '';
+
+            if(document.getElementById('input-full-name')) document.getElementById('input-full-name').value = savedName;
+            if(document.getElementById('input-address')) document.getElementById('input-address').value = savedAddress;
+            if(document.getElementById('input-mobile')) document.getElementById('input-mobile').value = savedMobile;
+
+            const nameEl = document.getElementById('sidebar-profile-name');
+            if(nameEl) nameEl.innerText = savedName;
+
+            const profileNameEl = document.getElementById('profileName');
+            if(profileNameEl) profileNameEl.innerText = savedName || 'User Name';
+        };
+
+        window.handleAvatarUpload = function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64Image = e.target.result;
+                    localStorage.setItem('profile_avatar', base64Image);
+                    loadAvatar();
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        window.loadAvatar = function() {
+            const savedImage = localStorage.getItem('profile_avatar') || 'N1024.png';
+            ['sidebar-avatar-img', 'header-avatar-img'].forEach(id => {
+                const img = document.getElementById(id);
+                if(img) img.src = savedImage;
+            });
         };
 
         window.switchTab = function(tab) {
@@ -189,13 +396,13 @@
             const shareView = document.getElementById('shareView');
 
             if (tab === 'scan') {
-                scanTabBtn.className = "flex-1 py-2.5 rounded-lg font-bold text-xs transition text-indigo-400 bg-slate-800 shadow";
+                scanTabBtn.className = "flex-1 py-2.5 rounded-lg font-bold text-xs transition text-emerald-500 bg-slate-100 dark:bg-slate-800 shadow";
                 shareTabBtn.className = "flex-1 py-2.5 rounded-lg font-bold text-xs transition text-slate-400";
                 scanView.classList.remove('hidden');
                 shareView.classList.add('hidden');
                 startRealScanner();
             } else {
-                shareTabBtn.className = "flex-1 py-2.5 rounded-lg font-bold text-xs transition text-indigo-400 bg-slate-800 shadow";
+                shareTabBtn.className = "flex-1 py-2.5 rounded-lg font-bold text-xs transition text-emerald-500 bg-slate-100 dark:bg-slate-800 shadow";
                 scanTabBtn.className = "flex-1 py-2.5 rounded-lg font-bold text-xs transition text-slate-400";
                 shareView.classList.remove('hidden');
                 scanView.classList.add('hidden');
@@ -237,7 +444,7 @@
                     clearInterval(qrTimerInterval);
                     if (timerBadge) timerBadge.textContent = "Expired";
                     if (expiryCountdown) expiryCountdown.textContent = "Expired!";
-                    document.getElementById('qrcode').innerHTML = '<p class="text-red-500 text-[11px] font-bold p-4">QR Expired!<br>Generate new.</p>';
+                    document.getElementById('qrcode').innerHTML = '<p class="text-rose-500 text-[11px] font-bold p-4">QR Expired!<br>Generate new.</p>';
                 } else {
                     const mins = Math.floor(secondsLeft / 60);
                     const secs = secondsLeft % 60;
@@ -268,7 +475,6 @@
                                 files: [file]
                             });
                         } catch (err) {
-                            // Fallback if file share fails
                             await navigator.share({
                                 title: 'Digital NoteBook QR Sync',
                                 text: `Secure Sync Token: ${lastGeneratedToken}`
@@ -452,7 +658,7 @@
         function showFeedback(message, type) {
             const fb = document.getElementById('feedbackMsg');
             if (!fb) return;
-            fb.className = `fixed top-4 left-1/2 transform -translate-x-1/2 z-50 px-4 py-2 rounded-xl text-xs font-bold shadow-lg transition-all ${type === 'success' ? 'bg-emerald-600 text-white' : 'bg-red-600 text-white'}`;
+            fb.className = `fixed top-4 left-1/2 transform -translate-x-1/2 z-50 px-4 py-2 rounded-xl text-xs font-bold shadow-lg transition-all ${type === 'success' ? 'bg-emerald-600 text-white' : 'bg-rose-600 text-white'}`;
             fb.textContent = message;
             fb.classList.remove('hidden');
             setTimeout(() => { fb.classList.add('hidden'); }, 3000);
