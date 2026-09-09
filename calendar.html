@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ne" class="dark">
+<html lang="en" class="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Digital NoteBook - नेपाली क्यालेन्डर</title>
+<title>Digital NoteBook</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
 tailwind.config = {
@@ -25,12 +25,21 @@ tailwind.config = {
         document.documentElement.classList.add('dark');
     }
 </script>
-<!-- Nepali Date Converter Library via CDN -->
-<script src="https://cdn.jsdelivr.net/npm/nepali-date-converter@3.4.0/dist/nepali-date-converter.umd.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    @keyframes rainbow {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    .animate-rainbow {
+        background-size: 300% auto;
+        animation: rainbow 5s linear infinite;
+    }
+</style>
 </head>
-<body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-xs flex flex-col h-screen overflow-hidden select-none">
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-xs">
 
 <div class="flex min-h-screen w-full">
     
@@ -70,7 +79,6 @@ tailwind.config = {
             <!-- SIDEBAR NAVIGATION -->
             <nav class="space-y-1 font-medium">
                 <a href="index.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl hover:bg-slate-800 text-slate-300 transition"><span>📊</span> <span class="lang-text" data-en="Overview" data-np="अवलोकन">Overview</span></a>
-                <a href="#" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl bg-emerald-600 text-white shadow-md transition"><span>📅</span> <span class="lang-text" data-en="Nepali Calendar" data-np="नेपाली क्यालेन्डर">Nepali Calendar</span></a>
             </nav>
 
             <div class="space-y-2.5 bg-slate-800/50 p-3 rounded-xl border border-slate-700/60">
@@ -96,10 +104,9 @@ tailwind.config = {
         </div>
     </div>
 
-    <!-- MAIN LAYOUT -->
-    <div class="flex-1 flex flex-col h-full w-full">
+    <div class="flex-1 flex flex-col w-full">
         
-        <!-- HEADER SECTION -->
+        <!-- HEADER SECTION (Navbar) -->
         <header class="sticky top-0 z-40 flex items-center justify-between px-3 md:px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-emerald-500/20 shadow-md">
             <div class="flex items-center space-x-2.5">
                 <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-emerald-400 transition">☰</button>
@@ -124,46 +131,12 @@ tailwind.config = {
             </div>
         </header>
 
-        <!-- CALENDAR FULL SCREEN CONTENT -->
-        <main class="flex-1 flex flex-col items-center justify-center p-4 w-full bg-slate-100 dark:bg-slate-950 overflow-y-auto space-y-4">
-            
-            <!-- Calendar Card -->
-            <div class="w-full max-w-md bg-white dark:bg-slate-900 p-5 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 space-y-4">
-                
-                <!-- Header with Nepali Month & Navigation -->
-                <div class="flex justify-between items-center px-1">
-                    <h2 id="calendar-month-year" class="text-sm font-bold text-slate-900 dark:text-white tracking-wide"></h2>
-                    <div class="flex items-center gap-1.5">
-                        <button onclick="changeNepaliMonth(-1)" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-emerald-600 hover:text-white text-xs transition border border-slate-200 dark:border-slate-700">
-                            <i class="fa-solid fa-chevron-left"></i>
-                        </button>
-                        <button onclick="changeNepaliMonth(1)" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-emerald-600 hover:text-white text-xs transition border border-slate-200 dark:border-slate-700">
-                            <i class="fa-solid fa-chevron-right"></i>
-                        </button>
-                    </div>
+        <!-- Dynamic Date & Time Section -->
+        <main class="p-4 md:p-6 space-y-4 flex-1 w-full text-xs">
+            <div class="flex justify-between items-center px-1 py-1 text-white">
+                <div>
+                    <p id="dynamic-date" class="text-[11px] font-semibold tracking-wider text-slate-400 uppercase mb-1"></p>
                 </div>
-
-                <!-- Week Days Header (Nepali) -->
-                <div class="grid grid-cols-7 text-center text-xs font-semibold py-1">
-                    <span class="text-rose-500 font-bold">आइत</span>
-                    <span class="text-slate-500 dark:text-slate-400">सोम</span>
-                    <span class="text-slate-500 dark:text-slate-400">मङ्गल</span>
-                    <span class="text-slate-500 dark:text-slate-400">बुध</span>
-                    <span class="text-slate-500 dark:text-slate-400">बिही</span>
-                    <span class="text-slate-500 dark:text-slate-400">शुक्र</span>
-                    <span class="text-slate-500 dark:text-slate-400">शनि</span>
-                </div>
-
-                <!-- Days Grid -->
-                <div id="calendar-days" class="grid grid-cols-7 gap-1.5 text-center text-xs">
-                    <!-- Dynamic Nepali Days will load here -->
-                </div>
-            </div>
-
-            <!-- Selected Date Details Box -->
-            <div class="w-full max-w-md bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-3 text-center">
-                <p class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">मिति विवरण</p>
-                <p id="selected-date-info" class="text-xs font-bold text-slate-800 dark:text-slate-200 mt-0.5">लोड हुँदैछ...</p>
             </div>
         </main>
     </div>
@@ -191,7 +164,7 @@ tailwind.config = {
         currentLang = currentLang === 'EN' ? 'NEP' : 'EN';
         localStorage.setItem('lang', currentLang);
         updateLanguageUI();
-        renderNepaliCalendar();
+        updateDynamicHeader();
     }
 
     function updateThemeUI() {
@@ -212,105 +185,18 @@ tailwind.config = {
         updateThemeUI();
     }
 
-    // NEPALI CALENDAR LOGIC 
-    let currentBsDate = new NepaliDate();
-    let viewYear = currentBsDate.getYear();
-    let viewMonth = currentBsDate.getMonth(); // 0 देखि 11 सम्म
+    function updateDynamicHeader() {
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const dateString = now.toLocaleDateString(currentLang === 'NEP' ? 'ne-NP' : 'en-US', options).toUpperCase();
+        const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+        const timeString = now.toLocaleTimeString('en-US', timeOptions);
 
-    const nepaliMonthsEN = [
-        "Baishakh", "Jestha", "Ashadh", "Shrawan", "Bhadra", "Ashwin", 
-        "Kartik", "Mangsir", "Poush", "Magh", "Falgun", "Chaitra"
-    ];
-    const nepaliMonthsNP = [
-        "वैशाख", "जेठ", "असार", "साउन", "भदौ", "असोज", 
-        "कार्तिक", "मंसिर", "पौष", "माघ", "फागुन", "चैत"
-    ];
-
-    function convertToNepaliNumber(num) {
-        if (currentLang === 'EN') return num;
-        const nepaliDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
-        return num.toString().split('').map(digit => nepaliDigits[digit] !== undefined ? nepaliDigits[digit] : digit).join('');
+        const dateEl = document.getElementById('dynamic-date');
+        if (dateEl) dateEl.innerText = `${dateString} | ${timeString}`;
     }
 
-    function renderNepaliCalendar() {
-        const monthYearEl = document.getElementById('calendar-month-year');
-        const daysContainer = document.getElementById('calendar-days');
-        
-        let monthName = currentLang === 'NEP' ? nepaliMonthsNP[viewMonth] : nepaliMonthsEN[viewMonth];
-        monthYearEl.innerText = `${monthName} ${convertToNepaliNumber(viewYear)}`;
-        daysContainer.innerHTML = '';
-
-        let firstDayBs = new NepaliDate(viewYear, viewMonth, 1);
-        let firstDayWeekIndex = firstDayBs.getDay(); // 0 (आइतबार) देखि 6 (शनिबार)
-
-        for (let i = 0; i < firstDayWeekIndex; i++) {
-            let dayDiv = document.createElement('div');
-            dayDiv.className = "h-9";
-            daysContainer.appendChild(dayDiv);
-        }
-
-        for (let day = 1; day <= 32; day++) {
-            try {
-                let tempDate = new NepaliDate(viewYear, viewMonth, day);
-                if (tempDate.getMonth() !== viewMonth) break;
-
-                let dayDiv = document.createElement('div');
-                dayDiv.innerText = convertToNepaliNumber(day);
-                
-                let isToday = (
-                    day === currentBsDate.getDate() && 
-                    viewMonth === currentBsDate.getMonth() && 
-                    viewYear === currentBsDate.getYear()
-                );
-
-                let dayClass = "h-9 rounded-xl font-medium transition flex items-center justify-center cursor-pointer text-xs ";
-                if (isToday) {
-                    dayClass += "bg-emerald-600 text-white font-bold shadow-md shadow-emerald-500/20";
-                } else {
-                    dayClass += "bg-slate-50 dark:bg-slate-800/80 hover:bg-emerald-100 dark:hover:bg-emerald-950/50 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700/60";
-                }
-
-                dayDiv.className = dayClass;
-                dayDiv.onclick = () => selectDate(viewYear, viewMonth, day);
-                daysContainer.appendChild(dayDiv);
-            } catch (e) {
-                break;
-            }
-        }
-
-        updateDateInfo(currentBsDate.getYear(), currentBsDate.getMonth(), currentBsDate.getDate());
-    }
-
-    function changeNepaliMonth(direction) {
-        viewMonth += direction;
-        if (viewMonth > 11) {
-            viewMonth = 0;
-            viewYear++;
-        } else if (viewMonth < 0) {
-            viewMonth = 11;
-            viewYear--;
-        }
-        renderNepaliCalendar();
-    }
-
-    function selectDate(year, month, day) {
-        updateDateInfo(year, month, day);
-    }
-
-    function updateDateInfo(year, month, day) {
-        try {
-            let selected = new NepaliDate(year, month, day);
-            const daysListNP = ["आइतबार", "सोमबार", "मंगलवार", "बुधवार", "बिहीवार", "शुक्रवार", "शनिवार"];
-            const daysListEN = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-            
-            let dayName = currentLang === 'NEP' ? daysListNP[selected.getDay()] : daysListEN[selected.getDay()];
-            let monthName = currentLang === 'NEP' ? nepaliMonthsNP[month] : nepaliMonthsEN[month];
-            
-            document.getElementById('selected-date-info').innerText = `${dayName}, ${monthName} ${convertToNepaliNumber(day)}, ${convertToNepaliNumber(year)}`;
-        } catch (e) {
-            document.getElementById('selected-date-info').innerText = "मितिको विवरण उपलब्ध छैन";
-        }
-    }
+    setInterval(updateDynamicHeader, 1000);
 
     function saveProfileDetails() {
         const name = document.getElementById('input-full-name').value;
@@ -362,7 +248,7 @@ tailwind.config = {
     document.addEventListener("DOMContentLoaded", () => {
         updateLanguageUI();
         updateThemeUI();
-        renderNepaliCalendar();
+        updateDynamicHeader();
         loadUserData();
         loadAvatar();
     });
