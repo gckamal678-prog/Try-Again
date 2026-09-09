@@ -43,6 +43,22 @@ tailwind.config = {
 <!-- TOAST NOTIFICATION CONTAINER -->
 <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2"></div>
 
+<!-- MANDATORY LOGIN OVERLAY / MODAL -->
+<div id="login-overlay" class="fixed inset-0 bg-slate-950 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-8 w-full max-w-md shadow-2xl text-center space-y-6">
+        <div class="w-16 h-16 rounded-2xl bg-emerald-600 mx-auto flex items-center justify-center shadow-lg">
+            <img src="N1024.png" alt="Logo" class="w-10 h-10 object-cover rounded-lg">
+        </div>
+        <div class="space-y-2">
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white">Digital NoteBook</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400">कृपया एप प्रयोग गर्न अगाडि बढ्नको लागि Google मार्फत लग-इन गर्नुहोस्।</p>
+        </div>
+        <button onclick="handleGoogleAuth()" class="w-full py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-white rounded-xl text-xs font-bold flex items-center justify-center gap-3 shadow hover:bg-slate-50 transition">
+            <i class="fa-brands fa-google text-red-500 text-base"></i> Google बाट लगइन गर्नुहोस्
+        </button>
+    </div>
+</div>
+
 <!-- MASTER RESET MODAL -->
 <div id="reset-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 w-full max-w-md shadow-2xl space-y-4">
@@ -244,6 +260,7 @@ tailwind.config = {
 
     firebase.auth().onAuthStateChanged((user) => {
         currentUser = user;
+        const loginOverlay = document.getElementById('login-overlay');
         const nameEl = document.getElementById('auth-user-name');
         const emailEl = document.getElementById('auth-user-email');
         const imgEl = document.getElementById('auth-user-img');
@@ -254,6 +271,9 @@ tailwind.config = {
         const headerAvatar = document.getElementById('header-avatar-img');
 
         if (user) {
+            // Hide mandatory login overlay if user is logged in
+            if(loginOverlay) loginOverlay.classList.add('hidden');
+
             if(nameEl) nameEl.innerText = user.displayName || 'Google User';
             if(emailEl) emailEl.innerText = user.email || '';
             if(imgEl && user.photoURL) imgEl.src = user.photoURL;
@@ -264,6 +284,9 @@ tailwind.config = {
             if(sidebarAvatar && user.photoURL) sidebarAvatar.src = user.photoURL;
             if(headerAvatar && user.photoURL) headerAvatar.src = user.photoURL;
         } else {
+            // Show mandatory login overlay if user is NOT logged in
+            if(loginOverlay) loginOverlay.classList.remove('hidden');
+
             if(nameEl) nameEl.innerText = 'Not Logged In';
             if(emailEl) emailEl.innerText = 'Please sign in to sync data';
             if(btnText) btnText.innerText = 'Google बाट लगइन गर्नुहोस्';
