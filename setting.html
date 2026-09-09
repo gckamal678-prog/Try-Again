@@ -38,10 +38,15 @@ tailwind.config = {
         animation: rainbow 5s linear infinite;
     }
     .more-text {
-        display: none;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     .more-text.show {
         display: block;
+        overflow: visible;
     }
     /* Dynamic text effects */
     .effect-shadow {
@@ -113,16 +118,19 @@ tailwind.config = {
                 </h3>
                 <div>
                     <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Full Name" data-np="पूरा नाम">Full Name</span></label>
-                    <input type="text" id="input-full-name" placeholder="Enter Full Name" oninput="saveProfileDetails()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
+                    <input type="text" id="input-full-name" placeholder="Enter Full Name" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
                 </div>
                 <div>
                     <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Address" data-np="ठेगाना">Address</span></label>
-                    <input type="text" id="input-address" placeholder="Enter Address" oninput="saveProfileDetails()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
+                    <input type="text" id="input-address" placeholder="Enter Address" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
                 </div>
                 <div>
                     <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Mobile Number" data-np="मोबाइल नम्बर">Mobile Number</span></label>
-                    <input type="tel" id="input-mobile" placeholder="Enter Mobile Number" oninput="saveProfileDetails()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
+                    <input type="tel" id="input-mobile" placeholder="Enter Mobile Number" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
                 </div>
+                <button onclick="saveProfileDetails()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition shadow-md">
+                    <span class="lang-text" data-en="Save Info" data-np="सेभ गर्नुहोस्">Save Info</span>
+                </button>
             </div>
         </div>
     </div>
@@ -176,9 +184,9 @@ tailwind.config = {
                         <div>
                             <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1" data-i18n="font_size">Font Size</label>
                             <select id="font-size-select" onchange="changeFontSize(this.value)" class="w-full border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white p-2.5 rounded-xl text-xs outline-none">
-                                <option value="small">Small (15px)</option>
-                                <option value="medium" selected>Medium (20px)</option>
-                                <option value="large">Large (30px)</option>
+                                <option value="small">Small</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="large">Large</option>
                             </select>
                         </div>
                         <div>
@@ -212,38 +220,25 @@ tailwind.config = {
                     </div>
                 </div>
 
-                <!-- Policy, Terms & About Section (Consolidated into a single unified card) -->
+                <!-- Policy, Terms & About Section -->
                 <div class="bg-white dark:bg-slate-900 p-4 md:p-6 rounded-2xl shadow-sm space-y-4 border border-slate-200 dark:border-slate-800 transition-colors duration-300 w-full">
                     <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider border-b border-slate-200 dark:border-slate-800 pb-3" data-i18n="policy_title">ℹ️ Policy, Terms & About</h4>
 
-                    <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 w-full">
-                        <h5 class="font-bold text-xs text-slate-800 dark:text-slate-200" data-i18n="policy_main_title">गोपनीयता, सर्तहरू र बारेमा (Policy, Terms & Overview)</h5>
-                        <p class="text-xs text-slate-600 dark:text-slate-400 mt-1" data-i18n="policy_main_desc">तपाईँका वित्तीय रेकर्डहरू फायरबेस क्लाउडमा सुरक्षित हुन्छन्। तेस्रो पक्षलाई डाटा बिक्री गरिंदैन, र प्रयोगकर्तासँग यसको पूर्ण नियन्त्रण हुन्छ।</p>
-                        
-                        <div id="more-policy" class="more-text text-xs text-slate-600 dark:text-slate-400 space-y-2 mt-2 pt-2 border-t border-slate-100 dark:border-slate-700">
-                            <div>
-                                <p class="font-semibold text-slate-700 dark:text-slate-300">१. गोपनीयता नीति र डाटा भण्डारण:</p>
-                                <p>तपाईँका हिसाब-किताब, कारोबार र बिलहरू फायरबेस (Firebase) को क्लाउड सर्भरमा सुरक्षित रूपमा भण्डारण हुन्छन्। (English: Your financial records are securely stored in the cloud using Firebase.)</p>
+                    <div class="space-y-3 w-full">
+                        <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 w-full">
+                            <h5 class="font-bold text-xs text-slate-800 dark:text-slate-200" data-i18n="policy_main_title">Policy, Terms & Overview</h5>
+                            <p class="text-xs text-slate-600 dark:text-slate-400 mt-1" data-i18n="policy_main_desc">Your financial records are secured in Firebase cloud. Third-party data sharing is restricted, and users retain complete control over their accounts.</p>
+                            
+                            <div id="more-policy" class="more-text text-xs text-slate-600 dark:text-slate-400 space-y-2 mt-2 pt-2 border-t border-slate-100 dark:border-slate-700">
+                                <p class="lang-text" 
+                                   data-en="Your complete accounts, transaction records, and bills will be kept fully secure in the cloud server. We will never sell or transfer any of your personal or financial details to any third party or anyone else, ensuring your privacy remains protected at all times. To use this system, users must log in securely and will be entirely responsible for keeping their login credentials confidential. An active internet connection is fundamentally required to keep data fresh and synchronized in real-time on the server. Furthermore, users retain the full right to request the deletion of their account and all stored details from the server whenever they wish." 
+                                   data-np="तपाईँका सबै हिसाब-किताब, कारोबारका विवरण र बिलहरू क्लाउड सर्भरमा पूर्ण रूपमा सुरक्षित रूपमा राखिनेछन्। हामी तपाईँको कुनै पनि व्यक्तिगत वा वित्तीय विवरणहरू तेस्रो पक्ष वा अन्य कसैलाई पनि बिक्री गर्ने वा हस्तान्तरण गर्ने छैनौं, जसले गर्दा तपाईँको गोपनीयता सधैं सुरक्षित रहन्छ। यो प्रणाली प्रयोग गर्नका लागि प्रयोगकर्ताहरूले सुरक्षित रूपमा लगइन गर्नुपर्ने हुन्छ र आफ्ना लगइन विवरणहरू गोप्य राख्ने पूर्ण जिम्मेवारी स्वयम् प्रयोगकर्ताकै हुनेछ। सर्भरमा डाटालाई वास्तविक समयमै ताजा राख्न र सिंक गर्नका लागि सक्रिय इन्टरनेट जडान अनिवार्य रूपमा आवश्यक पर्दछ। यसबाहेक, प्रयोगकर्ताहरूसँग पूर्ण अधिकार हुन्छ कि उनीहरूले सर्भरमा सुरक्षित राखिएको आफ्नो खाता तथा सम्पूर्ण विवरणहरू जुनसुकै बेला चाहेको बखत मेटाउनका लागि अनुरोध गर्न सक्नेछन्।">
+                                   तपाईँका सबै हिसाब-किताब, कारोबारका विवरण र बिलहरू क्लाउड सर्भरमा पूर्ण रूपमा सुरक्षित रूपमा राखिनेछन्। हामी तपाईँको कुनै पनि व्यक्तिगत वा वित्तीय विवरणहरू तेस्रो पक्ष वा अन्य कसैलाई पनि बिक्री गर्ने वा हस्तान्तरण गर्ने छैनौं, जसले गर्दा तपाईँको गोपनीयता सधैं सुरक्षित रहन्छ। यो प्रणाली प्रयोग गर्नका लागि प्रयोगकर्ताहरूले सुरक्षित रूपमा लगइन गर्नुपर्ने हुन्छ र आफ्ना लगइन विवरणहरू गोप्य राख्ने पूर्ण जिम्मेवारी स्वयम् प्रयोगकर्ताकै हुनेछ। सर्भरमा डाटालाई वास्तविक समयमै ताजा राख्न र सिंक गर्नका लागि सक्रिय इन्टरनेट जडान अनिवार्य रूपमा आवश्यक पर्दछ। यसबाहेक, प्रयोगकर्ताहरूसँग पूर्ण अधिकार हुन्छ कि उनीहरूले सर्भरमा सुरक्षित राखिएको आफ्नो खाता तथा सम्पूर्ण विवरणहरू जुनसुकै बेला चाहेको बखत मेटाउनका लागि अनुरोध गर्न सक्नेछन्।
+                                </p>
                             </div>
-                            <div>
-                                <p class="font-semibold text-slate-700 dark:text-slate-300">२. तेस्रो पक्षको पहुँच:</p>
-                                <p>हामी तपाईँको व्यक्तिगत वित्तीय डाटा कुनै पनि अनाधिकृत तेस्रो पक्षलाई बिक्री वा हस्तान्तरण गर्दैनौं। (English: We do not sell or transfer your personal financial data to unauthorized third parties.)</p>
-                            </div>
-                            <div>
-                                <p class="font-semibold text-slate-700 dark:text-slate-300">३. सुरक्षा र लगइन:</p>
-                                <p>प्रयोगकर्ताले सुरक्षित रूपमा लगइन गर्न सक्छन्, तर आफ्नो लगइन विवरण गोप्य राख्ने जिम्मेवारी प्रयोगकर्ताको हुन्छ। (English: Users are responsible for keeping their login details confidential.)</p>
-                            </div>
-                            <div>
-                                <p class="font-semibold text-slate-700 dark:text-slate-300">४. इन्टरनेट र सिंक:</p>
-                                <p>फायरबेस सर्भरमा डाटा वास्तविक समयमा सिंक र अपडेट गर्नका लागि इन्टरनेट जडानको आवश्यकता पर्दछ। (English: An internet connection is required to real-time sync data.)</p>
-                            </div>
-                            <div>
-                                <p class="font-semibold text-slate-700 dark:text-slate-300">५. डाटा मेटाउने अधिकार:</p>
-                                <p>प्रयोगकर्तासँग फायरबेस सर्भरमा रहेको आफ्नो खाता र डाटा जुनसुकै बेला मेटाउन अनुरोध गर्ने अधिकार हुन्छ। (English: Users have the right to request deletion of their account and data at any time.)</p>
-                            </div>
-                        </div>
 
-                        <button onclick="toggleText('policy')" id="toggle-btn-policy" class="text-emerald-600 dark:text-emerald-400 font-bold text-xs mt-3 block hover:underline" data-i18n="see_more">See More (थप हेर्नुहोस्)</button>
+                            <button onclick="toggleText('policy')" id="toggle-btn-policy" class="text-emerald-600 dark:text-emerald-400 font-bold text-xs mt-3 block hover:underline" data-i18n="see_more">See More</button>
+                        </div>
                     </div>
                     
                     <div class="pt-2 text-center border-t border-slate-100 dark:border-slate-800 w-full">
@@ -299,6 +294,7 @@ tailwind.config = {
             policy_main_title: "Policy, Terms & Overview",
             policy_main_desc: "Your financial records are secured in Firebase cloud. Third-party data sharing is restricted, and users retain complete control over their accounts.",
             see_more: "See More",
+            see_less: "See Less",
             check_update: "(Check Update)",
             feedback_title: "Feedback & Suggestions",
             your_name: "Your Name:",
@@ -316,9 +312,10 @@ tailwind.config = {
             effect_background: "ब्याकग्राउन्ड",
             effect_hollow: "खोक्रो (Hollow)",
             policy_title: "ℹ️ नीति, सर्तहरू र बारेमा",
-            policy_main_title: "गोपनीयता, सर्तहरू र बारेमा (Policy, Terms & Overview)",
-            policy_main_desc: "तपाईँका वित्तीय रेकर्डहरू फायरबेस क्लाउडमा सुरक्षित हुन्छन्। तेस्रो पक्षलाई डाटा बिक्री गरिंदैन, र प्रयोगकर्तासँग यसको पूर्ण नियन्त्रण हुन्छ।",
-            see_more: "See More (थप हेर्नुहोस्)",
+            policy_main_title: "गोपनीयता नीति र सर्तहरू",
+            policy_main_desc: "तपाईँका हिसाब-किताब फायरबेस क्लाउडमा सुरक्षित छन्। तेस्रो पक्षलाई डाटा共享 गरिंदैन।",
+            see_more: "थप हेर्नुहोस्",
+            see_less: "कम देखाउनुहोस्",
             check_update: "(अपडेट जाँच गर्नुहोस्)",
             feedback_title: "प्रतिक्रिया तथा सुझाव (Feedback & Suggestions)",
             your_name: "तपाईंको नाम / Your Name:",
@@ -342,6 +339,13 @@ tailwind.config = {
                 el.innerText = translations[currentLang][key];
             }
         });
+
+        const toggleBtn = document.getElementById('toggle-btn-policy');
+        if (toggleBtn) {
+            const el = document.getElementById('more-policy');
+            const isShown = el && el.classList.contains('show');
+            toggleBtn.innerText = isShown ? (translations[currentLang]['see_less'] || 'See Less') : (translations[currentLang]['see_more'] || 'See More');
+        }
     }
 
     function toggleLanguage() {
@@ -400,20 +404,22 @@ tailwind.config = {
         }, 1500);
     }
 
-    // Typography and Styling Functions with instant sizing update
+    // Typography and Styling Functions
     function changeFontSize(size) {
-        let baseSize = '20px'; // Updated default medium to 20px base equivalent or handling logic
-        if (size === 'small') baseSize = '15px';
-        else if (size === 'medium') baseSize = '20px';
-        else if (size === 'large') baseSize = '30px';
+        let fontSizePx = '15px';
+        if (size === 'small') fontSizePx = '15px';
+        else if (size === 'medium') fontSizePx = '20px';
+        else if (size === 'large') fontSizePx = '24px';
 
-        document.documentElement.style.fontSize = baseSize;
+        document.body.style.fontSize = fontSizePx;
         localStorage.setItem('pref_font_size', size);
+        showToast(currentLang === 'NEP' ? 'फन्ट साइज परिवर्तन भयो!' : 'Font size updated!', 'success');
     }
 
     function changeFontFamily(family) {
         document.body.style.fontFamily = `'${family}', sans-serif`;
         localStorage.setItem('pref_font_family', family);
+        showToast(currentLang === 'NEP' ? 'फन्ट परिवार परिवर्तन भयो!' : 'Font family updated!', 'success');
     }
 
     function changeFontStyle(style) {
@@ -428,6 +434,7 @@ tailwind.config = {
             document.body.style.fontStyle = 'normal';
         }
         localStorage.setItem('pref_font_style', style);
+        showToast(currentLang === 'NEP' ? 'फन्ट शैली परिवर्तन भयो!' : 'Font style updated!', 'success');
     }
 
     function setTextEffect(effect) {
@@ -436,6 +443,7 @@ tailwind.config = {
         if (effect) {
             mainBody.classList.add(`effect-${effect}`);
             localStorage.setItem('pref_text_effect', effect);
+            showToast(currentLang === 'NEP' ? 'टेक्स्ट इफेक्ट लागू भयो!' : 'Text effect applied!', 'success');
         } else {
             localStorage.removeItem('pref_text_effect');
         }
@@ -448,7 +456,7 @@ tailwind.config = {
             el.classList.toggle('show');
             const isShown = el.classList.contains('show');
             if (currentLang === 'NEP') {
-                btn.innerText = isShown ? 'कम देखाउनुहोस् (See Less)' : 'See More (थप हेर्नुहोस्)';
+                btn.innerText = isShown ? 'कम देखाउनुहोस्' : 'थप हेर्नुहोस्';
             } else {
                 btn.innerText = isShown ? 'See Less' : 'See More';
             }
@@ -472,13 +480,14 @@ tailwind.config = {
     function saveProfileDetails() {
         const name = document.getElementById('input-full-name').value;
         const address = document.getElementById('input-address').value;
-        const mobile = document.getElementById('input-mobile.value') || document.getElementById('input-mobile').value;
+        const mobile = document.getElementById('input-mobile').value;
 
         if(name) localStorage.setItem('profile_name', name);
         localStorage.setItem('profile_address', address);
         localStorage.setItem('profile_mobile', mobile);
 
         loadUserData();
+        showToast(currentLang === 'NEP' ? 'विवरण सफलतापूर्वक सेभ भयो!' : 'Details saved successfully!', 'success');
     }
 
     function loadUserData() {
