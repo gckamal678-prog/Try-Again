@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="NoteBook">
 <link rel="apple-touch-icon" href="N1024.png">
-<meta name="keywords" content="digital notebook, transaction manager, nepali finance app, income expense tracker, note taking app, kamal gc">
+<meta name="keywords" content="digital notebook, transaction manager, nepali finance app, income expense tracker, note taking app, KAMAL G.C.">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -649,6 +649,15 @@ tailwind.config = {
         if(document.getElementById('summary-payable')) document.getElementById('summary-payable').innerText = `Rs ${totalPayable.toLocaleString()}`;
     }
 
+    // Auto-update summary cards when page is shown or focused
+    window.addEventListener('pageshow', (event) => {
+        updateSummaryCards();
+    });
+
+    window.addEventListener('focus', () => {
+        updateSummaryCards();
+    });
+
     // Listen to storage changes across tabs / pages for real-time auto-update
     window.addEventListener('storage', (event) => {
         updateSummaryCards();
@@ -869,7 +878,7 @@ tailwind.config = {
     function prevStep() {
         if (currentStep > 0) {
             currentStep--;
-            showStep(currentstep);
+            showStep(currentStep);
         }
     }
 
