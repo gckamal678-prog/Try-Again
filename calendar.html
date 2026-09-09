@@ -64,7 +64,7 @@ tailwind.config = {
 <!-- MAIN LAYOUT -->
 <div class="flex-1 flex flex-col h-full w-full">
     
-    <!-- HEADER SECTION (Emerald Mint & Inter Styled) -->
+    <!-- HEADER SECTION -->
     <header class="sticky top-0 z-40 flex items-center justify-between px-3 md:px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-emerald-500/20 shadow-md">
         <div class="flex items-center space-x-2.5">
             <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-emerald-400 transition">☰</button>
@@ -78,12 +78,13 @@ tailwind.config = {
             </div>
         </div>
 
+        <!-- Right Controls: Today, Language, Theme & Avatar -->
         <div class="flex items-center space-x-2">
             <button onclick="goToToday()" title="Today" class="px-2 py-1 rounded-md bg-slate-800 border border-slate-700 text-[10px] font-bold text-slate-200 hover:bg-slate-700 transition"><span class="lang-text" data-en="Today" data-np="आज">Today</span></button>
             <button onclick="toggleLanguage()" id="lang-toggle-btn" class="px-2 py-1 rounded-md bg-slate-800 border border-slate-700 text-[10px] font-bold text-slate-200 hover:bg-slate-700 transition">ENG</button>
             <button onclick="toggleTheme()" id="theme-toggle-btn" class="w-7 h-7 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center text-sm hover:bg-slate-700 transition">🌛</button>
             <div class="relative cursor-pointer" onclick="toggleSidebar()">
-                <div class="w-8 h-8 rounded-full bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-sm">
+                <div class="w-7 h-7 rounded-full bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-sm">
                     <img id="header-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
                 </div>
             </div>
@@ -91,7 +92,7 @@ tailwind.config = {
     </header>
 
     <!-- CALENDAR FULL SCREEN CONTENT -->
-    <main class="flex-1 flex flex-col items-center justify-center p-4 w-full h-full bg-slate-100 dark:bg-slate-950 overflow-hidden">
+    <main class="flex-1 flex flex-col items-center justify-center p-4 w-full bg-slate-100 dark:bg-slate-950 overflow-y-auto">
         <div class="w-full max-w-md bg-white dark:bg-slate-900 p-5 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 space-y-4">
             
             <!-- Header with Nepali Month & Navigation -->
@@ -163,7 +164,7 @@ tailwind.config = {
     // NEPALI CALENDAR LOGIC
     let currentBsDate = new NepaliDate();
     let viewYear = currentBsDate.getYear();
-    let viewMonth = currentBsDate.getMonth(); // 0 देखि 11 वा 1 देखि 12 (lib अनुसार ह्यान्डल गरिन्छ)
+    let viewMonth = currentBsDate.getMonth(); // 0 देखि 11 सम्म हुने
 
     const nepaliMonthsEN = [
         "Baishakh", "Jestha", "Ashadh", "Shrawan", "Bhadra", "Ashwin", 
@@ -184,28 +185,28 @@ tailwind.config = {
         const monthYearEl = document.getElementById('calendar-month-year');
         const daysContainer = document.getElementById('calendar-days');
         
-        let monthName = currentLang === 'NEP' ? nepaliMonthsNP[viewMonth - 1] : nepaliMonthsEN[viewMonth - 1];
+        let monthName = currentLang === 'NEP' ? nepaliMonthsNP[viewMonth] : nepaliMonthsEN[viewMonth];
         monthYearEl.innerText = `${monthName} ${convertToNepaliNumber(viewYear)}`;
         daysContainer.innerHTML = '';
 
-        // महिनाको पहिलो दिन पत्ता लगाउने
-        let firstDayBs = new NepaliDate(viewYear, viewMonth, 1);
+        // महिनाको पहिलो मिति (Index 0 देखि 11 भएकोले viewMonth मा +1 गरिन्छ)
+        let firstDayBs = new NepaliDate(viewYear, viewMonth + 1, 1);
         let firstDayAdWeek = firstDayBs.toAd().getDay(); // 0 (Sun) देखि 6 (Sat)
 
-        // महिनामा जम्मा कति दिन छन् पत्ता लगाउने सही तरिका
-        let totalDays;
+        // महिनामा जम्मा कति दिन छन् निकाल्ने
+        let totalDays = 30;
         try {
-            let nextMonthBs = viewMonth === 12 ? new NepaliDate(viewYear + 1, 1, 1) : new NepaliDate(viewYear, viewMonth + 1, 1);
+            let nextMonthBs = viewMonth === 11 ? new NepaliDate(viewYear + 1, 1, 1) : new NepaliDate(viewYear, viewMonth + 2, 1);
             let diffTime = nextMonthBs.toAd().getTime() - firstDayBs.toAd().getTime();
             totalDays = Math.round(diffTime / (1000 * 3600 * 24));
         } catch (e) {
-            totalDays = 30;
+            totalDays = 31;
         }
 
-        // खाली स्पेसहरू (पहिलो दिनअघि)
+        // खाली स्पेसहरू (पहिलो दिन अघि)
         for (let i = 0; i < firstDayAdWeek; i++) {
             let dayDiv = document.createElement('div');
-            dayDiv.className = "p-2.5 rounded-xl text-transparent select-none";
+            dayDiv.className = "p-2 rounded-xl select-none";
             daysContainer.appendChild(dayDiv);
         }
 
@@ -213,7 +214,7 @@ tailwind.config = {
         for (let day = 1; day <= totalDays; day++) {
             let dayDiv = document.createElement('div');
             dayDiv.innerText = convertToNepaliNumber(day);
-            dayDiv.className = "p-2.5 rounded-xl font-medium transition flex items-center justify-center cursor-pointer hover:bg-emerald-50 dark:hover:bg-emerald-950/50";
+            dayDiv.className = "p-2 rounded-xl font-medium transition flex items-center justify-center cursor-pointer hover:bg-emerald-50 dark:hover:bg-emerald-950/50";
 
             let isToday = (day === currentBsDate.getDate() && viewMonth === currentBsDate.getMonth() && viewYear === currentBsDate.getYear());
             if (isToday) {
@@ -228,11 +229,11 @@ tailwind.config = {
 
     function changeNepaliMonth(direction) {
         viewMonth += direction;
-        if (viewMonth > 12) {
-            viewMonth = 1;
+        if (viewMonth > 11) {
+            viewMonth = 0;
             viewYear++;
-        } else if (viewMonth < 1) {
-            viewMonth = 12;
+        } else if (viewMonth < 0) {
+            viewMonth = 11;
             viewYear--;
         }
         renderNepaliCalendar();
