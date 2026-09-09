@@ -390,31 +390,52 @@ tailwind.config = {
 
     setInterval(updateDynamicHeader, 1000);
 
-    // Filter data placeholder functions (can be expanded based on date selectors if available)
     function getDateFilteredData(dataArray) {
         return dataArray;
     }
 
-    // Function to calculate and update summary cards using forEach / reduce methods
+    // कुल जम्मा हिसाब गर्ने मुख्य फंक्शन
     function updateSummaryCards() {
-        // १. add-income.html को कुल आम्दानी (Total Income) हिसाब गर्ने
-        const incomesData = localStorage.getItem('digital_notebook_incomes') || localStorage.getItem('incomes') || '[]';
+        // १. Total Income (add-income.html बाट आउने डाटाको लागि सबै सम्भावित कि (Keys) हरू चेक गरिएको)
+        const incomeKeys = ['digital_notebook_incomes', 'incomes', 'income_data', 'add_income_list'];
         let incomes = [];
-        try { incomes = JSON.parse(incomesData); } catch(e) { incomes = []; }
+        for (let key of incomeKeys) {
+            const data = localStorage.getItem(key);
+            if (data) {
+                try {
+                    const parsed = JSON.parse(data);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        incomes = parsed;
+                        break;
+                    }
+                } catch(e) {}
+            }
+        }
         
         const filteredIncomes = getDateFilteredData(incomes);
         const totalIncome = filteredIncomes.reduce((sum, item) => {
-            const val = Number(item.amount || item.incomeAmount || item.val || 0);
+            const val = Number(item.amount || item.incomeAmount || item.val || item.total || item.price || 0);
             return sum + val;
         }, 0);
         
         const incomeEl = document.getElementById('summary-income');
         if(incomeEl) incomeEl.innerText = `Rs ${totalIncome.toLocaleString()}`;
 
-        // २. add-transaction.html को कारोबार (Invest, Receivable, Payable) हिसाब गर्ने
-        const transactionsData = localStorage.getItem('digital_notebook_transactions') || localStorage.getItem('transactions') || localStorage.getItem('advanced_notebook_notes') || '[]';
+        // २. Transactions (add-transaction.html बाट आउने डाटाको लागि सबै सम्भावित कि हरू चेक गरिएको)
+        const txKeys = ['digital_notebook_transactions', 'transactions', 'advanced_notebook_notes', 'notes', 'transaction_list'];
         let transactions = [];
-        try { transactions = JSON.parse(transactionsData); } catch(e) { transactions = []; }
+        for (let key of txKeys) {
+            const data = localStorage.getItem(key);
+            if (data) {
+                try {
+                    const parsed = JSON.parse(data);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        transactions = parsed;
+                        break;
+                    }
+                } catch(e) {}
+            }
+        }
 
         const filteredTransactions = getDateFilteredData(transactions);
 
@@ -423,16 +444,17 @@ tailwind.config = {
         let totalPayable = 0;
 
         filteredTransactions.forEach(tx => {
-            const amt = Number(tx.amount || tx.txAmount || tx.val || tx.principalAmount || 0);
-            const tType = String(tx.type || tx.category || '').toLowerCase();
+            const amt = Number(tx.amount || tx.txAmount || tx.val || tx.principalAmount || tx.total || tx.price || 0);
+            const tType = String(tx.type || tx.category || tx.transactionType || tx.action || '').toLowerCase();
             
-            if (tType.includes('invest') || tType.includes('लगानी')) {
+            if (tType.includes('invest') || tType.includes('लगानी') || tType.includes('expense')) {
                 totalInvest += amt;
             } else if (tType.includes('receive') || tType.includes('लिनु') || tType.includes('पाउनुपर्ने')) {
                 totalReceivable += amt;
-            } else if (tType.includes('give') || tType.includes('payable') || tType.includes('दिनुपर्ने') || tType.includes('दिनु')) {
+            } else if (tType.includes('give') || tType.includes('payable') || tType.includes('दिनुपर्ने') || tType.includes('दिनु') || tType.includes('pay')) {
                 totalPayable += amt;
             } else {
+                // यदि स्पष्ट प्रकार छैन भने रकमको प्रकृतिको आधारमा वा डिफल्ट रूपमा receivable मा राख्ने
                 totalReceivable += amt;
             }
         });
