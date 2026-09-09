@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Digital NoteBook - Nepali Calendar</title>
+<title>Digital NoteBook - नेपाली क्यालेन्डर</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
 tailwind.config = {
@@ -92,33 +92,45 @@ tailwind.config = {
     </header>
 
     <!-- CALENDAR FULL SCREEN CONTENT -->
-    <main class="flex-1 flex flex-col items-center justify-center p-4 w-full bg-slate-100 dark:bg-slate-950 overflow-y-auto">
+    <main class="flex-1 flex flex-col items-center justify-center p-4 w-full bg-slate-100 dark:bg-slate-950 overflow-y-auto space-y-4">
+        
+        <!-- Calendar Card -->
         <div class="w-full max-w-md bg-white dark:bg-slate-900 p-5 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 space-y-4">
             
             <!-- Header with Nepali Month & Navigation -->
             <div class="flex justify-between items-center px-1">
-                <h2 id="calendar-month-year" class="text-sm font-bold text-slate-900 dark:text-white"></h2>
+                <h2 id="calendar-month-year" class="text-sm font-bold text-slate-900 dark:text-white tracking-wide"></h2>
                 <div class="flex items-center gap-1.5">
-                    <button onclick="changeNepaliMonth(-1)" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-emerald-600 hover:text-white text-xs transition"><i class="fa-solid fa-chevron-left"></i></button>
-                    <button onclick="changeNepaliMonth(1)" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-emerald-600 hover:text-white text-xs transition"><i class="fa-solid fa-chevron-right"></i></button>
+                    <button onclick="changeNepaliMonth(-1)" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-emerald-600 hover:text-white text-xs transition border border-slate-200 dark:border-slate-700">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <button onclick="changeNepaliMonth(1)" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-emerald-600 hover:text-white text-xs transition border border-slate-200 dark:border-slate-700">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
                 </div>
             </div>
 
             <!-- Week Days Header (Nepali) -->
-            <div class="grid grid-cols-7 text-center text-xs font-semibold text-slate-400 py-1">
-                <span>आइत</span>
-                <span>सोम</span>
-                <span>मङ्गल</span>
-                <span>बुध</span>
-                <span>बिही</span>
-                <span>शुक्र</span>
-                <span>शनि</span>
+            <div class="grid grid-cols-7 text-center text-xs font-semibold py-1">
+                <span class="text-rose-500 font-bold">आइत</span>
+                <span class="text-slate-500 dark:text-slate-400">सोम</span>
+                <span class="text-slate-500 dark:text-slate-400">मङ्गल</span>
+                <span class="text-slate-500 dark:text-slate-400">बुध</span>
+                <span class="text-slate-500 dark:text-slate-400">बिही</span>
+                <span class="text-slate-500 dark:text-slate-400">शुक्र</span>
+                <span class="text-slate-500 dark:text-slate-400">शनि</span>
             </div>
 
             <!-- Days Grid -->
             <div id="calendar-days" class="grid grid-cols-7 gap-1.5 text-center text-xs">
                 <!-- Dynamic Nepali Days will load here -->
             </div>
+        </div>
+
+        <!-- Selected Date Details Box -->
+        <div class="w-full max-w-md bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-3 text-center">
+            <p class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">मिति विवरण</p>
+            <p id="selected-date-info" class="text-xs font-bold text-slate-800 dark:text-slate-200 mt-0.5">लोड हुँदैछ...</p>
         </div>
     </main>
 </div>
@@ -161,18 +173,18 @@ tailwind.config = {
         }
     }
 
-    // NEPALI CALENDAR LOGIC
+    // NEPALI CALENDAR LOGIC WITH ACCURATE MONTH LENGTH HANDLING
     let currentBsDate = new NepaliDate();
     let viewYear = currentBsDate.getYear();
-    let viewMonth = currentBsDate.getMonth(); // 0 देखि 11 सम्म हुने
+    let viewMonth = currentBsDate.getMonth(); // 0 देखि 11 सम्म
 
     const nepaliMonthsEN = [
         "Baishakh", "Jestha", "Ashadh", "Shrawan", "Bhadra", "Ashwin", 
         "Kartik", "Mangsir", "Poush", "Magh", "Falgun", "Chaitra"
     ];
     const nepaliMonthsNP = [
-        "वैशाख", "जेठ", "आषाढ", "श्रावण", "भाद्र", "आश्विन", 
-        "कार्तिक", "मंसिर", "पौष", "माघ", "फागुन", "चैत्र"
+        "वैशाख", "जेठ", "असार", "साउन", "भदौ", "असोज", 
+        "कार्तिक", "मंसिर", "पौष", "माघ", "फागुन", "चैत"
     ];
 
     function convertToNepaliNumber(num) {
@@ -189,42 +201,50 @@ tailwind.config = {
         monthYearEl.innerText = `${monthName} ${convertToNepaliNumber(viewYear)}`;
         daysContainer.innerHTML = '';
 
-        // महिनाको पहिलो मिति (Index 0 देखि 11 भएकोले viewMonth मा +1 गरिन्छ)
+        // महिनाको पहिलो मिति (viewMonth ० देखि ११ भएकोले NepaliDate मा viewMonth + 1 हुन्छ)
         let firstDayBs = new NepaliDate(viewYear, viewMonth + 1, 1);
-        let firstDayAdWeek = firstDayBs.toAd().getDay(); // 0 (Sun) देखि 6 (Sat)
-
-        // महिनामा जम्मा कति दिन छन् निकाल्ने
-        let totalDays = 30;
-        try {
-            let nextMonthBs = viewMonth === 11 ? new NepaliDate(viewYear + 1, 1, 1) : new NepaliDate(viewYear, viewMonth + 2, 1);
-            let diffTime = nextMonthBs.toAd().getTime() - firstDayBs.toAd().getTime();
-            totalDays = Math.round(diffTime / (1000 * 3600 * 24));
-        } catch (e) {
-            totalDays = 31;
-        }
+        let firstDayWeekIndex = firstDayBs.getDay(); // 0 (आइतबार) देखि 6 (शनिबार)
 
         // खाली स्पेसहरू (पहिलो दिन अघि)
-        for (let i = 0; i < firstDayAdWeek; i++) {
+        for (let i = 0; i < firstDayWeekIndex; i++) {
             let dayDiv = document.createElement('div');
-            dayDiv.className = "p-2 rounded-xl select-none";
+            dayDiv.className = "h-9";
             daysContainer.appendChild(dayDiv);
         }
 
-        // दिनहरू रेन्डर गर्ने
-        for (let day = 1; day <= totalDays; day++) {
-            let dayDiv = document.createElement('div');
-            dayDiv.innerText = convertToNepaliNumber(day);
-            dayDiv.className = "p-2 rounded-xl font-medium transition flex items-center justify-center cursor-pointer hover:bg-emerald-50 dark:hover:bg-emerald-950/50";
+        // महिनाभरिका दिनहरू लूप चलाउने (१ देखि ३२ सम्म जाँच्दै सही दिनमा रोक्ने)
+        for (let day = 1; day <= 32; day++) {
+            try {
+                let tempDate = new NepaliDate(viewYear, viewMonth + 1, day);
+                // यदि महिना परिवर्तन भयो भने लूप ब्रेक गर्ने (यसले महिना अनुसार २९, ३०, ३१ वा ३२ दिन स्वचालित रूपमा मिलाउँछ)
+                if (tempDate.getMonth() !== viewMonth + 1) break;
 
-            let isToday = (day === currentBsDate.getDate() && viewMonth === currentBsDate.getMonth() && viewYear === currentBsDate.getYear());
-            if (isToday) {
-                dayDiv.className += " bg-emerald-600 text-white hover:bg-emerald-700 font-bold shadow-md shadow-emerald-500/20";
-            } else {
-                dayDiv.className += " text-slate-700 dark:text-slate-300";
+                let dayDiv = document.createElement('div');
+                dayDiv.innerText = convertToNepaliNumber(day);
+                
+                let isToday = (
+                    day === currentBsDate.getDate() && 
+                    viewMonth === currentBsDate.getMonth() && 
+                    viewYear === currentBsDate.getYear()
+                );
+
+                let dayClass = "h-9 rounded-xl font-medium transition flex items-center justify-center cursor-pointer text-xs ";
+                if (isToday) {
+                    dayClass += "bg-emerald-600 text-white font-bold shadow-md shadow-emerald-500/20";
+                } else {
+                    dayClass += "bg-slate-50 dark:bg-slate-800/80 hover:bg-emerald-100 dark:hover:bg-emerald-950/50 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700/60";
+                }
+
+                dayDiv.className = dayClass;
+                dayDiv.onclick = () => selectDate(viewYear, viewMonth, day);
+                daysContainer.appendChild(dayDiv);
+            } catch (e) {
+                break;
             }
-
-            daysContainer.appendChild(dayDiv);
         }
+
+        // हालको वा आजको मिति विवरण अपडेट गर्ने
+        updateDateInfo(currentBsDate.getYear(), currentBsDate.getMonth(), currentBsDate.getDate());
     }
 
     function changeNepaliMonth(direction) {
@@ -237,6 +257,25 @@ tailwind.config = {
             viewYear--;
         }
         renderNepaliCalendar();
+    }
+
+    function selectDate(year, month, day) {
+        updateDateInfo(year, month, day);
+    }
+
+    function updateDateInfo(year, month, day) {
+        try {
+            let selected = new NepaliDate(year, month + 1, day);
+            const daysListNP = ["आइतबार", "सोमबार", "मंगलवार", "बुधवार", "बिहीवार", "शुक्रवार", "शनिवार"];
+            const daysListEN = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            
+            let dayName = currentLang === 'NEP' ? daysListNP[selected.getDay()] : daysListEN[selected.getDay()];
+            let monthName = currentLang === 'NEP' ? nepaliMonthsNP[month] : nepaliMonthsEN[month];
+            
+            document.getElementById('selected-date-info').innerText = `${dayName}, ${monthName} ${convertToNepaliNumber(day)}, ${convertToNepaliNumber(year)}`;
+        } catch (e) {
+            document.getElementById('selected-date-info').innerText = "मितिको विवरण उपलब्ध छैन";
+        }
     }
 
     function goToToday() {
@@ -253,6 +292,14 @@ tailwind.config = {
         const savedName = localStorage.getItem('profile_name');
         if(savedName) {
             document.getElementById('sidebar-profile-name').innerText = savedName;
+        }
+
+        // थिम अनुसार बटन आइकन सेट गर्ने
+        const htmlEl = document.documentElement;
+        if(htmlEl.classList.contains('dark')) {
+            document.getElementById('theme-toggle-btn').innerText = '🌛';
+        } else {
+            document.getElementById('theme-toggle-btn').innerText = '🌞';
         }
     });
 </script>
