@@ -121,7 +121,7 @@ tailwind.config = {
 
     <div class="flex-1 flex flex-col w-full">
         
-        <!-- HEADER SECTION (Emerald Mint & Inter Styled) -->
+        <!-- HEADER SECTION -->
         <header class="sticky top-0 z-40 flex items-center justify-between px-3 md:px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-emerald-500/20 shadow-md">
             <div class="flex items-center space-x-2.5">
                 <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-emerald-400 transition">☰</button>
@@ -415,7 +415,13 @@ tailwind.config = {
         const period = parseFloat(document.getElementById('txn-period').value) || 0;
         const npr = parseFloat(document.getElementById('txn-amount-npr').value) || 0;
         const inr = parseFloat(document.getElementById('txn-amount-inr').value) || 0;
-        const total = parseFloat(document.getElementById('txn-total-calc').value) || 0;
+        
+        // Ensure total calculation updates correctly for Expense or other types
+        let total = parseFloat(document.getElementById('txn-total-calc').value) || 0;
+        if (total === 0) {
+            total = npr + (inr * INR_RATE);
+        }
+
         const note = document.getElementById('txn-note').value.trim();
 
         let transactions = JSON.parse(localStorage.getItem('digital_notebook_transactions') || '[]');
@@ -471,9 +477,12 @@ tailwind.config = {
             }
             parties[matchedKey].items.push({ ...tx, originalIndex: idx });
 
+            // Fix calculation: Expense reduces balance or acts correctly based on user ledger logic
             if (tx.type === 'Receivable') {
                 parties[matchedKey].balance += tx.total;
             } else if (tx.type === 'Payable') {
+                parties[matchedKey].balance -= tx.total;
+            } else if (tx.type === 'Expense') {
                 parties[matchedKey].balance -= tx.total;
             }
         });
@@ -661,7 +670,7 @@ tailwind.config = {
         const savedMobile = localStorage.getItem('profile_mobile') || '';
 
         if(document.getElementById('input-full-name')) document.getElementById('input-full-name').value = savedName;
-        if(document.getElementById('input-address')) document.getElementById('input-address5') ? '' : document.getElementById('input-address').value = savedAddress;
+        if(document.getElementById('input-address')) document.getElementById('input-address').value = savedAddress;
         if(document.getElementById('input-mobile')) document.getElementById('input-mobile').value = savedMobile;
 
         const nameEl = document.getElementById('sidebar-profile-name');
