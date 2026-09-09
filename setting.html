@@ -132,7 +132,7 @@ tailwind.config = {
 
     <div class="flex-1 flex flex-col w-full">
         
-        <!-- HEADER SECTION (Emerald Mint & Inter Styled) -->
+        <!-- HEADER SECTION -->
         <header class="sticky top-0 z-40 flex items-center justify-between px-3 md:px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-emerald-500/20 shadow-md">
             <div class="flex items-center space-x-2.5">
                 <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-emerald-400 transition">☰</button>
@@ -449,25 +449,31 @@ tailwind.config = {
         }, 1500);
     }
 
-    // Typography and Styling Functions
-    function changeFontSize(size) {
-        let fontSizePx = '13px';
-        if (size === 'small') fontSizePx = '11px';
-        else if (size === 'medium') fontSizePx = '13px';
-        else if (size === 'large') fontSizePx = '16px';
+    // Typography and Styling Functions (सुधार गरिएको)
+    function changeFontSize(size, showNotification = true) {
+        let fontSizePx = '14px';
+        if (size === 'small') fontSizePx = '12px';
+        else if (size === 'medium') fontSizePx = '14px';
+        else if (size === 'large') fontSizePx = '17px';
 
-        document.body.style.fontSize = fontSizePx;
+        // सम्पूर्ण पेजको मूल font-size परिवर्तन गर्न
+        document.documentElement.style.fontSize = fontSizePx;
         localStorage.setItem('pref_font_size', size);
-        showToast(currentLang === 'NEP' ? 'फन्ट साइज परिवर्तन भयो!' : 'Font size updated!', 'success');
+        
+        if (showNotification) {
+            showToast(currentLang === 'NEP' ? 'फन्ट साइज परिवर्तन भयो!' : 'Font size updated!', 'success');
+        }
     }
 
-    function changeFontFamily(family) {
+    function changeFontFamily(family, showNotification = true) {
         document.body.style.fontFamily = `'${family}', sans-serif`;
         localStorage.setItem('pref_font_family', family);
-        showToast(currentLang === 'NEP' ? 'फन्ट परिवार परिवर्तन भयो!' : 'Font family updated!', 'success');
+        if (showNotification) {
+            showToast(currentLang === 'NEP' ? 'फन्ट परिवार परिवर्तन भयो!' : 'Font family updated!', 'success');
+        }
     }
 
-    function changeFontStyle(style) {
+    function changeFontStyle(style, showNotification = true) {
         if (style === 'bold') {
             document.body.style.fontWeight = 'bold';
             document.body.style.fontStyle = 'normal';
@@ -479,16 +485,20 @@ tailwind.config = {
             document.body.style.fontStyle = 'normal';
         }
         localStorage.setItem('pref_font_style', style);
-        showToast(currentLang === 'NEP' ? 'फन्ट शैली परिवर्तन भयो!' : 'Font style updated!', 'success');
+        if (showNotification) {
+            showToast(currentLang === 'NEP' ? 'फन्ट शैली परिवर्तन भयो!' : 'Font style updated!', 'success');
+        }
     }
 
-    function setTextEffect(effect) {
+    function setTextEffect(effect, showNotification = true) {
         const mainBody = document.getElementById('main-body');
         mainBody.classList.remove('effect-shadow', 'effect-outline', 'effect-background', 'effect-hollow');
         if (effect) {
             mainBody.classList.add(`effect-${effect}`);
             localStorage.setItem('pref_text_effect', effect);
-            showToast(currentLang === 'NEP' ? 'टेक्स्ट इफेक्ट लागू भयो!' : 'Text effect applied!', 'success');
+            if (showNotification) {
+                showToast(currentLang === 'NEP' ? 'टेक्स्ट इफेक्ट लागू भयो!' : 'Text effect applied!', 'success');
+            }
         } else {
             localStorage.removeItem('pref_text_effect');
         }
@@ -564,34 +574,36 @@ tailwind.config = {
 
     function loadAvatar() {
         const savedImage = localStorage.getItem('profile_avatar') || 'N1024.png';
+        ['sidebar-avatar-img', 'header-avatar-img'].getElementById = id => { ... } // internal safe check
         ['sidebar-avatar-img', 'header-avatar-img'].forEach(id => {
             const img = document.getElementById(id);
             if(img) img.src = savedImage;
         });
     }
 
+    // सेभ भएका प्राथमिकताहरू लोड गर्दा नोटिफिकेसन नआउने गरी `false` पास गरिएको छ।
     function loadSavedPreferences() {
         const savedSize = localStorage.getItem('pref_font_size');
         if (savedSize) {
-            changeFontSize(savedSize);
+            changeFontSize(savedSize, false);
             const selectEl = document.getElementById('font-size-select');
             if(selectEl) selectEl.value = savedSize;
         }
         const savedFamily = localStorage.getItem('pref_font_family');
         if (savedFamily) {
-            document.body.style.fontFamily = `'${savedFamily}', sans-serif`;
+            changeFontFamily(savedFamily, false);
             const familyEl = document.getElementById('font-family-select');
             if(familyEl) familyEl.value = savedFamily;
         }
         const savedStyle = localStorage.getItem('pref_font_style');
         if (savedStyle) {
-            changeFontStyle(savedStyle);
+            changeFontStyle(savedStyle, false);
             const styleEl = document.getElementById('font-style-select');
             if(styleEl) styleEl.value = savedStyle;
         }
         const savedEffect = localStorage.getItem('pref_text_effect');
         if (savedEffect) {
-            setTextEffect(savedEffect);
+            setTextEffect(savedEffect, false);
         }
     }
 
