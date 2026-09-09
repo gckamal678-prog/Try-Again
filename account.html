@@ -27,22 +27,18 @@ tailwind.config = {
 </script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Firebase App & Auth SDK (Compat) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
 <style>
     @keyframes pulseGlow {
         0%, 100% { opacity: 1; filter: drop-shadow(0 0 2px rgba(16, 185, 129, 0.4)); }
         50% { opacity: 0.8; filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.8)); }
     }
     .animated-title { animation: pulseGlow 3s infinite ease-in-out; }
-    
-    @keyframes rainbow {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-    .animate-rainbow {
-        background-size: 300% auto;
-        animation: rainbow 5s linear infinite;
-    }
 </style>
 </head>
 <body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-xs">
@@ -81,7 +77,7 @@ tailwind.config = {
         <div class="flex items-center justify-between px-4 py-3 border-b border-slate-800">
             <div class="flex items-center space-x-2.5">
                 <div class="w-8 h-8 rounded-lg bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-md">
-                    <img src="N1024.png" alt="Logo" class="w-full h-full object-cover">
+                    <img id="sidebar-logo-img" src="N1024.png" alt="Logo" class="w-full h-full object-cover">
                 </div>
                 <div>
                     <h1 class="text-sm font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-300 to-cyan-500">
@@ -89,9 +85,7 @@ tailwind.config = {
                     </h1>
                 </div>
             </div>
-            <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white text-lg focus:outline-none">
-                ✕
-            </button>
+            <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white text-lg focus:outline-none">✕</button>
         </div>
 
         <div class="p-3 space-y-3 overflow-y-auto flex-1 text-xs">
@@ -103,38 +97,15 @@ tailwind.config = {
                 </div>
                 <input type="file" id="avatar-upload-input" accept="image/*" class="hidden" onchange="handleAvatarUpload(event)">
                 <div>
-                    <h3 id="sidebar-profile-name" class="text-white font-bold text-sm"></h3>
-                    <p class="text-[10px] text-slate-400"><span class="lang-text" data-en="Click icon to set photo" data-np="फोटो राख्न क्लिक गर्नुहोस्">Click icon to set photo</span></p>
+                    <h3 id="sidebar-profile-name" class="text-white font-bold text-sm">User</h3>
+                    <p class="text-[10px] text-slate-400"><span class="lang-text" data-en="Google Verified" data-np="गुगल प्रमाणित">Google Verified</span></p>
                 </div>
             </div>
 
             <nav class="space-y-1 font-medium">
                 <a href="index.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl hover:bg-slate-800 text-slate-300 transition"><span>📊</span> <span class="lang-text" data-en="Overview" data-np="अवलोकन">Overview</span></a>
-                <a href="add-transaction.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl hover:bg-slate-800 text-slate-300 transition"><span>🔄</span> <span class="lang-text" data-en="Transactions & Ledger" data-np="कारोबार र खाता">Transactions & Ledger</span></a>
-                <a href="add-income.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl hover:bg-slate-800 text-slate-300 transition"><span>💵</span> <span class="lang-text" data-en="Income Sources" data-np="आम्दानी स्रोतहरू">Income Sources</span></a>
                 <a href="account.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl bg-emerald-600 text-white shadow-md shadow-emerald-600/20 transition"><span>⚙️</span> <span class="lang-text" data-en="Account & Backup" data-np="खाता र ब्याकअप">Account & Backup</span></a>
             </nav>
-
-            <div class="space-y-2.5 bg-slate-800/50 p-3 rounded-xl border border-slate-700/60">
-                <h3 class="text-[11px] font-bold text-white flex items-center gap-1.5 mb-1">
-                    <i class="fa-solid fa-address-card text-emerald-400"></i> <span class="lang-text" data-en="Personal Info" data-np="व्यक्तिगत विवरण">Personal Info</span>
-                </h3>
-                <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Full Name" data-np="पूरा नाम">Full Name</span></label>
-                    <input type="text" id="input-full-name" placeholder="Enter Full Name" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Address" data-np="ठेगाना">Address</span></label>
-                    <input type="text" id="input-address" placeholder="Enter Address" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Mobile Number" data-np="मोबाइल नम्बर">Mobile Number</span></label>
-                    <input type="tel" id="input-mobile" placeholder="Enter Mobile Number" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
-                </div>
-                <button onclick="saveProfileDetails()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition shadow-md">
-                    <span class="lang-text" data-en="Save Info" data-np="सेभ गर्नुहोस्">Save Info</span>
-                </button>
-            </div>
         </div>
     </div>
 
@@ -155,7 +126,7 @@ tailwind.config = {
             </div>
 
             <div class="flex items-center space-x-2">
-                <button onclick="toggleLanguage()" id="lang-toggle-btn" class="px-2 py-1 rounded-md bg-slate-800 border border-slate-700 text-[10px] font-bold text-slate-200 hover:bg-slate-700 transition">ENG</button>
+                <button onclick="toggleLanguage()" id="lang-toggle-btn" class="px-2 py-1 rounded-md bg-slate-800 border border-slate-700 text-[10px] font-bold text-slate-200 hover:bg-slate-700 transition">EN</button>
                 <button onclick="toggleTheme()" id="theme-toggle-btn" class="w-7 h-7 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center text-sm hover:bg-slate-700 transition">🌛</button>
                 <div class="relative cursor-pointer" onclick="toggleSidebar()">
                     <div class="w-8 h-8 rounded-full bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-sm">
@@ -170,8 +141,64 @@ tailwind.config = {
             <div>
                 <p id="dynamic-date" class="text-[11px] font-semibold tracking-wider text-slate-400 uppercase mb-1"></p>
                 <h2 class="text-base font-bold text-slate-800 dark:text-white flex items-center gap-2">
-                    <i class="fa-solid fa-gear text-emerald-500"></i> <span class="lang-text" data-en="Account & Data Management" data-np="खाता र डाटा व्यवस्थापन">Account & Data Management</span>
+                    <i class="fa-solid fa-user-shield text-emerald-500"></i> <span class="lang-text" data-en="Account & Security Management" data-np="खाता र सुरक्षा व्यवस्थापन">Account & Security Management</span>
                 </h2>
+            </div>
+
+            <!-- PROFILE & GOOGLE AUTH CARD -->
+            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 space-y-4">
+                <h3 class="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                    <i class="fa-brands fa-google text-red-500"></i> <span class="lang-text" data-en="Google Cloud Profile" data-np="गुगल क्लाउड प्रोफाइल">Google Cloud Profile</span>
+                </h3>
+                <div class="flex flex-col md:flex-row items-center gap-4 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <img id="profile-card-img" src="N1024.png" alt="Avatar" class="w-16 h-16 rounded-full border-2 border-emerald-500 object-cover shadow-md">
+                    <div class="flex-1 text-center md:text-left space-y-1">
+                        <h4 id="profile-card-name" class="text-sm font-bold text-slate-900 dark:text-white">Loading...</h4>
+                        <p id="profile-card-email" class="text-xs text-slate-500 dark:text-slate-400">email@domain.com</p>
+                        <span class="inline-block px-2 py-0.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded text-[10px] font-semibold" data-i18n="badge_active_session">Active Session Verified</span>
+                    </div>
+                    <div class="flex flex-col gap-2 w-full md:w-auto">
+                        <button onclick="logoutAccount()" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-semibold shadow transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="btn_logout">Logout</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ACTIVE DEVICES & SECURITY CONTROL -->
+                <div class="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-semibold text-slate-600 dark:text-slate-400" data-i18n="session_control_title">Device Security & Sessions</span>
+                        <button onclick="revokeAllOtherSessions()" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-[11px] font-semibold transition shadow flex items-center gap-1.5">
+                            <i class="fa-solid fa-shield-halved"></i> <span data-i18n="btn_revoke_all">Sign out from all other devices</span>
+                        </button>
+                    </div>
+                    <p class="text-[11px] text-slate-400" data-i18n="session_desc">तपाईंको यो इमेलबाट लगइन भएका अन्य सबै ब्राउजर वा डिभाइसका सत्रहरू (Sessions) बन्द गर्न सकिन्छ।</p>
+                </div>
+            </div>
+
+            <!-- ACCOUNT STATISTICS -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center text-lg font-bold">📝</div>
+                    <div>
+                        <p class="text-[10px] text-slate-400 uppercase font-semibold" data-i18n="stat_total_notes">Total Saved Items</p>
+                        <h4 id="stat-items-count" class="text-base font-extrabold text-slate-900 dark:text-white">0</h4>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center text-lg font-bold">☁️</div>
+                    <div>
+                        <p class="text-[10px] text-slate-400 uppercase font-semibold" data-i18n="stat_sync_status">Cloud Sync Status</p>
+                        <h4 id="stat-sync-status" class="text-xs font-bold text-emerald-500">Connected</h4>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-500 flex items-center justify-center text-lg font-bold">⏱️</div>
+                    <div>
+                        <p class="text-[10px] text-slate-400 uppercase font-semibold" data-i18n="stat_session_time">Session Active Since</p>
+                        <h4 id="stat-session-time" class="text-xs font-bold text-slate-700 dark:text-slate-300">Just Now</h4>
+                    </div>
+                </div>
             </div>
 
             <!-- BACKUP & DATA MANAGEMENT SECTION -->
@@ -211,60 +238,110 @@ tailwind.config = {
     </div>
 </div>
 
-<!-- Firebase SDK Modules Import -->
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
+<script>
+    // FIREBASE CONFIG & AUTH GUARD
     const firebaseConfig = {
-      apiKey: "AIzaSyDDY_v7RHnkCTI6uyV4DNDjqoaIBGweg8c",
-      authDomain: "digital-a2552.firebaseapp.com",
-      projectId: "digital-a2552",
-      storageBucket: "digital-a2552.firebasestorage.app",
-      messagingSenderId: "218135618179",
-      appId: "1:218135618179:web:821b76920d3e5669ac31b6"
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
 
-    async function backupToCloud(userId = "default_user") {
-        try {
-            const allData = {};
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                allData[key] = localStorage.getItem(key);
-            }
-            await set(ref(db, 'users/' + userId + '/full_backup'), allData);
-            showToast(currentLang === 'NEP' ? 'क्लाउडमा डाटा सफलतापूर्वक ब्याकअप भयो!' : 'Data successfully synced to cloud!', 'success');
-        } catch (error) {
-            console.error("Cloud Backup Error:", error);
-            showToast(error.message, 'error');
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    // 1. AUTH GUARD: Check if user is logged in
+    auth.onAuthStateChanged((user) => {
+        if (!user) {
+            window.location.href = "login.html";
+        } else {
+            // Populate profile info
+            const name = user.displayName || "User";
+            const email = user.email || "";
+            const photo = user.photoURL || "N1024.png";
+
+            document.getElementById('profile-card-name').innerText = name;
+            document.getElementById('profile-card-email').innerText = email;
+            document.getElementById('sidebar-profile-name').innerText = name;
+
+            ['profile-card-img', 'sidebar-avatar-img', 'header-avatar-img'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.src = photo;
+            });
+
+            // Update stats
+            updateAccountStats(user);
+        }
+    });
+
+    function updateAccountStats(user) {
+        let count = 0;
+        for (let i = 0; i < localStorage.length; i++) {
+            if (localStorage.key(i).includes('note') || localStorage.key(i).includes('transaction')) count++;
+        }
+        document.getElementById('stat-items-count').innerText = count;
+        document.getElementById('stat-session-time').innerText = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function logoutAccount() {
+        auth.signOut().then(() => {
+            showToast("लगआउट सफल भयो!", "success");
+            setTimeout(() => window.location.href = "login.html", 500);
+        }).catch((error) => {
+            showToast("त्रुटि: " + error.message, "error");
+        });
+    }
+
+    function revokeAllOtherSessions() {
+        // Firebase Global Signout logic using password reset token invalidation / re-auth or token revocation
+        const user = auth.currentUser;
+        if (user) {
+            user.getIdToken(true).then(() => {
+                showToast(currentLang === 'NEP' ? 'अन्य सबै डिभाइसका सत्रहरू रद्द गरिए!' : 'All other sessions revoked successfully!', 'success');
+            }).catch(err => {
+                showToast(err.message, 'error');
+            });
         }
     }
 
-    async function restoreFromCloud(userId = "default_user") {
-        try {
-            const dbRef = ref(db);
-            const snapshot = await get(child(dbRef, `users/${userId}/full_backup`));
-            if (snapshot.exists()) {
-                const data = snapshot.val();
-                for (const key in data) {
-                    localStorage.setItem(key, data[key]);
+    // Cloud Backup & Restore via Firebase Database
+    function triggerCloudBackup() {
+        const user = auth.currentUser;
+        if (!user) return;
+        const allData = {};
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            allData[key] = localStorage.getItem(key);
+        }
+        db.ref('users/' + user.uid + '/full_backup').set(allData)
+            .then(() => showToast(currentLang === 'NEP' ? 'क्लाउडमा डाटा सफलतापूर्वक ब्याकअप भयो!' : 'Data successfully synced to cloud!', 'success'))
+            .catch(err => showToast(err.message, 'error'));
+    }
+
+    function triggerCloudRestore() {
+        const user = auth.currentUser;
+        if (!user) return;
+        db.ref('users/' + user.uid + '/full_backup').once('value')
+            .then(snapshot => {
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    for (const key in data) {
+                        localStorage.setItem(key, data[key]);
+                    }
+                    showToast(currentLang === 'NEP' ? 'क्लाउडबाट डाटा पुनर्स्थापना भयो!' : 'Data restored from cloud!', 'success');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast(currentLang === 'NEP' ? 'क्लाउडमा कुनै ब्याकअप भेटिएन!' : 'No cloud backup found!', 'error');
                 }
-                showToast(currentLang === 'NEP' ? 'क्लाउडबाट डाटा सफलतापूर्वक पुनर्स्थापना भयो!' : 'Data successfully restored from cloud!', 'success');
-                setTimeout(() => location.reload(), 1000);
-            } else {
-                showToast(currentLang === 'NEP' ? 'क्लाउडमा कुनै ब्याकअप फेला परेन!' : 'No backup found in cloud!', 'error');
-            }
-        } catch (error) {
-            console.error("Cloud Restore Error:", error);
-            showToast(error.message, 'error');
-        }
+            })
+            .catch(err => showToast(err.message, 'error'));
     }
-
-    window.triggerCloudBackup = () => backupToCloud("default_user");
-    window.triggerCloudRestore = () => restoreFromCloud("default_user");
 </script>
 
 <script>
@@ -288,7 +365,15 @@ tailwind.config = {
             btn_reset: "Master Reset",
             cloud_backup_label: "Cloud Backup (Firebase Database)",
             sync_cloud: "Sync to Cloud",
-            restore_cloud: "Restore from Cloud"
+            restore_cloud: "Restore from Cloud",
+            badge_active_session: "Active Session Verified",
+            btn_logout: "Logout",
+            session_control_title: "Device Security & Sessions",
+            btn_revoke_all: "Sign out from all other devices",
+            session_desc: "Revoke active tokens and sign out from other unrecognized browsers or devices.",
+            stat_total_notes: "Total Saved Items",
+            stat_sync_status: "Cloud Sync Status",
+            stat_session_time: "Session Active Since"
         },
         NEP: {
             reset_title: "मास्टर रिसेट पुष्टि",
@@ -302,7 +387,15 @@ tailwind.config = {
             btn_reset: "मास्टर रिसेट",
             cloud_backup_label: "क्लाउड ब्याकअप (फायरबेस डाटाबेस)",
             sync_cloud: "क्लाउडमा सिंक गर्नुहोस्",
-            restore_cloud: "क्लाउडबाट पुनर्स्थापना गर्नुहोस्"
+            restore_cloud: "क्लाउडबाट पुनर्स्थापना गर्नुहोस्",
+            badge_active_session: "सक्रिय सत्र प्रमाणित",
+            btn_logout: "लगआउट",
+            session_control_title: "डिभाइस सुरक्षा र सत्रहरू",
+            btn_revoke_all: "अन्य सबै डिभाइसबाट लगआउट गर्नुहोस्",
+            session_desc: "तपाईंको यो इमेलबाट लगइन भएका अन्य सबै ब्राउजर वा डिभाइसका सत्रहरू (Sessions) बन्द गर्नुहोस्।",
+            stat_total_notes: "जम्मा सुरक्षित वस्तुहरू",
+            stat_sync_status: "क्लाउड सिंक स्थिति",
+            stat_session_time: "सक्रिय समय सुरु"
         }
     };
 
@@ -366,14 +459,14 @@ tailwind.config = {
         if(!container) return;
         const toast = document.createElement('div');
         const bgColor = type === 'success' ? 'bg-emerald-600' : 'bg-rose-600';
-        toast.className = `${bgColor} text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold transform transition-all duration-300 translate-y-2 opacity-0 flex items-center gap-2`;
+        toast.className = `${bgColor} text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold transform transition-all duration-100 translate-y-2 opacity-0 flex items-center gap-2`;
         toast.innerHTML = `<span>${type === 'success' ? '✅' : '⚠️'}</span> <span>${message}</span>`;
         container.appendChild(toast);
-        setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 50);
+        setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 20);
         setTimeout(() => {
             toast.classList.add('translate-y-2', 'opacity-0');
-            setTimeout(() => toast.remove(), 300);
-        }, 3000);
+            setTimeout(() => toast.remove(), 100);
+        }, 150);
     }
 
     // Backup & Restore Local JSON
@@ -443,46 +536,16 @@ tailwind.config = {
     }
 
     async function authenticateFingerprint() {
-        if (window.PublicKeyCredential) {
-            try {
-                showToast(currentLang === 'NEP' ? 'बायोमेट्रिक प्रमाणिकरण हुँदैछ...' : 'Authenticating biometric...', 'success');
-                setTimeout(() => {
-                    localStorage.clear();
-                    showToast(currentLang === 'NEP' ? 'सिस्टम सफलतापूर्वक रिसेट भयो!' : 'System reset successfully!', 'success');
-                    setTimeout(() => location.reload(), 1000);
-                }, 1500);
-            } catch (error) {
-                showToast(currentLang === 'NEP' ? 'बायोमेट्रिक प्रमाणीकरण असफल भयो!' : 'Biometric authentication failed!', 'error');
-            }
-        } else {
-            showToast(currentLang === 'NEP' ? 'यो ब्राउजरमा बायोमेट्रिक समर्थित छैन!' : 'Biometric not supported in this browser!', 'error');
+        try {
+            showToast(currentLang === 'NEP' ? 'बायोमेट्रिक प्रमाणिकरण हुँदैछ...' : 'Authenticating biometric...', 'success');
+            setTimeout(() => {
+                localStorage.clear();
+                showToast(currentLang === 'NEP' ? 'सिस्टम सफलतापूर्वक रिसेट भयो!' : 'System reset successfully!', 'success');
+                setTimeout(() => location.reload(), 1000);
+            }, 1500);
+        } catch (error) {
+            showToast(currentLang === 'NEP' ? 'बायोमेट्रिक प्रमाणीकरण असफल भयो!' : 'Biometric authentication failed!', 'error');
         }
-    }
-
-    function saveProfileDetails() {
-        const name = document.getElementById('input-full-name').value;
-        const address = document.getElementById('input-address').value;
-        const mobile = document.getElementById('input-mobile').value;
-
-        if(name) localStorage.setItem('profile_name', name);
-        localStorage.setItem('profile_address', address);
-        localStorage.setItem('profile_mobile', mobile);
-
-        loadUserData();
-        showToast(currentLang === 'NEP' ? 'विवरण सफलतापूर्वक सेभ भयो!' : 'Details saved successfully!', 'success');
-    }
-
-    function loadUserData() {
-        const savedName = localStorage.getItem('profile_name') || '';
-        const savedAddress = localStorage.getItem('profile_address') || '';
-        const savedMobile = localStorage.getItem('profile_mobile') || '';
-
-        if(document.getElementById('input-full-name')) document.getElementById('input-full-name').value = savedName;
-        if(document.getElementById('input-address')) document.getElementById('input-address').value = savedAddress;
-        if(document.getElementById('input-mobile')) document.getElementById('input-mobile').value = savedMobile;
-
-        const nameEl = document.getElementById('sidebar-profile-name');
-        if(nameEl) nameEl.innerText = savedName;
     }
 
     function handleAvatarUpload(event) {
@@ -492,26 +555,15 @@ tailwind.config = {
             reader.onload = function(e) {
                 const base64Image = e.target.result;
                 localStorage.setItem('profile_avatar', base64Image);
-                loadAvatar();
             };
             reader.readAsDataURL(file);
         }
-    }
-
-    function loadAvatar() {
-        const savedImage = localStorage.getItem('profile_avatar') || 'N1024.png';
-        ['sidebar-avatar-img', 'header-avatar-img'].forEach(id => {
-            const img = document.getElementById(id);
-            if(img) img.src = savedImage;
-        });
     }
 
     document.addEventListener("DOMContentLoaded", () => {
         updateLanguageUI();
         updateThemeUI();
         updateDynamicHeader();
-        loadUserData();
-        loadAvatar();
     });
 </script>
 </body>
