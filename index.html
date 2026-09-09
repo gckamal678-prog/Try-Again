@@ -180,27 +180,27 @@ tailwind.config = {
                 </a>
             </div>
 
-            <!-- ROW 1: Financial Summaries -->
+            <!-- ROW 1: Financial Summaries with requested IDs -->
             <div class="grid grid-cols-4 gap-2 text-center pt-2">
                 <div class="flex flex-col items-center p-1">
                     <span class="text-base mb-0.5">💵</span>
                     <span class="text-[10px] font-semibold text-emerald-500 truncate w-full"><span class="lang-text" data-en="Total Income" data-np="कुल आम्दानी">Total Income</span></span>
-                    <span id="val-income" class="text-xs font-bold text-slate-800 dark:text-slate-100 mt-0.5">Rs 0</span>
+                    <span id="summary-income" class="text-xs font-bold text-slate-800 dark:text-slate-100 mt-0.5">Rs 0</span>
                 </div>
                 <div class="flex flex-col items-center p-1">
                     <span class="text-base mb-0.5">📈</span>
                     <span class="text-[10px] font-semibold text-teal-500 truncate w-full"><span class="lang-text" data-en="Total Invest" data-np="कुल लगानी">Total Invest</span></span>
-                    <span id="val-invest" class="text-xs font-bold text-slate-800 dark:text-slate-100 mt-0.5">Rs 0</span>
+                    <span id="summary-expenses" class="text-xs font-bold text-slate-800 dark:text-slate-100 mt-0.5">Rs 0</span>
                 </div>
                 <div class="flex flex-col items-center p-1">
                     <span class="text-base mb-0.5">📥</span>
                     <span class="text-[10px] font-semibold text-cyan-500 truncate w-full"><span class="lang-text" data-en="Total Receivable" data-np="पाउनुपर्ने रकम">Total Receivable</span></span>
-                    <span id="val-receivable" class="text-xs font-bold text-slate-800 dark:text-slate-100 mt-0.5">Rs 0</span>
+                    <span id="summary-receivable" class="text-xs font-bold text-slate-800 dark:text-slate-100 mt-0.5">Rs 0</span>
                 </div>
                 <div class="flex flex-col items-center p-1">
                     <span class="text-base mb-0.5">📤</span>
                     <span class="text-[10px] font-semibold text-rose-500 truncate w-full"><span class="lang-text" data-en="Total Giveble" data-np="दिनुपर्ने रकम">Total Giveble</span></span>
-                    <span id="val-giveble" class="text-xs font-bold text-slate-800 dark:text-slate-100 mt-0.5">Rs 0</span>
+                    <span id="summary-payable" class="text-xs font-bold text-slate-800 dark:text-slate-100 mt-0.5">Rs 0</span>
                 </div>
             </div>
 
@@ -390,30 +390,39 @@ tailwind.config = {
 
     setInterval(updateDynamicHeader, 1000);
 
-    function loadFinancialSummaries() {
-        // १. आम्दानीको कुल योग निकाल्ने
+    // Filter data placeholder functions (can be expanded based on date selectors if available)
+    function getDateFilteredData(dataArray) {
+        return dataArray;
+    }
+
+    // Function to calculate and update summary cards using forEach / reduce methods
+    function updateSummaryCards() {
+        // १. add-income.html को कुल आम्दानी (Total Income) हिसाब गर्ने
         const incomesData = localStorage.getItem('digital_notebook_incomes') || localStorage.getItem('incomes') || '[]';
         let incomes = [];
         try { incomes = JSON.parse(incomesData); } catch(e) { incomes = []; }
         
-        const totalIncome = incomes.reduce((sum, item) => {
+        const filteredIncomes = getDateFilteredData(incomes);
+        const totalIncome = filteredIncomes.reduce((sum, item) => {
             const val = Number(item.amount || item.incomeAmount || item.val || 0);
             return sum + val;
         }, 0);
         
-        const incomeEl = document.getElementById('val-income');
+        const incomeEl = document.getElementById('summary-income');
         if(incomeEl) incomeEl.innerText = `Rs ${totalIncome.toLocaleString()}`;
 
-        // २. कारोबार (Transactions) को डेटा लोड गर्ने र प्रकार छुट्याउने
+        // २. add-transaction.html को कारोबार (Invest, Receivable, Payable) हिसाब गर्ने
         const transactionsData = localStorage.getItem('digital_notebook_transactions') || localStorage.getItem('transactions') || localStorage.getItem('advanced_notebook_notes') || '[]';
         let transactions = [];
         try { transactions = JSON.parse(transactionsData); } catch(e) { transactions = []; }
 
+        const filteredTransactions = getDateFilteredData(transactions);
+
         let totalInvest = 0;
         let totalReceivable = 0;
-        let totalGiveble = 0;
+        let totalPayable = 0;
 
-        transactions.forEach(tx => {
+        filteredTransactions.forEach(tx => {
             const amt = Number(tx.amount || tx.txAmount || tx.val || tx.principalAmount || 0);
             const tType = String(tx.type || tx.category || '').toLowerCase();
             
@@ -422,16 +431,15 @@ tailwind.config = {
             } else if (tType.includes('receive') || tType.includes('लिनु') || tType.includes('पाउनुपर्ने')) {
                 totalReceivable += amt;
             } else if (tType.includes('give') || tType.includes('payable') || tType.includes('दिनुपर्ने') || tType.includes('दिनु')) {
-                totalGiveble += amt;
+                totalPayable += amt;
             } else {
-                // यदि टाइप स्पष्ट छैन भने डिफल्ट रूपमा Receivable मा गणना गर्ने
                 totalReceivable += amt;
             }
         });
 
-        if(document.getElementById('val-invest')) document.getElementById('val-invest').innerText = `Rs ${totalInvest.toLocaleString()}`;
-        if(document.getElementById('val-receivable')) document.getElementById('val-receivable').innerText = `Rs ${totalReceivable.toLocaleString()}`;
-        if(document.getElementById('val-giveble')) document.getElementById('val-giveble').innerText = `Rs ${totalGiveble.toLocaleString()}`;
+        if(document.getElementById('summary-expenses')) document.getElementById('summary-expenses').innerText = `Rs ${totalInvest.toLocaleString()}`;
+        if(document.getElementById('summary-receivable')) document.getElementById('summary-receivable').innerText = `Rs ${totalReceivable.toLocaleString()}`;
+        if(document.getElementById('summary-payable')) document.getElementById('summary-payable').innerText = `Rs ${totalPayable.toLocaleString()}`;
     }
 
     function saveProfileDetails() {
@@ -493,7 +501,7 @@ tailwind.config = {
         updateDynamicHeader();
         loadUserData();
         loadAvatar();
-        loadFinancialSummaries();
+        updateSummaryCards();
         
         setTimeout(() => {
             const splash = document.getElementById('splash-screen');
