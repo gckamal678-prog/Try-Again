@@ -173,7 +173,7 @@ tailwind.config = {
         }
     }
 
-    // NEPALI CALENDAR LOGIC WITH ACCURATE MONTH LENGTH HANDLING
+    // NEPALI CALENDAR LOGIC 
     let currentBsDate = new NepaliDate();
     let viewYear = currentBsDate.getYear();
     let viewMonth = currentBsDate.getMonth(); // 0 देखि 11 सम्म
@@ -201,8 +201,8 @@ tailwind.config = {
         monthYearEl.innerText = `${monthName} ${convertToNepaliNumber(viewYear)}`;
         daysContainer.innerHTML = '';
 
-        // महिनाको पहिलो मिति (viewMonth ० देखि ११ भएकोले NepaliDate मा viewMonth + 1 हुन्छ)
-        let firstDayBs = new NepaliDate(viewYear, viewMonth + 1, 1);
+        // महिनाको पहिलो मिति (NepaliDate(year, month, day) मा महिना ० देखि ११ नै हुन्छ)
+        let firstDayBs = new NepaliDate(viewYear, viewMonth, 1);
         let firstDayWeekIndex = firstDayBs.getDay(); // 0 (आइतबार) देखि 6 (शनिबार)
 
         // खाली स्पेसहरू (पहिलो दिन अघि)
@@ -215,9 +215,9 @@ tailwind.config = {
         // महिनाभरिका दिनहरू लूप चलाउने (१ देखि ३२ सम्म जाँच्दै सही दिनमा रोक्ने)
         for (let day = 1; day <= 32; day++) {
             try {
-                let tempDate = new NepaliDate(viewYear, viewMonth + 1, day);
-                // यदि महिना परिवर्तन भयो भने लूप ब्रेक गर्ने (यसले महिना अनुसार २९, ३०, ३१ वा ३२ दिन स्वचालित रूपमा मिलाउँछ)
-                if (tempDate.getMonth() !== viewMonth + 1) break;
+                let tempDate = new NepaliDate(viewYear, viewMonth, day);
+                // यदि महिना परिवर्तन भयो भने लूप ब्रेक गर्ने
+                if (tempDate.getMonth() !== viewMonth) break;
 
                 let dayDiv = document.createElement('div');
                 dayDiv.innerText = convertToNepaliNumber(day);
@@ -265,7 +265,7 @@ tailwind.config = {
 
     function updateDateInfo(year, month, day) {
         try {
-            let selected = new NepaliDate(year, month + 1, day);
+            let selected = new NepaliDate(year, month, day);
             const daysListNP = ["आइतबार", "सोमबार", "मंगलवार", "बुधवार", "बिहीवार", "शुक्रवार", "शनिवार"];
             const daysListEN = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
             
@@ -294,7 +294,6 @@ tailwind.config = {
             document.getElementById('sidebar-profile-name').innerText = savedName;
         }
 
-        // थिम अनुसार बटन आइकन सेट गर्ने
         const htmlEl = document.documentElement;
         if(htmlEl.classList.contains('dark')) {
             document.getElementById('theme-toggle-btn').innerText = '🌛';
