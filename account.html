@@ -99,7 +99,6 @@ tailwind.config = {
                 <div class="relative cursor-pointer group" onclick="document.getElementById('avatar-upload-input').click()">
                     <div class="w-11 h-11 rounded-full bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-sm">
                         <img id="sidebar-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
-            
                     </div>
                 </div>
                 <input type="file" id="avatar-upload-input" accept="image/*" class="hidden" onchange="handleAvatarUpload(event)">
@@ -141,8 +140,8 @@ tailwind.config = {
 
     <div class="flex-1 flex flex-col w-full">
         
-        <!-- HEADER SECTION (Emerald Mint & Inter Styled) -->
-          <header class="sticky top-0 z-40 flex items-center justify-between px-3 md:px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-emerald-500/20 shadow-md">
+        <!-- HEADER SECTION -->
+        <header class="sticky top-0 z-40 flex items-center justify-between px-3 md:px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-emerald-500/20 shadow-md">
             <div class="flex items-center space-x-2.5">
                 <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-emerald-400 transition">☰</button>
                 <div class="flex items-center space-x-2 cursor-pointer" onclick="toggleSidebar()">
@@ -166,8 +165,17 @@ tailwind.config = {
             </div>
         </header>
 
+        <!-- MAIN CONTENT AREA -->
+        <main class="p-4 space-y-4 flex-1 w-full max-w-5xl mx-auto overflow-y-auto">
+            <div>
+                <p id="dynamic-date" class="text-[11px] font-semibold tracking-wider text-slate-400 uppercase mb-1"></p>
+                <h2 class="text-base font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-gear text-emerald-500"></i> <span class="lang-text" data-en="Account & Data Management" data-np="खाता र डाटा व्यवस्थापन">Account & Data Management</span>
+                </h2>
+            </div>
+
             <!-- BACKUP & DATA MANAGEMENT SECTION -->
-            <div class="space-y-4 w-full max-w-5xl mx-auto pt-2">
+            <div class="space-y-4 w-full">
                 <div class="bg-white dark:bg-slate-900 p-4 md:p-6 rounded-2xl shadow-sm space-y-3 border border-slate-200 dark:border-slate-800 transition-colors duration-300 w-full">
                     <h3 class="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
                         <i class="fa-solid fa-database text-emerald-500"></i> <span data-i18n="data_management">Data Management & Backup</span>
@@ -199,7 +207,6 @@ tailwind.config = {
                     </div>
                 </div>
             </div>
-
         </main>
     </div>
 </div>
@@ -284,7 +291,7 @@ tailwind.config = {
             restore_cloud: "Restore from Cloud"
         },
         NEP: {
-            reset_title: "मार्जिन रिसेट पुष्टि",
+            reset_title: "मास्टर रिसेट पुष्टि",
             reset_desc: "तपाईंको सम्पूर्ण डाटा मेटिनेछ। पुष्टि गर्न 'RESET' टाइप गर्नुहोस् र पिन (PIN) प्रविष्ट गर्नुहोस्:",
             use_fingerprint: "फिंगरप्रिन्ट / बायोमेट्रिक प्रयोग गर्नुहोस्",
             btn_cancel: "रद्द गर्नुहोस्",
@@ -408,7 +415,7 @@ tailwind.config = {
     // Master Reset Modal Logic
     function openResetModal() {
         document.getElementById('reset-modal').classList.remove('hidden');
-        document.getElementById('reset-input').value = '...';
+        document.getElementById('reset-input').value = '';
         document.getElementById('reset-pin').value = '';
     }
 
@@ -472,7 +479,7 @@ tailwind.config = {
 
         if(document.getElementById('input-full-name')) document.getElementById('input-full-name').value = savedName;
         if(document.getElementById('input-address')) document.getElementById('input-address').value = savedAddress;
-        if(document.getElementById('input-mobile')) document.getElementById('input-mobile').value = savedMessage || savedMobile;
+        if(document.getElementById('input-mobile')) document.getElementById('input-mobile').value = savedMobile;
 
         const nameEl = document.getElementById('sidebar-profile-name');
         if(nameEl) nameEl.innerText = savedName;
@@ -480,7 +487,7 @@ tailwind.config = {
 
     function handleAvatarUpload(event) {
         const file = event.target.files[0];
-        if (file) { // सुधार गरिएको: `if (file, img)` लाई मिलाएर सहि बनाइएको
+        if (file) {
             const reader = new FileReader();
             reader.onload = function(e) {
                 const base64Image = e.target.result;
@@ -499,7 +506,7 @@ tailwind.config = {
         });
     }
 
-    document.createElement("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", () => {
         updateLanguageUI();
         updateThemeUI();
         updateDynamicHeader();
