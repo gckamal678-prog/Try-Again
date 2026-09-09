@@ -95,7 +95,7 @@ tailwind.config = {
     <div class="flex-1 flex flex-col w-full">
         
         <!-- HEADER SECTION (Emerald Mint & Inter Styled) -->
-        <header class="sticky top-0 z-40 flex items-center justify-between px-3 md:px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-emerald-500/20 shadow-md">
+          <header class="sticky top-0 z-40 flex items-center justify-between px-3 md:px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-emerald-500/20 shadow-md">
             <div class="flex items-center space-x-2.5">
                 <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-emerald-400 transition">☰</button>
                 <div class="flex items-center space-x-2 cursor-pointer" onclick="toggleSidebar()">
@@ -113,13 +113,12 @@ tailwind.config = {
                 <button onclick="toggleTheme()" id="theme-toggle-btn" class="w-7 h-7 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center text-sm hover:bg-slate-700 transition">🌛</button>
                 <div class="relative cursor-pointer" onclick="toggleSidebar()">
                     <div class="w-8 h-8 rounded-full bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-sm">
-                        <img id="sidebar-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
-            
+                        <img id="header-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
                     </div>
                 </div>
             </div>
         </header>
-
+        
         <main class="p-4 md:p-6 space-y-4 flex-1 w-full text-xs">
             <div class="flex justify-between items-center px-1 py-1 text-white">
                 <div>
