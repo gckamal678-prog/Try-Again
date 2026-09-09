@@ -113,19 +113,16 @@ tailwind.config = {
                 </h3>
                 <div>
                     <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Full Name" data-np="पूरा नाम">Full Name</span></label>
-                    <input type="text" id="input-full-name" placeholder="Enter Full Name" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
+                    <input type="text" id="input-full-name" placeholder="Enter Full Name" oninput="saveProfileDetails()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
                 </div>
                 <div>
                     <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Address" data-np="ठेगाना">Address</span></label>
-                    <input type="text" id="input-address" placeholder="Enter Address" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
+                    <input type="text" id="input-address" placeholder="Enter Address" oninput="saveProfileDetails()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
                 </div>
                 <div>
                     <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Mobile Number" data-np="मोबाइल नम्बर">Mobile Number</span></label>
-                    <input type="tel" id="input-mobile" placeholder="Enter Mobile Number" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
+                    <input type="tel" id="input-mobile" placeholder="Enter Mobile Number" oninput="saveProfileDetails()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
                 </div>
-                <button onclick="saveProfileDetails()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition shadow-md">
-                    <span class="lang-text" data-en="Save Info" data-np="सेभ गर्नुहोस्">Save Info</span>
-                </button>
             </div>
         </div>
     </div>
@@ -449,31 +446,23 @@ tailwind.config = {
         }, 1500);
     }
 
-    // Typography and Styling Functions (सुधार गरिएको)
-    function changeFontSize(size, showNotification = true) {
-        let fontSizePx = '14px';
-        if (size === 'small') fontSizePx = '12px';
-        else if (size === 'medium') fontSizePx = '14px';
-        else if (size === 'large') fontSizePx = '17px';
+    // Typography and Styling Functions with instant sizing update
+    function changeFontSize(size) {
+        let baseSize = '12px';
+        if (size === 'small') baseSize = '10px';
+        else if (size === 'medium') baseSize = '12px';
+        else if (size === 'large') baseSize = '15px';
 
-        // सम्पूर्ण पेजको मूल font-size परिवर्तन गर्न
-        document.documentElement.style.fontSize = fontSizePx;
+        document.documentElement.style.fontSize = baseSize;
         localStorage.setItem('pref_font_size', size);
-        
-        if (showNotification) {
-            showToast(currentLang === 'NEP' ? 'फन्ट साइज परिवर्तन भयो!' : 'Font size updated!', 'success');
-        }
     }
 
-    function changeFontFamily(family, showNotification = true) {
+    function changeFontFamily(family) {
         document.body.style.fontFamily = `'${family}', sans-serif`;
         localStorage.setItem('pref_font_family', family);
-        if (showNotification) {
-            showToast(currentLang === 'NEP' ? 'फन्ट परिवार परिवर्तन भयो!' : 'Font family updated!', 'success');
-        }
     }
 
-    function changeFontStyle(style, showNotification = true) {
+    function changeFontStyle(style) {
         if (style === 'bold') {
             document.body.style.fontWeight = 'bold';
             document.body.style.fontStyle = 'normal';
@@ -485,20 +474,14 @@ tailwind.config = {
             document.body.style.fontStyle = 'normal';
         }
         localStorage.setItem('pref_font_style', style);
-        if (showNotification) {
-            showToast(currentLang === 'NEP' ? 'फन्ट शैली परिवर्तन भयो!' : 'Font style updated!', 'success');
-        }
     }
 
-    function setTextEffect(effect, showNotification = true) {
+    function setTextEffect(effect) {
         const mainBody = document.getElementById('main-body');
         mainBody.classList.remove('effect-shadow', 'effect-outline', 'effect-background', 'effect-hollow');
         if (effect) {
             mainBody.classList.add(`effect-${effect}`);
             localStorage.setItem('pref_text_effect', effect);
-            if (showNotification) {
-                showToast(currentLang === 'NEP' ? 'टेक्स्ट इफेक्ट लागू भयो!' : 'Text effect applied!', 'success');
-            }
         } else {
             localStorage.removeItem('pref_text_effect');
         }
@@ -513,7 +496,7 @@ tailwind.config = {
             if (currentLang === 'NEP') {
                 btn.innerText = isShown ? 'कम देखाउनुहोस् (See Less)' : 'See More (थप हेर्नुहोस्)';
             } else {
-                btn.innerText = isShown ? 'See Less' : 'See More';
+                btn.innerText = isShown ? 'See More' : 'See More';
             }
         }
     }
@@ -542,7 +525,6 @@ tailwind.config = {
         localStorage.setItem('profile_mobile', mobile);
 
         loadUserData();
-        showToast(currentLang === 'NEP' ? 'विवरण सफलतापूर्वक सेभ भयो!' : 'Details saved successfully!', 'success');
     }
 
     function loadUserData() {
@@ -574,36 +556,34 @@ tailwind.config = {
 
     function loadAvatar() {
         const savedImage = localStorage.getItem('profile_avatar') || 'N1024.png';
-        ['sidebar-avatar-img', 'header-avatar-img'].getElementById = id => { ... } // internal safe check
         ['sidebar-avatar-img', 'header-avatar-img'].forEach(id => {
             const img = document.getElementById(id);
             if(img) img.src = savedImage;
         });
     }
 
-    // सेभ भएका प्राथमिकताहरू लोड गर्दा नोटिफिकेसन नआउने गरी `false` पास गरिएको छ।
     function loadSavedPreferences() {
         const savedSize = localStorage.getItem('pref_font_size');
         if (savedSize) {
-            changeFontSize(savedSize, false);
+            changeFontSize(savedSize);
             const selectEl = document.getElementById('font-size-select');
             if(selectEl) selectEl.value = savedSize;
         }
         const savedFamily = localStorage.getItem('pref_font_family');
         if (savedFamily) {
-            changeFontFamily(savedFamily, false);
+            document.body.style.fontFamily = `'${savedFamily}', sans-serif`;
             const familyEl = document.getElementById('font-family-select');
             if(familyEl) familyEl.value = savedFamily;
         }
         const savedStyle = localStorage.getItem('pref_font_style');
         if (savedStyle) {
-            changeFontStyle(savedStyle, false);
+            changeFontStyle(savedStyle);
             const styleEl = document.getElementById('font-style-select');
             if(styleEl) styleEl.value = savedStyle;
         }
         const savedEffect = localStorage.getItem('pref_text_effect');
         if (savedEffect) {
-            setTextEffect(savedEffect, false);
+            setTextEffect(savedEffect);
         }
     }
 
