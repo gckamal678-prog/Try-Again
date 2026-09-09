@@ -62,28 +62,19 @@ tailwind.config = {
 <!-- MAIN LAYOUT -->
 <div class="flex-1 flex flex-col h-full w-full">
     
-    <!-- HEADER SECTION (Emerald Mint & Inter Styled) -->
-      <header class="sticky top-0 z-40 flex items-center justify-between px-3 md:px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-emerald-500/20 shadow-md">
-            <div class="flex items-center space-x-2.5">
-                <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-emerald-400 transition">☰</button>
-                <div class="flex items-center space-x-2 cursor-pointer" onclick="toggleSidebar()">
-                    <div class="w-7 h-7 rounded-lg bg-emerald-600 border border-emerald-500/50 flex items-center justify-center overflow-hidden shadow-sm">
-                        <img src="N1024.png" alt="Logo" class="w-full h-full object-cover">
-                    </div>
-                    <span class="text-xs md:text-sm font-extrabold tracking-wider bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
-                        Digital NoteBook
-                    </span>
+    <!-- HEADER SECTION -->
+    <header class="sticky top-0 z-40 flex items-center justify-between px-3 md:px-5 py-3.5 bg-slate-900/95 backdrop-blur border-b border-emerald-500/20 shadow-md">
+        <div class="flex items-center space-x-2.5">
+            <button onclick="toggleSidebar()" class="text-white text-xl focus:outline-none hover:text-emerald-400 transition">☰</button>
+            <div class="flex items-center space-x-2 cursor-pointer" onclick="toggleSidebar()">
+                <div class="w-7 h-7 rounded-lg bg-emerald-600 border border-emerald-500/50 flex items-center justify-center overflow-hidden shadow-sm">
+                    <img src="N1024.png" alt="Logo" class="w-full h-full object-cover">
                 </div>
+                <span class="text-xs md:text-sm font-extrabold tracking-wider bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
+                    Digital NoteBook
+                </span>
             </div>
-
-            <div class="flex items-center space-x-2">
-                <button onclick="toggleLanguage()" id="lang-toggle-btn" class="px-2 py-1 rounded-md bg-slate-800 border border-slate-700 text-[10px] font-bold text-slate-200 hover:bg-slate-700 transition">ENG</button>
-                <button onclick="toggleTheme()" id="theme-toggle-btn" class="w-7 h-7 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center text-sm hover:bg-slate-700 transition">🌛</button>
-                <div class="relative cursor-pointer" onclick="toggleSidebar()">
-                    <div class="w-8 h-8 rounded-full bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-sm">
-                        <img id="header-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
-                    </div>
-                </div>
+        </div>
 
         <div class="flex items-center space-x-2">
             <!-- Floating / Mini Mode Button -->
@@ -93,6 +84,11 @@ tailwind.config = {
             <button onclick="minimizeCalculator()" title="Dashboard" class="w-7 h-7 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 hover:bg-slate-700"><i class="fa-solid fa-house text-[10px]"></i></button>
             <button onclick="toggleLanguage()" id="lang-toggle-btn" class="px-2 py-1 rounded-md bg-slate-800 border border-slate-700 text-[10px] font-bold text-slate-200 hover:bg-slate-700 transition">ENG</button>
             <button onclick="toggleTheme()" id="theme-toggle-btn" class="w-7 h-7 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center text-sm hover:bg-slate-700 transition">🌛</button>
+            <div class="relative cursor-pointer" onclick="toggleSidebar()">
+                <div class="w-8 h-8 rounded-full bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-sm">
+                    <img id="header-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
+                </div>
+            </div>
         </div>
     </header>
 
@@ -192,7 +188,7 @@ tailwind.config = {
         window.location.href = 'index.html';
     }
 
-    // Floating Mini Mode Toggle (एप भित्रै सानो फ्लोटिङ विन्डो बनाउने फिचर)
+    // Floating Mini Mode Toggle
     let isFloat = false;
     function toggleFloatMode() {
         isFloat = !isFloat;
@@ -200,7 +196,7 @@ tailwind.config = {
         const container = document.getElementById('main-calculator-container');
         
         if (isFloat) {
-            card.className = "fixed bottom-5 right-5 w-80 h-[450px] flex flex-col bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-emerald-500/40 p-4 space-y-3 z-50 transition-all animate-bounce-short";
+            card.className = "fixed bottom-5 right-5 w-80 h-[450px] flex flex-col bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-emerald-500/40 p-4 space-y-3 z-50 transition-all";
             container.classList.remove('items-center', 'justify-center');
         } else {
             card.className = "w-full max-w-md h-full max-h-[620px] flex flex-col bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 p-5 space-y-4 transition-all";
