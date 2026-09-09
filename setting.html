@@ -176,9 +176,9 @@ tailwind.config = {
                         <div>
                             <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1" data-i18n="font_size">Font Size</label>
                             <select id="font-size-select" onchange="changeFontSize(this.value)" class="w-full border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white p-2.5 rounded-xl text-xs outline-none">
-                                <option value="small">Small</option>
-                                <option value="medium" selected>Medium</option>
-                                <option value="large">Large</option>
+                                <option value="small">Small (15px)</option>
+                                <option value="medium" selected>Medium (20px)</option>
+                                <option value="large">Large (30px)</option>
                             </select>
                         </div>
                         <div>
@@ -212,56 +212,38 @@ tailwind.config = {
                     </div>
                 </div>
 
-                <!-- Policy, Terms & About Section -->
+                <!-- Policy, Terms & About Section (Consolidated into a single unified card) -->
                 <div class="bg-white dark:bg-slate-900 p-4 md:p-6 rounded-2xl shadow-sm space-y-4 border border-slate-200 dark:border-slate-800 transition-colors duration-300 w-full">
                     <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider border-b border-slate-200 dark:border-slate-800 pb-3" data-i18n="policy_title">ℹ️ Policy, Terms & About</h4>
 
-                    <div class="space-y-3 w-full">
-                        <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 w-full">
-                            <h5 class="font-bold text-xs text-slate-800 dark:text-slate-200" data-i18n="policy_1_title">१. गोपनीयता नीति र डाटा भण्डारण (Privacy Policy & Data Storage)</h5>
-                            <p class="text-xs text-slate-600 dark:text-slate-400 mt-1" data-i18n="policy_1_desc">तपाईँका हिसाब-किताब, कारोबार र बिलहरू फायरबेस (Firebase) को क्लाउड सर्भरमा सुरक्षित रूपमा भण्डारण हुन्छन्।</p>
-                            <div id="more-privacy" class="more-text text-xs text-slate-600 dark:text-slate-400 space-y-1.5 mt-2">
-                                <p><strong data-i18n="eng_lbl">English:</strong> Your financial records, transactions, and bills are securely stored in the cloud using Firebase, ensuring your data is backed up.</p>
-                                <p><strong data-i18n="np_lbl">नेपाली:</strong> यसले डाटाको ब्याकअप भइरहन्छ र मोबाइल परिवर्तन गरे पनि डाटा सुरक्षित रहन्छ।</p>
+                    <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 w-full">
+                        <h5 class="font-bold text-xs text-slate-800 dark:text-slate-200" data-i18n="policy_main_title">गोपनीयता, सर्तहरू र बारेमा (Policy, Terms & Overview)</h5>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 mt-1" data-i18n="policy_main_desc">तपाईँका वित्तीय रेकर्डहरू फायरबेस क्लाउडमा सुरक्षित हुन्छन्। तेस्रो पक्षलाई डाटा बिक्री गरिंदैन, र प्रयोगकर्तासँग यसको पूर्ण नियन्त्रण हुन्छ।</p>
+                        
+                        <div id="more-policy" class="more-text text-xs text-slate-600 dark:text-slate-400 space-y-2 mt-2 pt-2 border-t border-slate-100 dark:border-slate-700">
+                            <div>
+                                <p class="font-semibold text-slate-700 dark:text-slate-300">१. गोपनीयता नीति र डाटा भण्डारण:</p>
+                                <p>तपाईँका हिसाब-किताब, कारोबार र बिलहरू फायरबेस (Firebase) को क्लाउड सर्भरमा सुरक्षित रूपमा भण्डारण हुन्छन्। (English: Your financial records are securely stored in the cloud using Firebase.)</p>
                             </div>
-                            <button onclick="toggleText('privacy')" id="toggle-btn-privacy" class="text-emerald-600 dark:text-emerald-400 font-bold text-xs mt-2.5 block hover:underline" data-i18n="see_more">See More (थप हेर्नुहोस्)</button>
+                            <div>
+                                <p class="font-semibold text-slate-700 dark:text-slate-300">२. तेस्रो पक्षको पहुँच:</p>
+                                <p>हामी तपाईँको व्यक्तिगत वित्तीय डाटा कुनै पनि अनाधिकृत तेस्रो पक्षलाई बिक्री वा हस्तान्तरण गर्दैनौं। (English: We do not sell or transfer your personal financial data to unauthorized third parties.)</p>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-slate-700 dark:text-slate-300">३. सुरक्षा र लगइन:</p>
+                                <p>प्रयोगकर्ताले सुरक्षित रूपमा लगइन गर्न सक्छन्, तर आफ्नो लगइन विवरण गोप्य राख्ने जिम्मेवारी प्रयोगकर्ताको हुन्छ। (English: Users are responsible for keeping their login details confidential.)</p>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-slate-700 dark:text-slate-300">४. इन्टरनेट र सिंक:</p>
+                                <p>फायरबेस सर्भरमा डाटा वास्तविक समयमा सिंक र अपडेट गर्नका लागि इन्टरनेट जडानको आवश्यकता पर्दछ। (English: An internet connection is required to real-time sync data.)</p>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-slate-700 dark:text-slate-300">५. डाटा मेटाउने अधिकार:</p>
+                                <p>प्रयोगकर्तासँग फायरबेस सर्भरमा रहेको आफ्नो खाता र डाटा जुनसुकै बेला मेटाउन अनुरोध गर्ने अधिकार हुन्छ। (English: Users have the right to request deletion of their account and data at any time.)</p>
+                            </div>
                         </div>
 
-                        <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 w-full">
-                            <h5 class="font-bold text-xs text-slate-800 dark:text-slate-200" data-i18n="policy_2_title">२. तेस्रो पक्षको पहुँच (Third-Party Access)</h5>
-                            <p class="text-xs text-slate-600 dark:text-slate-400 mt-1" data-i18n="policy_2_desc">हामी तपाईँको व्यक्तिगत वित्तीय डाटा कुनै पनि अनाधिकृत तेस्रो पक्षलाई बिक्री वा हस्तान्तरण गर्दैनौं।</p>
-                            <div id="more-thirdparty" class="more-text text-xs text-slate-600 dark:text-slate-400 space-y-1.5 mt-2">
-                                <p><strong data-i18n="eng_lbl2">English:</strong> We do not sell, trade, or transfer your personal financial data to any unauthorized third parties.</p>
-                            </div>
-                            <button onclick="toggleText('thirdparty')" id="toggle-btn-thirdparty" class="text-emerald-600 dark:text-emerald-400 font-bold text-xs mt-2.5 block hover:underline" data-i18n="see_more">See More (थप हेर्नुहोस्)</button>
-                        </div>
-
-                        <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 w-full">
-                            <h5 class="font-bold text-xs text-slate-800 dark:text-slate-200" data-i18n="policy_3_title">३. सुरक्षा र लगइन (Security & Authentication)</h5>
-                            <p class="text-xs text-slate-600 dark:text-slate-400 mt-1" data-i18n="policy_3_desc">प्रयोगकर्ताले सुरक्षित रूपमा लगइन गर्न सक्छन्, तर आफ्नो लगइन विवरण गोप्य राख्ने जिम्मेवारी प्रयोगकर्ताको हुन्छ।</p>
-                            <div id="more-security" class="more-text text-xs text-slate-600 dark:text-slate-400 space-y-1.5 mt-2">
-                                <p><strong data-i18n="eng_lbl3">English:</strong> Users can securely log in using their credentials, but users are responsible for keeping their login details confidential.</p>
-                            </div>
-                            <button onclick="toggleText('security')" id="toggle-btn-security" class="text-emerald-600 dark:text-emerald-400 font-bold text-xs mt-2.5 block hover:underline" data-i18n="see_more">See More (थप हेर्नुहोस्)</button>
-                        </div>
-
-                        <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 w-full">
-                            <h5 class="font-bold text-xs text-slate-800 dark:text-slate-200" data-i18n="policy_4_title">४. इन्टरनेट र सिंक (Internet & Sync)</h5>
-                            <p class="text-xs text-slate-600 dark:text-slate-400 mt-1" data-i18n="policy_4_desc">फायरबेस सर्भरमा डाटा वास्तविक समयमा सिंक र अपडेट गर्नका लागि इन्टरनेट जडानको आवश्यकता पर्दछ।</p>
-                            <div id="more-internet" class="more-text text-xs text-slate-600 dark:text-slate-400 space-y-1.5 mt-2">
-                                <p><strong data-i18n="eng_lbl4">English:</strong> The app may require an internet connection to sync and update your data in real-time with the Firebase server.</p>
-                            </div>
-                            <button onclick="toggleText('internet')" id="toggle-btn-internet" class="text-emerald-600 dark:text-emerald-400 font-bold text-xs mt-2.5 block hover:underline" data-i18n="see_more">See More (थप हेर्नुहोस्)</button>
-                        </div>
-
-                        <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 w-full">
-                            <h5 class="font-bold text-xs text-slate-800 dark:text-slate-200" data-i18n="policy_5_title">५. डाटा मेटाउने अधिकार (Data Deletion Rights)</h5>
-                            <p class="text-xs text-slate-600 dark:text-slate-400 mt-1" data-i18n="policy_5_desc">प्रयोगकर्तासँग फायरबेस सर्भरमा रहेको आफ्नो खाता र डाटा जुनसुकै बेला मेटाउन अनुरोध गर्ने अधिकार हुन्छ।</p>
-                            <div id="more-deletion" class="more-text text-xs text-slate-600 dark:text-slate-400 space-y-1.5 mt-2">
-                                <p><strong data-i18n="eng_lbl5">English:</strong> Users have the right to request the deletion of their account and all associated data stored on the Firebase server at any time.</p>
-                            </div>
-                            <button onclick="toggleText('deletion')" id="toggle-btn-deletion" class="text-emerald-600 dark:text-emerald-400 font-bold text-xs mt-2.5 block hover:underline" data-i18n="see_more">See More (थप हेर्नुहोस्)</button>
-                        </div>
+                        <button onclick="toggleText('policy')" id="toggle-btn-policy" class="text-emerald-600 dark:text-emerald-400 font-bold text-xs mt-3 block hover:underline" data-i18n="see_more">See More (थप हेर्नुहोस्)</button>
                     </div>
                     
                     <div class="pt-2 text-center border-t border-slate-100 dark:border-slate-800 w-full">
@@ -314,23 +296,9 @@ tailwind.config = {
             effect_background: "Background",
             effect_hollow: "Hollow",
             policy_title: "ℹ️ Policy, Terms & About",
-            policy_1_title: "1. Privacy Policy & Data Storage",
-            policy_1_desc: "Your financial records, transactions, and bills are securely stored in the cloud using Firebase.",
-            policy_2_title: "2. Third-Party Access",
-            policy_2_desc: "We do not sell, trade, or transfer your personal financial data to any unauthorized third parties.",
-            policy_3_title: "3. Security & Authentication",
-            policy_3_desc: "Users can securely log in, but users are responsible for keeping their login details confidential.",
-            policy_4_title: "4. Internet & Sync",
-            policy_4_desc: "An internet connection is required to real-time sync and update data on the Firebase server.",
-            policy_5_title: "5. Data Deletion Rights",
-            policy_5_desc: "Users have the right to request deletion of their account and data stored on Firebase at any time.",
+            policy_main_title: "Policy, Terms & Overview",
+            policy_main_desc: "Your financial records are secured in Firebase cloud. Third-party data sharing is restricted, and users retain complete control over their accounts.",
             see_more: "See More",
-            eng_lbl: "English:",
-            np_lbl: "Nepali:",
-            eng_lbl2: "English:",
-            eng_lbl3: "English:",
-            eng_lbl4: "English:",
-            eng_lbl5: "English:",
             check_update: "(Check Update)",
             feedback_title: "Feedback & Suggestions",
             your_name: "Your Name:",
@@ -348,23 +316,9 @@ tailwind.config = {
             effect_background: "ब्याकग्राउन्ड",
             effect_hollow: "खोक्रो (Hollow)",
             policy_title: "ℹ️ नीति, सर्तहरू र बारेमा",
-            policy_1_title: "१. गोपनीयता नीति र डाटा भण्डारण (Privacy Policy & Data Storage)",
-            policy_1_desc: "तपाईँका हिसाब-किताब, कारोबार र बिलहरू फायरबेस (Firebase) को क्लाउड सर्भरमा सुरक्षित रूपमा भण्डारण हुन्छन्।",
-            policy_2_title: "२. तेस्रो पक्षको पहुँच (Third-Party Access)",
-            policy_2_desc: "हामी तपाईँको व्यक्तिगत वित्तीय डाटा कुनै पनि अनाधिकृत तेस्रो पक्षलाई बिक्री वा हस्तान्तरण गर्दैनौं।",
-            policy_3_title: "३. सुरक्षा र लगइन (Security & Authentication)",
-            policy_3_desc: "प्रयोगकर्ताले सुरक्षित रूपमा लगइन गर्न सक्छन्, तर आफ्नो लगइन विवरण गोप्य राख्ने जिम्मेवारी प्रयोगकर्ताको हुन्छ।",
-            policy_4_title: "४. इन्टरनेट र सिंक (Internet & Sync)",
-            policy_4_desc: "फायरबेस सर्भरमा डाटा वास्तविक समयमा सिंक र अपडेट गर्नका लागि इन्टरनेट जडानको आवश्यकता पर्दछ।",
-            policy_5_title: "५. डाटा मेटाउने अधिकार (Data Deletion Rights)",
-            policy_5_desc: "प्रयोगकर्तासँग फायरबेस सर्भरमा रहेको आफ्नो खाता र डाटा जुनसुकै बेला मेटाउन अनुरोध गर्ने अधिकार हुन्छ।",
+            policy_main_title: "गोपनीयता, सर्तहरू र बारेमा (Policy, Terms & Overview)",
+            policy_main_desc: "तपाईँका वित्तीय रेकर्डहरू फायरबेस क्लाउडमा सुरक्षित हुन्छन्। तेस्रो पक्षलाई डाटा बिक्री गरिंदैन, र प्रयोगकर्तासँग यसको पूर्ण नियन्त्रण हुन्छ।",
             see_more: "See More (थप हेर्नुहोस्)",
-            eng_lbl: "English:",
-            np_lbl: "नेपाली:",
-            eng_lbl2: "English:",
-            eng_lbl3: "English:",
-            eng_lbl4: "English:",
-            eng_lbl5: "English:",
             check_update: "(अपडेट जाँच गर्नुहोस्)",
             feedback_title: "प्रतिक्रिया तथा सुझाव (Feedback & Suggestions)",
             your_name: "तपाईंको नाम / Your Name:",
@@ -448,10 +402,10 @@ tailwind.config = {
 
     // Typography and Styling Functions with instant sizing update
     function changeFontSize(size) {
-        let baseSize = '12px';
-        if (size === 'small') baseSize = '10px';
-        else if (size === 'medium') baseSize = '12px';
-        else if (size === 'large') baseSize = '15px';
+        let baseSize = '20px'; // Updated default medium to 20px base equivalent or handling logic
+        if (size === 'small') baseSize = '15px';
+        else if (size === 'medium') baseSize = '20px';
+        else if (size === 'large') baseSize = '30px';
 
         document.documentElement.style.fontSize = baseSize;
         localStorage.setItem('pref_font_size', size);
@@ -496,7 +450,7 @@ tailwind.config = {
             if (currentLang === 'NEP') {
                 btn.innerText = isShown ? 'कम देखाउनुहोस् (See Less)' : 'See More (थप हेर्नुहोस्)';
             } else {
-                btn.innerText = isShown ? 'See More' : 'See More';
+                btn.innerText = isShown ? 'See Less' : 'See More';
             }
         }
     }
@@ -518,7 +472,7 @@ tailwind.config = {
     function saveProfileDetails() {
         const name = document.getElementById('input-full-name').value;
         const address = document.getElementById('input-address').value;
-        const mobile = document.getElementById('input-mobile').value;
+        const mobile = document.getElementById('input-mobile.value') || document.getElementById('input-mobile').value;
 
         if(name) localStorage.setItem('profile_name', name);
         localStorage.setItem('profile_address', address);
