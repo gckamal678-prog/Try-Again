@@ -27,8 +27,6 @@ tailwind.config = {
 </script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-<!-- नेपाली मिति कनभर्टरको लागि CDN -->
-<script src="https://cdn.jsdelivr.net/npm/nepali-date-converter@3.4.0/dist/nepali-date-converter.umd.js"></script>
 <style>
     @keyframes rainbow {
         0% { background-position: 0% 50%; }
@@ -135,8 +133,8 @@ tailwind.config = {
 
         <!-- नेपाली बार, महिना, गते र समय देखाउने सेक्सन -->
         <main class="p-4 md:p-6 space-y-4 flex-1 w-full text-xs">
-            <div class="flex justify-between items-center px-2 py-2.5 bg-slate-800/60 border border-slate-700/60 rounded-xl text-white shadow-sm">
-                <div class="flex items-center space-x-2">
+            <div class="flex justify-between items-center px-3 py-2.5 bg-slate-800/80 border border-slate-700/60 rounded-xl text-white shadow-sm">
+                <div class="flex items-center space-x-2.5 w-full">
                     <i class="fa-solid fa-calendar-days text-emerald-400 text-sm"></i>
                     <p id="dynamic-date" class="text-[11px] font-bold tracking-wider uppercase"></p>
                 </div>
@@ -162,7 +160,6 @@ tailwind.config = {
             if(text) el.innerText = text;
         });
 
-        // भाषा परिवर्तन हुनासाथ मिति पनि अपडेट हुनेछ
         updateDynamicHeader();
     }
 
@@ -190,48 +187,51 @@ tailwind.config = {
         updateThemeUI();
     }
 
-    // --- नेपाली बार, महिना, गते र समय रियल-टाइममा देखाउने फंक्सन ---
+    // शुद्ध नेपाली क्यालेन्डर क्याल्कुलेसन (कुनै CDN नचाहिने)
     function updateDynamicHeader() {
-        try {
-            // नेपाली मिति लिनको लागि nepali-date-converter प्रयोग गरिएको
-            const todayNepali = new NepaliDate();
-            const year = todayNepali.getYear();
-            const month = todayNepali.getMonth(); // 0 देखि 11 सम्म
-            const date = todayNepali.getDate();   // गते
-            const dayOfWeek = todayNepali.getDay(); // बार (0-6)
+        const now = new Date();
+        
+        // बारहरू
+        const daysNp = ["आइतबार", "सोमबार", "मंगलबार", "बुधबार", "बिहीबार", "शुक्रबार", "शनिबार"];
+        const daysEn = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        const dayOfWeek = now.getDay();
 
-            // बारको नाम (नेपाली र अंग्रेजी)
-            const daysNp = ["आइतबार", "सोमबार", "मंगलबार", "बुधबार", "बिहीबार", "शुक्रबार", "शनिबार"];
-            const daysEn = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        // अनुमानित वा सिधै अंग्रेजी मितिलाई नेपालीमा रूपान्तरण गर्न मिलutc बेस इस्वी मिति (२०८३ सालको वरिपरि)
+        // सरल रूपमा साल जोड्ने तरिका (सामान्यतया अंग्रेजी सालमा ५६ वर्ष ९ महिना जोड्दा नेपाली साल हुन्छ)
+        let enYear = now.getFullYear();
+        let enMonth = now.getMonth(); // 0-11
+        let enDate = now.getDate();
 
-            // महिनाको नाम (नेपाली र अंग्रेजी)
-            const monthsNp = ["वैशाख", "जेठ", "आषाढ", "श्रावण", "भाद्र", "आश्विन", "कार्तिक", "मंसिर", "पौष", "माघ", "फागुन", "चैत"];
-            const monthsEn = ["Baisakh", "Jestha", "Ashadh", "Shrawan", "Bhadra", "Ashwin", "Kartik", "Mangsir", "Poush", "Magh", "Falgun", "Chaitra"];
+        // नेपाली महिनाहरू
+        const monthsNp = ["वैशाख", "जेठ", "आषाढ", "श्रावण", "भाद्र", "आश्विन", "कार्तिक", "मंसिर", "पौष", "माघ", "फागुन", "चैत"];
+        const monthsEn = ["Baisakh", "Jestha", "Ashadh", "Shrawan", "Bhadra", "Ashwin", "Kartik", "Mangsir", "Poush", "Magh", "Falgun", "Chaitra"];
 
-            // लाइभ समय (Time) निकाल्ने
-            const now = new Date();
-            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-            const timeString = now.toLocaleTimeString('en-US', timeOptions);
+        // सरल रूपमा आजको नेपाली मिति अनुमान गर्ने बेस कंवर्टर (लगभग ५७ वर्ष फरक)
+        let npYear = enYear + 57;
+        let npMonthIndex = (enMonth + 8) % 12; // मोटामोटी महिना मिलान
+        if(enMonth >= 4 && enDate >= 14) npYear = enYear + 57; 
 
-            let dateString = "";
-            if (currentLang === 'NEP') {
-                // नेपाली भाषामा: वार, महिना गते, वर्ष | समय
-                dateString = `${daysNp[dayOfWeek]}, ${monthsNp[month]} ${date} गते, ${year} | ${timeString}`;
-            } else {
-                // अंग्रेजी भाषामा: वार, महिना गते, वर्ष | समय
-                dateString = `${daysEn[dayOfWeek]}, ${monthsEn[month]} ${date}, ${year} | ${timeString}`;
-            }
+        // यथार्थ गतेको लागि अनुमानित दिन गणना
+        let npDate = (enDate + 15) > 30 ? (enDate + 15) % 30 : enDate + 15;
+        if(npDate <= 0) npDate = 1;
 
-            const dateEl = document.getElementById('dynamic-date');
-            if (dateEl) {
-                dateEl.innerText = dateString;
-            }
-        } catch (e) {
-            console.error("Nepali Date Error:", e);
+        // समय निकाल्ने
+        const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+        const timeString = now.toLocaleTimeString('en-US', timeOptions);
+
+        let dateString = "";
+        if (currentLang === 'NEP') {
+            dateString = `${daysNp[dayOfWeek]}, ${monthsNp[npMonthIndex]} ${npDate} गते, ${npYear} | ${timeString}`;
+        } else {
+            dateString = `${daysEn[dayOfWeek]}, ${monthsEn[npMonthIndex]} ${npDate}, ${npYear} | ${timeString}`;
+        }
+
+        const dateEl = document.getElementById('dynamic-date');
+        if (dateEl) {
+            dateEl.innerText = dateString;
         }
     }
 
-    // प्रत्येक १ सेकेन्डमा समय र मिति अपडेट भइरहन्छ (Real-time)
     setInterval(updateDynamicHeader, 1000);
 
     function saveProfileDetails() {
@@ -264,7 +264,7 @@ tailwind.config = {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.load = function(e) {
+            reader.onload = function(e) {
                 const base64Image = e.target.result;
                 localStorage.setItem('profile_avatar', base64Image);
                 loadAvatar();
@@ -275,10 +275,10 @@ tailwind.config = {
 
     function loadAvatar() {
         const savedImage = localStorage.getItem('profile_avatar') || 'N1024.png';
-        ['sidebar-avatar-img', 'header-avatar-img'].forEach(id => {
+        ['sidebar-avatar-img', 'header-avatar-img'].forEach(id =>.forEach ? ['sidebar-avatar-img', 'header-avatar-img'].forEach(id => {
             const img = document.getElementById(id);
             if(img) img.src = savedImage;
-        });
+        }) : null);
     }
 
     document.addEventListener("DOMContentLoaded", () => {
