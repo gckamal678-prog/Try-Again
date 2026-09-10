@@ -131,7 +131,7 @@ tailwind.config = {
             </div>
         </header>
 
-        <!-- नेपाली बार, महिना, गते र समय देखाउने सेक्सन -->
+        <!-- Dynamic Date & Time Section -->
         <main class="p-4 md:p-6 space-y-4 flex-1 w-full text-xs">
             <div class="flex justify-between items-center px-3 py-2.5 bg-slate-800/80 border border-slate-700/60 rounded-xl text-white shadow-sm">
                 <div class="flex items-center space-x-2.5 w-full">
@@ -187,35 +187,29 @@ tailwind.config = {
         updateThemeUI();
     }
 
-    // शुद्ध नेपाली क्यालेन्डर क्याल्कुलेसन (कुनै CDN नचाहिने)
+    // रियल-टाइम बार, महिना, गते र वर्ष निकाल्ने फंक्सन
     function updateDynamicHeader() {
         const now = new Date();
         
-        // बारहरू
         const daysNp = ["आइतबार", "सोमबार", "मंगलबार", "बुधबार", "बिहीबार", "शुक्रबार", "शनिबार"];
         const daysEn = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
         const dayOfWeek = now.getDay();
 
-        // अनुमानित वा सिधै अंग्रेजी मितिलाई नेपालीमा रूपान्तरण गर्न मिलutc बेस इस्वी मिति (२०८३ सालको वरिपरि)
-        // सरल रूपमा साल जोड्ने तरिका (सामान्यतया अंग्रेजी सालमा ५६ वर्ष ९ महिना जोड्दा नेपाली साल हुन्छ)
         let enYear = now.getFullYear();
-        let enMonth = now.getMonth(); // 0-11
+        let enMonth = now.getMonth(); 
         let enDate = now.getDate();
 
-        // नेपाली महिनाहरू
         const monthsNp = ["वैशाख", "जेठ", "आषाढ", "श्रावण", "भाद्र", "आश्विन", "कार्तिक", "मंसिर", "पौष", "माघ", "फागुन", "चैत"];
         const monthsEn = ["Baisakh", "Jestha", "Ashadh", "Shrawan", "Bhadra", "Ashwin", "Kartik", "Mangsir", "Poush", "Magh", "Falgun", "Chaitra"];
 
-        // सरल रूपमा आजको नेपाली मिति अनुमान गर्ने बेस कंवर्टर (लगभग ५७ वर्ष फरक)
+        // नेपाली मिति कन्भर्जन लजिक
         let npYear = enYear + 57;
-        let npMonthIndex = (enMonth + 8) % 12; // मोटामोटी महिना मिलान
+        let npMonthIndex = (enMonth + 8) % 12;
         if(enMonth >= 4 && enDate >= 14) npYear = enYear + 57; 
 
-        // यथार्थ गतेको लागि अनुमानित दिन गणना
         let npDate = (enDate + 15) > 30 ? (enDate + 15) % 30 : enDate + 15;
         if(npDate <= 0) npDate = 1;
 
-        // समय निकाल्ने
         const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
         const timeString = now.toLocaleTimeString('en-US', timeOptions);
 
@@ -275,10 +269,10 @@ tailwind.config = {
 
     function loadAvatar() {
         const savedImage = localStorage.getItem('profile_avatar') || 'N1024.png';
-        ['sidebar-avatar-img', 'header-avatar-img'].forEach(id =>.forEach ? ['sidebar-avatar-img', 'header-avatar-img'].forEach(id => {
+        ['sidebar-avatar-img', 'header-avatar-img'].forEach(id => {
             const img = document.getElementById(id);
             if(img) img.src = savedImage;
-        }) : null);
+        });
     }
 
     document.addEventListener("DOMContentLoaded", () => {
