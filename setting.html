@@ -18,7 +18,7 @@ tailwind.config = {
 }
 </script>
 <script>
-    // सुरुमै थिम चेक गरी लागु गर्ने
+    // पेज लोड हुनुभन्दा अघि नै सेभ गरिएको थिम चेक गरी लागू गर्ने
     const savedTheme = localStorage.getItem('theme') || 'dark';
     if (savedTheme === 'light') {
         document.documentElement.classList.remove('dark');
@@ -396,7 +396,7 @@ tailwind.config = {
         }, 1500);
     }
 
-    // Typography and Styling Functions
+    // फन्ट साइज परिवर्तन र सेभ गर्ने
     function changeFontSize(size) {
         let scaleSize = '12px';
         if (size === 'small') scaleSize = '11px';
@@ -408,12 +408,14 @@ tailwind.config = {
         showToast(currentLang === 'NEP' ? 'फन्ट साइज परिवर्तन भयो!' : 'Font size updated!', 'success');
     }
 
+    // फन्ट फेमिली परिवर्तन र सेभ गर्ने
     function changeFontFamily(family) {
         document.body.style.fontFamily = `'${family}', sans-serif`;
         localStorage.setItem('pref_font_family', family);
         showToast(currentLang === 'NEP' ? 'फन्ट परिवार परिवर्तन भयो!' : 'Font family updated!', 'success');
     }
 
+    // फन्ट शैली (Bold/Italic) परिवर्तन र सेभ गर्ने
     function changeFontStyle(style) {
         if (style === 'bold') {
             document.body.style.fontWeight = 'bold';
@@ -429,6 +431,7 @@ tailwind.config = {
         showToast(currentLang === 'NEP' ? 'फन्ट शैली परिवर्तन भयो!' : 'Font style updated!', 'success');
     }
 
+    // टेक्स्ट इफेक्ट परिवर्तन र सेभ गर्ने
     function setTextEffect(effect) {
         const mainBody = document.getElementById('main-body');
         if (mainBody) {
@@ -519,7 +522,7 @@ tailwind.config = {
         });
     }
 
-    // सुरक्षित गरिएका सम्पूर्ण सेटिङहरू पेज रिफ्रेस गर्दा वा अर्को पेजमा जाँदा लोड गर्ने मुख्य फंक्सन
+    // सबै सेभ भएका प्रिफरेन्सेसहरू लोड गर्ने मुख्य फंक्सन
     function loadSavedPreferences() {
         // १. फन्ट साइज लोड गर्ने
         const savedSize = localStorage.getItem('pref_font_size');
@@ -542,7 +545,7 @@ tailwind.config = {
             if(familyEl) familyEl.value = savedFamily;
         }
 
-        // ३. फन्ट शैली (Bold/Italic) लोड गर्ने
+        // ३. फन्ट शैली लोड गर्ने
         const savedStyle = localStorage.getItem('pref_font_style');
         if (savedStyle) {
             if (savedStyle === 'bold') {
@@ -568,7 +571,7 @@ tailwind.config = {
         }
     }
 
-    // पेज लोड हुनेबित्तिकै सबै सेटिङ र युजर डाटा स्वतः एप्लाई हुनेछ
+    // पेज लोड हुनेबित्तिकै सबै कुराहरू स्वतः एप्लाई हुनेछन्
     document.addEventListener("DOMContentLoaded", () => {
         updateLanguageUI();
         updateThemeUI();
