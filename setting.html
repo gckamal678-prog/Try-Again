@@ -3,8 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Digital NoteBook - Settings & Preferences</title>
+<title>Digital NoteBook - Account & Data Management</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<!-- Firebase App (core) and Firebase Auth -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<!-- EmailJS SDK -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script type="text/javascript">
+   (function(){
+      emailjs.init("Vf1aU0BqSjZ0q1XwZ"); // तपाईंको EmailJS Public Key यहाँ राखिएको छ
+   })();
+</script>
 <script>
 tailwind.config = {
     darkMode: 'class',
@@ -18,7 +28,6 @@ tailwind.config = {
 }
 </script>
 <script>
-    // पेज लोड हुनुभन्दा अघि नै सेभ गरिएको थिम चेक गरी लागू गर्ने
     const savedTheme = localStorage.getItem('theme') || 'dark';
     if (savedTheme === 'light') {
         document.documentElement.classList.remove('dark');
@@ -27,47 +36,39 @@ tailwind.config = {
     }
 </script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Srikhand&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-    @keyframes rainbow {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
+    @keyframes pulseGlow {
+        0%, 100% { opacity: 1; filter: drop-shadow(0 0 2px rgba(16, 185, 129, 0.4)); }
+        50% { opacity: 0.8; filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.8)); }
     }
-    .animate-rainbow {
-        background-size: 300% auto;
-        animation: rainbow 5s linear infinite;
-    }
-    .more-text {
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    .more-text.show {
-        display: block;
-        overflow: visible;
-    }
-    /* Dynamic text effects */
-    .effect-outline {
-        -webkit-text-stroke: 1px currentColor;
-    }
-    .effect-background {
-        background-color: rgba(16, 185, 129, 0.2);
-        padding: 0.1rem 0.3rem;
-        border-radius: 0.25rem;
-    }
-    .effect-hollow {
-        color: transparent;
-        -webkit-text-stroke: 1px currentColor;
-    }
+    .animated-title { animation: pulseGlow 3s infinite ease-in-out; }
 </style>
 </head>
-<body id="main-body" class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-xs">
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-xs">
 
 <!-- TOAST NOTIFICATION CONTAINER -->
 <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2"></div>
+
+<!-- MASTER RESET MODAL -->
+<div id="reset-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 w-full max-w-md shadow-2xl space-y-4">
+        <h3 class="text-base font-bold text-red-600 dark:text-red-500 flex items-center gap-2">
+            <i class="fa-solid fa-triangle-exclamation"></i> <span data-i18n="reset_title">Master Reset Confirm</span>
+        </h3>
+        <p class="text-xs text-slate-600 dark:text-slate-400" data-i18n="reset_desc">
+            तपाईंको सम्पूर्ण डाटा मेटिनेछ। पुष्टि गर्न 'RESET' टाइप गर्नुहोस् र पिन (PIN) प्रविष्ट गर्नुहोस्:
+        </p>
+        <div class="space-y-3">
+            <input type="text" id="reset-input" placeholder="Type RESET here" class="w-full p-2.5 text-xs bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl outline-none text-slate-900 dark:text-white">
+            <input type="password" id="reset-pin" placeholder="Enter 6-digit PIN" maxlength="6" class="w-full p-2.5 text-xs bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl outline-none text-slate-900 dark:text-white">
+        </div>
+        <div class="flex gap-2 justify-end pt-2">
+            <button onclick="closeResetModal()" class="px-4 py-2 bg-slate-200 dark:bg-slate-800 text-xs font-semibold rounded-xl hover:bg-slate-300" data-i18n="btn_cancel">Cancel</button>
+            <button onclick="confirmMasterReset()" class="px-4 py-2 bg-red-600 text-white text-xs font-semibold rounded-xl hover:bg-red-700" data-i18n="btn_reset_system">Reset System</button>
+        </div>
+    </div>
+</div>
 
 <div class="flex min-h-screen w-full">
     
@@ -80,56 +81,29 @@ tailwind.config = {
                     <img src="N1024.png" alt="Logo" class="w-full h-full object-cover">
                 </div>
                 <div>
-                    <h1 class="text-sm font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">
-                        Digital NoteBook
+                    <h1 class="text-sm font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-300 to-cyan-500">
+                        Digital <span class="text-emerald-400">NoteBook</span>
                     </h1>
                 </div>
             </div>
-            <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white text-lg focus:outline-none">
-                ✕
-            </button>
+            <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white text-lg focus:outline-none">✕</button>
         </div>
 
         <div class="p-3 space-y-3 overflow-y-auto flex-1 text-xs">
             <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-3 flex items-center space-x-3">
-                <div class="relative cursor-pointer group" onclick="document.getElementById('avatar-upload-input').click()">
-                    <div class="w-11 h-11 rounded-full bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-sm">
-                        <img id="sidebar-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
-                    </div>
+                <div class="w-11 h-11 rounded-full bg-emerald-600 border border-emerald-500 flex items-center justify-center overflow-hidden shadow-sm">
+                    <img id="sidebar-avatar-img" src="N1024.png" alt="Profile" class="w-full h-full object-cover">
                 </div>
-                <input type="file" id="avatar-upload-input" accept="image/*" class="hidden" onchange="handleAvatarUpload(event)">
                 <div>
-                    <h3 id="sidebar-profile-name" class="text-white font-bold text-sm"></h3>
-                    <p class="text-[10px] text-slate-400"><span class="lang-text" data-en="Click icon to set photo" data-np="फोटो राख्न क्लिक गर्नुहोस्">Click icon to set photo</span></p>
+                    <h3 id="sidebar-profile-name" class="text-white font-bold text-sm">User</h3>
+                    <p class="text-[10px] text-slate-400" id="sidebar-user-email">Local User</p>
                 </div>
             </div>
 
-            <!-- SIDEBAR NAVIGATION -->
             <nav class="space-y-1 font-medium">
                 <a href="index.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl hover:bg-slate-800 text-slate-300 transition"><span>📊</span> <span class="lang-text" data-en="Overview" data-np="अवलोकन">Overview</span></a>
-                <a href="setting.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl bg-emerald-600 text-white shadow-md shadow-emerald-600/20 transition"><span>⚙️</span> <span class="lang-text" data-en="Settings & About" data-np="सेटिङ र बारेमा">Settings & About</span></a>
+                <a href="account.html" class="flex items-center gap-2.5 py-2.5 px-3 rounded-xl bg-emerald-600 text-white shadow-md shadow-emerald-600/20 transition"><span>⚙️</span> <span class="lang-text" data-en="Account & Backup" data-np="खाता र ब्याकअप">Account & Backup</span></a>
             </nav>
-
-            <div class="space-y-2.5 bg-slate-800/50 p-3 rounded-xl border border-slate-700/60">
-                <h3 class="text-[11px] font-bold text-white flex items-center gap-1.5 mb-1">
-                    <i class="fa-solid fa-address-card text-emerald-400"></i> <span class="lang-text" data-en="Personal Info" data-np="व्यक्तिगत विवरण">Personal Info</span>
-                </h3>
-                <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Full Name" data-np="पूरा नाम">Full Name</span></label>
-                    <input type="text" id="input-full-name" placeholder="Enter Full Name" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Address" data-np="ठेगाना">Address</span></label>
-                    <input type="text" id="input-address" placeholder="Enter Address" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5"><span class="lang-text" data-en="Mobile Number" data-np="मोबाइल नम्बर">Mobile Number</span></label>
-                    <input type="tel" id="input-mobile" placeholder="Enter Mobile Number" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500">
-                </div>
-                <button onclick="saveProfileDetails()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition shadow-md">
-                    <span class="lang-text" data-en="Save Info" data-np="सेभ गर्नुहोस्">Save Info</span>
-                </button>
-            </div>
         </div>
     </div>
 
@@ -159,105 +133,107 @@ tailwind.config = {
                 </div>
             </div>
         </header>
-        
-        <main class="p-4 md:p-6 space-y-4 flex-1 w-full text-xs">
-            <div class="flex justify-between items-center px-1 py-1 text-white">
-                <div>
-                    <p id="dynamic-date" class="text-[11px] font-semibold tracking-wider text-slate-400 uppercase mb-1"></p>
-                    <h2 class="text-base md:text-lg font-bold text-slate-800 dark:text-white tracking-tight flex items-center gap-2">
-                        <i class="fa-solid fa-sliders text-emerald-500"></i> <span class="lang-text" data-en="Settings & Preferences" data-np="सेटिङ र प्राथमिकताहरू">Settings & Preferences</span>
-                    </h2>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="p-4 space-y-4 flex-1 w-full max-w-xl mx-auto overflow-y-auto">
+            
+            <!-- Header & Back Button -->
+            <div class="flex items-center justify-between bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-2xl shadow-sm">
+                <h1 class="text-base font-bold text-emerald-600 dark:text-emerald-400" data-translate="accountSettingsTitle">Account Management</h1>
+                <a href="index.html" class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs rounded-xl font-medium transition text-slate-800 dark:text-white" data-translate="backToDashboard">Back to Dashboard</a>
+            </div>
+
+            <!-- 1. BACKUP & DATA MANAGEMENT SECTION -->
+            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-sm space-y-3 border border-slate-200 dark:border-slate-800">
+                <h3 class="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                    <i class="fa-solid fa-database text-emerald-500"></i> <span data-i18n="data_management">Data Management & Backup</span>
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    <button onclick="backupData()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium p-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-md">
+                        <i class="fa-solid fa-download"></i> <span data-i18n="btn_backup">Backup JSON</span>
+                    </button>
+                    <label class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium p-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-md">
+                        <i class="fa-solid fa-upload"></i> <span data-i18n="btn_restore">Restore JSON</span>
+                        <input type="file" id="restore-file" onchange="restoreData(event)" class="hidden" accept=".json">
+                    </label>
                 </div>
             </div>
 
-            <!-- SETTINGS & STYLING SECTION -->
-            <div class="space-y-4 w-full max-w-5xl mx-auto">
-                
-                <!-- Typography & Layout Style -->
-                <div class="bg-white dark:bg-slate-900 p-4 md:p-6 rounded-2xl shadow-sm space-y-4 border border-slate-200 dark:border-slate-800 transition-colors duration-300 w-full">
-                    <h3 class="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                        <i class="fa-solid fa-font text-emerald-500"></i> <span data-i18n="typography_title">Typography & Layout Style</span>
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 w-full">
-                        <div>
-                            <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1" data-i18n="font_size">Font Size</label>
-                            <select id="font-size-select" onchange="changeFontSize(this.value)" class="w-full border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white p-2.5 rounded-xl text-xs outline-none">
-                                <option value="small">Small</option>
-                                <option value="medium" selected>Medium</option>
-                                <option value="large">Large</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1" data-i18n="font_family">Font Family</label>
-                            <select id="font-family-select" onchange="changeFontFamily(this.value)" class="w-full border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white p-2.5 rounded-xl text-xs outline-none">
-                                <option value="Poppins">Poppins</option>
-                                <option value="Inter">Inter</option>
-                                <option value="Srikhand">Srikhand</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1" data-i18n="font_style">Font Style</label>
-                            <select id="font-style-select" onchange="changeFontStyle(this.value)" class="w-full border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white p-2.5 rounded-xl text-xs outline-none">
-                                <option value="normal">Normal</option>
-                                <option value="bold">Bold</option>
-                                <option value="italic">Italic</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="pt-2 w-full">
-                        <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1" data-i18n="text_effects">Text Effects</label>
-                        <div class="grid grid-cols-2 md:grid-cols-3 gap-2 w-full">
-                            <button onclick="setTextEffect('outline')" class="bg-slate-100 dark:bg-slate-800 p-2 rounded-xl text-xs font-medium hover:bg-emerald-50 dark:hover:bg-slate-700 transition" data-i18n="effect_outline">Outline</button>
-                            <button onclick="setTextEffect('background')" class="bg-slate-100 dark:bg-slate-800 p-2 rounded-xl text-xs font-medium hover:bg-emerald-50 dark:hover:bg-slate-700 transition" data-i18n="effect_background">Background</button>
-                            <button onclick="setTextEffect('hollow')" class="bg-slate-100 dark:bg-slate-800 p-2 rounded-xl text-xs font-medium hover:bg-emerald-50 dark:hover:bg-slate-700 transition" data-i18n="effect_hollow">Hollow</button>
-                        </div>
-                    </div>
+            <!-- 2. Profile & Device Info Card -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-sm space-y-4">
+                <h2 class="text-sm font-bold text-slate-800 dark:text-slate-300 border-b border-slate-200 dark:border-slate-800 pb-2" data-translate="profileDeviceTitle">Profile & Device Info</h2>
+                <div class="space-y-2 text-xs">
+                    <p class="text-slate-500 dark:text-slate-400">Email: <span id="user-email-display" class="text-slate-900 dark:text-white font-medium">Loading...</span></p>
+                    <p class="text-slate-500 dark:text-slate-400">Device/Browser: <span id="device-info-display" class="text-slate-900 dark:text-white font-medium">Loading...</span></p>
                 </div>
+                <button onclick="handleLogout()" class="w-full py-2.5 bg-rose-600/20 hover:bg-rose-600 text-rose-600 hover:text-white border border-rose-600/30 rounded-xl font-bold text-xs transition" data-translate="logoutBtn">
+                    Log Out
+                </button>
+            </div>
 
-                <!-- Policy, Terms & About Section -->
-                <div class="bg-white dark:bg-slate-900 p-4 md:p-6 rounded-2xl shadow-sm space-y-4 border border-slate-200 dark:border-slate-800 transition-colors duration-300 w-full">
-                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider border-b border-slate-200 dark:border-slate-800 pb-3" data-i18n="policy_title">ℹ️ Policy, Terms & About</h4>
+            <!-- 3. Change Password Card -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-sm space-y-4">
+                <h2 class="text-sm font-bold text-slate-800 dark:text-slate-300 border-b border-slate-200 dark:border-slate-800 pb-2" data-translate="changePasswordTitle">Change Password</h2>
+                <div class="space-y-3">
+                    <input type="password" id="new-password" data-translate-placeholder="newPasswordPlaceholder" placeholder="Enter new password" class="w-full p-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500">
+                    <button onclick="handleChangePassword()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold text-xs transition" data-translate="updatePasswordBtn">
+                        Update Password
+                    </button>
+                </div>
+            </div>
 
-                    <div class="space-y-3 w-full">
-                        <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 w-full">
-                            <h5 class="font-bold text-xs text-slate-800 dark:text-slate-200" data-i18n="policy_main_title">Policy, Terms & Overview</h5>
-                            <p class="text-xs text-slate-600 dark:text-slate-400 mt-1" data-i18n="policy_main_desc">Your financial records are secured in Firebase cloud. Third-party data sharing is restricted, and users retain complete control over their accounts.</p>
+            <!-- 4. SECURITY & LOCK SETTINGS (6-DIGIT PIN & FINGERPRINT ON/OFF) -->
+            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 space-y-4">
+                <h3 class="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-emerald-500"></i> <span class="lang-text" data-en="Security & Lock Settings" data-np="सुरक्षा र लक सेटिंग्स">Security & Lock Settings</span>
+                </h3>
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="font-bold text-xs text-slate-800 dark:text-white"><span class="lang-text" data-en="App 6-Digit PIN Lock" data-np="एप ६-अंकको पिन लक">App 6-Digit PIN Lock</span></h4>
+                                <p class="text-[10px] text-slate-500 dark:text-slate-400"><span class="lang-text" data-en="Secure your app with a 6-digit PIN before entering dashboard" data-np="ड्यासबोर्ड प्रवेश गर्नुअघि ६-अंकको पिन कोड प्रयोग गरेर एप सुरक्षित गर्नुहोस्">Secure your app with a 6-digit PIN before entering dashboard</span></p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="pin-lock-toggle" onchange="togglePinLockSetting(this)" class="sr-only peer">
+                                <div class="w-9 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+                            </label>
+                        </div>
+                        <div id="pin-setup-box" class="hidden space-y-3 pt-2 border-t border-slate-200 dark:border-slate-700">
+                            <input type="password" id="new-app-pin" placeholder="Enter 6-digit PIN" maxlength="6" class="w-full p-2 text-xs bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg outline-none">
                             
-                            <div id="more-policy" class="more-text text-xs text-slate-600 dark:text-slate-400 space-y-2 mt-2 pt-2 border-t border-slate-100 dark:border-slate-700">
-                                <p class="lang-text" 
-                                   data-en="Your complete accounts, transaction records, and bills will be kept fully secure in the cloud server. We will never sell or transfer any of your personal or financial details to any third party or anyone else, ensuring your privacy remains protected at all times. To use this system, users must log in securely and will be entirely responsible for keeping their login credentials confidential. An active internet connection is fundamentally required to keep data fresh and synchronized in real-time on the server. Furthermore, users retain the full right to request the deletion of their account and all stored details from the server whenever they wish." 
-                                   data-np="तपाईँका सबै हिसाब-किताब, कारोबारका विवरण र बिलहरू क्लाउड सर्भरमा पूर्ण रूपमा सुरक्षित रूपमा राखिनेछन्। हामी तपाईँको कुनै पनि व्यक्तिगत वा वित्तीय विवरणहरू तेस्रो पक्ष वा अन्य कसैलाई पनि बिक्री गर्ने वा हस्तान्तरण गर्ने छैनौं, जसले गर्दा तपाईँको गोपनीयता सधैं सुरक्षित रहन्छ। यो प्रणाली प्रयोग गर्नका लागि प्रयोगकर्ताहरूले सुरक्षित रूपमा लगइन गर्नुपर्ने हुन्छ र आफ्ना लगइन विवरणहरू गोप्य राख्ने पूर्ण जिम्मेवारी स्वयम् प्रयोगकर्ताकै हुनेछ। सर्भरमा डाटालाई वास्तविक समयमै ताजा राख्न र सिंक गर्नका लागि सक्रिय इन्टरनेट जडान अनिवार्य रूपमा आवश्यक पर्दछ। यसबाहेक, प्रयोगकर्ताहरूसँग पूर्ण अधिकार हुन्छ कि उनीहरूले सर्भरमा सुरक्षित राखिएको आफ्नो खाता तथा सम्पूर्ण विवरणहरू जुनसुकै बेला चाहेको बखत मेटाउनका लागि अनुरोध गर्न सक्नेछन्।">
-                                   तपाईँका सबै हिसाब-किताब, कारोबारका विवरण र बिलहरू क्लाउड सर्भरमा पूर्ण रूपमा सुरक्षित रूपमा राखिनेछन्। हामी तपाईँको कुनै पनि व्यक्तिगत वा वित्तीय विवरणहरू तेस्रो पक्ष वा अन्य कसैलाई पनि बिक्री गर्ने वा हस्तान्तरण गर्ने छैनौं, जसले गर्दा तपाईँको गोपनीयता सधैं सुरक्षित रहन्छ। यो प्रणाली प्रयोग गर्नका लागि प्रयोगकर्ताहरूले सुरक्षित रूपमा लगइन गर्नुपर्ने हुन्छ र आफ्ना लगइन विवरणहरू गोप्य राख्ने पूर्ण जिम्मेवारी स्वयम् प्रयोगकर्ताकै हुनेछ। सर्भरमा डाटालाई वास्तविक समयमै ताजा राख्न र सिंक गर्नका लागि सक्रिय इन्टरनेट जडान अनिवार्य रूपमा आवश्यक पर्दछ। यसबाहेक, प्रयोगकर्ताहरूसँग पूर्ण अधिकार हुन्छ कि उनीहरूले सर्भरमा सुरक्षित राखिएको आफ्नो खाता तथा सम्पूर्ण विवरणहरू जुनसुकै बेला चाहेको बखत मेटाउनका लागि अनुरोध गर्न सक्नेछन्।
-                                </p>
+                            <!-- Fingerprint Toggle Option -->
+                            <div class="flex items-center justify-between pt-1">
+                                <span class="text-xs text-slate-300 flex items-center gap-1.5"><i class="fa-solid fa-fingerprint text-emerald-400"></i> <span class="lang-text" data-en="Enable Fingerprint / Biometric" data-np="फिंगरप्रिन्ट / बायोमेट्रिक अन गर्नुहोस्">Enable Fingerprint / Biometric</span></span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="biometric-lock-toggle" onchange="toggleBiometricSetting(this)" class="sr-only peer">
+                                    <div class="w-9 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+                                </label>
                             </div>
 
-                            <button onclick="toggleText('policy')" id="toggle-btn-policy" class="text-emerald-600 dark:text-emerald-400 font-bold text-xs mt-3 block hover:underline" data-i18n="see_more">See More</button>
+                            <button onclick="saveAppPin()" class="w-full py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold"><span class="lang-text" data-en="Save PIN" data-np="पिन सेभ गर्नुहोस्">Save PIN</span></button>
                         </div>
-                    </div>
-                    
-                    <div class="pt-2 text-center border-t border-slate-100 dark:border-slate-800 w-full">
-                        <button onclick="checkForUpdates()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-3 py-1.5 rounded-xl text-xs shadow-md shadow-emerald-600/20 transition">
-                            <i class="fa-solid fa-rotate"></i> Version 6.7 <span id="update-status-text" class="text-[9px] font-normal opacity-80" data-i18n="check_update">(Check Update)</span>
-                        </button>
                     </div>
                 </div>
+            </div>
 
-                <!-- Feedback & Suggestions -->
-                <div class="bg-white dark:bg-slate-900 p-4 md:p-6 rounded-2xl shadow-sm space-y-4 border border-slate-200 dark:border-slate-800 transition-colors duration-300 w-full">
-                    <h3 class="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                        <i class="fa-solid fa-comments text-emerald-500"></i> <span data-i18n="feedback_title">प्रतिक्रिया तथा सुझाव (Feedback & Suggestions)</span>
-                    </h3>
-                    <form id="feedback-form" onsubmit="handleFeedback(event)" class="space-y-3 w-full">
-                        <div class="w-full">
-                            <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1" data-i18n="your_name">तपाईंको नाम / Your Name:</label>
-                            <input type="text" id="fb-name" required placeholder="Enter your name" class="w-full border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white p-2.5 rounded-xl text-xs outline-none">
-                        </div>
-                        <div class="w-full">
-                            <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1" data-i18n="your_message">सुझाव वा प्रतिक्रिया / Message or Feedback:</label>
-                            <textarea id="fb-msg" rows="3" required placeholder="Write your feedback..." class="w-full border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white p-2.5 rounded-xl text-xs outline-none"></textarea>
-                        </div>
-                        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium p-2.5 rounded-xl text-xs transition" data-i18n="btn_submit">पठाउनुहोस् (Submit)</button>
-                    </form>
+            <!-- 5. DANGER ZONE -->
+            <div class="bg-white dark:bg-slate-900 border border-rose-900/40 p-5 rounded-2xl shadow-sm space-y-4">
+                <h2 class="text-sm font-bold text-rose-600 dark:text-rose-400 border-b border-rose-900/30 pb-2" data-translate="dangerZoneTitle">Danger Zone</h2>
+                
+                <div class="space-y-2">
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400">सबै डाटा मेटाएर फ्याक्ट्री रिसेट गर्नुहोस्:</p>
+                    <button onclick="openResetModal()" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium p-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-md">
+                        <i class="fa-solid fa-triangle-exclamation"></i> <span data-i18n="btn_reset">Master Reset</span>
+                    </button>
+                </div>
+
+                <div class="space-y-3 text-xs pt-3 border-t border-slate-200 dark:border-slate-800">
+                    <textarea id="delete-reason" data-translate-placeholder="deleteReasonPlaceholder" placeholder="Reason for deleting account..." rows="2" class="w-full p-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:outline-none focus:border-rose-500 resize-none"></textarea>
+                    <input type="password" id="delete-confirm-password" data-translate-placeholder="confirmPasswordPlaceholder" placeholder="Enter your current password to confirm" class="w-full p-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:outline-none focus:border-rose-500">
+                    <button onclick="handleDeleteAccount()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-500 text-white rounded-xl font-bold transition" data-translate="deleteAccountBtn">
+                        Permanently Delete Account
+                    </button>
                 </div>
             </div>
 
@@ -266,6 +242,19 @@ tailwind.config = {
 </div>
 
 <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDDY_v7RHnkCTI6uyV4DNDjqoaIBGweg8c",
+      authDomain: "digital-a2552.firebaseapp.com",
+      projectId: "digital-a2552",
+      storageBucket: "digital-a2552.firebasestorage.app",
+      messagingSenderId: "218135618179",
+      appId: "1:218135618179:web:821b76920d3e5669ac31b6"
+    };
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    const auth = firebase.auth();
+
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
         if (sidebar) sidebar.classList.toggle('-translate-x-full');
@@ -275,44 +264,40 @@ tailwind.config = {
 
     const translations = {
         EN: {
-            typography_title: "Typography & Layout Style",
-            font_size: "Font Size",
-            font_family: "Font Family",
-            font_style: "Font Style",
-            text_effects: "Text Effects",
-            effect_outline: "Outline",
-            effect_background: "Background",
-            effect_hollow: "Hollow",
-            policy_title: "ℹ️ Policy, Terms & About",
-            policy_main_title: "Policy, Terms & Overview",
-            policy_main_desc: "Your financial records are secured in Firebase cloud. Third-party data sharing is restricted, and users retain complete control over their accounts.",
-            see_more: "See More",
-            see_less: "See Less",
-            check_update: "(Check Update)",
-            feedback_title: "Feedback & Suggestions",
-            your_name: "Your Name:",
-            your_message: "Message or Feedback:",
-            btn_submit: "Submit"
+            reset_title: "Master Reset Confirm",
+            reset_desc: "All your data will be permanently deleted. Type 'RESET' and enter your 6-digit PIN to confirm:",
+            btn_cancel: "Cancel",
+            btn_reset_system: "Reset System",
+            data_management: "Data Management & Backup",
+            btn_backup: "Backup JSON",
+            btn_restore: "Restore JSON",
+            btn_reset: "Master Reset",
+            accountSettingsTitle: "Account Management",
+            backToDashboard: "Back to Dashboard",
+            profileDeviceTitle: "Profile & Device Info",
+            logoutBtn: "Log Out",
+            changePasswordTitle: "Change Password",
+            updatePasswordBtn: "Update Password",
+            dangerZoneTitle: "Danger Zone: Permanent Deletion & Reset",
+            deleteAccountBtn: "Permanently Delete Account"
         },
         NEP: {
-            typography_title: "टाइपोग्राफी र लेआउट शैली",
-            font_size: "फन्ट साइज",
-            font_family: "फन्ट परिवार",
-            font_style: "फन्ट शैली",
-            text_effects: "टेक्स्ट इफेक्ट्स",
-            effect_outline: "आउटलाइन",
-            effect_background: "ब्याकग्राउन्ड",
-            effect_hollow: "खोक्रो (Hollow)",
-            policy_title: "ℹ️ नीति, सर्तहरू र बारेमा",
-            policy_main_title: "गोपनीयता नीति र सर्तहरू",
-            policy_main_desc: "तपाईँका हिसाब-किताब फायरबेस क्लाउडमा सुरक्षित छन्। तेस्रो पक्षलाई डाटा共享 गरिंदैन।",
-            see_more: "थप हेर्नुहोस्",
-            see_less: "कम देखाउनुहोस्",
-            check_update: "(अपडेट जाँच गर्नुहोस्)",
-            feedback_title: "प्रतिक्रिया तथा सुझाव (Feedback & Suggestions)",
-            your_name: "तपाईंको नाम / Your Name:",
-            your_message: "सुझाव वा प्रतिक्रिया / Message or Feedback:",
-            btn_submit: "पठाउनुहोस् (Submit)"
+            reset_title: "मास्टर रिसेट पुष्टि",
+            reset_desc: "तपाईंको सम्पूर्ण डाटा मेटिनेछ। पुष्टि गर्न 'RESET' टाइप गर्नुहोस् र ६-अंकको पिन (PIN) प्रविष्ट गर्नुहोस्:",
+            btn_cancel: "रद्द गर्नुहोस्",
+            btn_reset_system: "सिस्टम रिसेट गर्नुहोस्",
+            data_management: "डाटा व्यवस्थापन र ब्याकअप",
+            btn_backup: "ब्याकअप JSON",
+            btn_restore: "पुनः भण्डारण JSON",
+            btn_reset: "मास्टर रिसेट",
+            accountSettingsTitle: "अकाउन्ट व्यवस्थापन",
+            backToDashboard: "ड्यासबोर्डमा फर्कनुहोस्",
+            profileDeviceTitle: "प्रोफाइल र डिभाइस जानकारी",
+            logoutBtn: "लग आउट गर्नुहोस्",
+            changePasswordTitle: "पासवर्ड परिवर्तन गर्नुहोस्",
+            updatePasswordBtn: "पासवर्ड अपडेट गर्नुहोस्",
+            dangerZoneTitle: "खतरा क्षेत्र: स्थायी अकाउन्ट मेटाउने र रिसेट",
+            deleteAccountBtn: "स्थायी रूपमा अकाउन्ट मेटाउनुहोस्"
         }
     };
 
@@ -332,19 +317,18 @@ tailwind.config = {
             }
         });
 
-        const toggleBtn = document.getElementById('toggle-btn-policy');
-        if (toggleBtn) {
-            const el = document.getElementById('more-policy');
-            const isShown = el && el.classList.contains('show');
-            toggleBtn.innerText = isShown ? (translations[currentLang]['see_less'] || 'See Less') : (translations[currentLang]['see_more'] || 'See More');
-        }
+        document.querySelectorAll('[data-translate]').forEach(el => {
+            const key = el.getAttribute('data-translate');
+            if (translations[currentLang] && translations[currentLang][key]) {
+                el.innerText = translations[currentLang][key];
+            }
+        });
     }
 
     function toggleLanguage() {
         currentLang = currentLang === 'EN' ? 'NEP' : 'EN';
         localStorage.setItem('lang', currentLang);
         updateLanguageUI();
-        updateDynamicHeader();
     }
 
     function updateThemeUI() {
@@ -365,220 +349,208 @@ tailwind.config = {
         updateThemeUI();
     }
 
-    function updateDynamicHeader() {
-        const now = new Date();
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        const dateString = now.toLocaleDateString(currentLang === 'NEP' ? 'ne-NP' : 'en-US', options).toUpperCase();
-        const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-        const timeString = now.toLocaleTimeString('en-US', timeOptions);
-
-        const dateEl = document.getElementById('dynamic-date');
-        if (dateEl) dateEl.innerText = `${dateString} | ${timeString}`;
-    }
-
-    setInterval(updateDynamicHeader, 1000);
-
     function showToast(message, type = 'success') {
         const container = document.getElementById('toast-container');
         if(!container) return;
         const toast = document.createElement('div');
         const bgColor = type === 'success' ? 'bg-emerald-600' : 'bg-rose-600';
-        
-        toast.className = `${bgColor} text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold transform transition-all duration-100 translate-y-2 opacity-0 flex items-center gap-2`;
+        toast.className = `${bgColor} text-white px-4 py.5 rounded-xl shadow-lg text-xs font-semibold transform transition-all duration-300 translate-y-2 opacity-0 flex items-center gap-2`;
         toast.innerHTML = `<span>${type === 'success' ? '✅' : '⚠️'}</span> <span>${message}</span>`;
         container.appendChild(toast);
-        
-        setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 20);
-        
+        setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 50);
         setTimeout(() => {
             toast.classList.add('translate-y-2', 'opacity-0');
-            setTimeout(() => toast.remove(), 100);
-        }, 1500);
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
     }
 
-    // फन्ट साइज परिवर्तन र सेभ गर्ने
-    function changeFontSize(size) {
-        let scaleSize = '12px';
-        if (size === 'small') scaleSize = '11px';
-        else if (size === 'medium') scaleSize = '13px';
-        else if (size === 'large') scaleSize = '15px';
-
-        document.documentElement.style.fontSize = scaleSize;
-        localStorage.setItem('pref_font_size', size);
-        showToast(currentLang === 'NEP' ? 'फन्ट साइज परिवर्तन भयो!' : 'Font size updated!', 'success');
-    }
-
-    // फन्ट फेमिली परिवर्तन र सेभ गर्ने
-    function changeFontFamily(family) {
-        document.body.style.fontFamily = `'${family}', sans-serif`;
-        localStorage.setItem('pref_font_family', family);
-        showToast(currentLang === 'NEP' ? 'फन्ट परिवार परिवर्तन भयो!' : 'Font family updated!', 'success');
-    }
-
-    // फन्ट शैली (Bold/Italic) परिवर्तन र सेभ गर्ने
-    function changeFontStyle(style) {
-        if (style === 'bold') {
-            document.body.style.fontWeight = 'bold';
-            document.body.style.fontStyle = 'normal';
-        } else if (style === 'italic') {
-            document.body.style.fontWeight = 'normal';
-            document.body.style.fontStyle = 'italic';
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            document.getElementById('user-email-display').innerText = user.email;
+            document.getElementById('sidebar-user-email').innerText = user.email;
+            document.getElementById('device-info-display').innerText = navigator.userAgent;
         } else {
-            document.body.style.fontWeight = 'normal';
-            document.body.style.fontStyle = 'normal';
+            window.location.href = 'index.html';
         }
-        localStorage.setItem('pref_font_style', style);
-        showToast(currentLang === 'NEP' ? 'फन्ट शैली परिवर्तन भयो!' : 'Font style updated!', 'success');
-    }
+    });
 
-    // टेक्स्ट इफेक्ट परिवर्तन र सेभ गर्ने
-    function setTextEffect(effect) {
-        const mainBody = document.getElementById('main-body');
-        if (mainBody) {
-            mainBody.classList.remove('effect-outline', 'effect-background', 'effect-hollow');
-            if (effect) {
-                mainBody.classList.add(`effect-${effect}`);
-                localStorage.setItem('pref_text_effect', effect);
-                showToast(currentLang === 'NEP' ? 'टेक्स्ट इफेक्ट लागू भयो!' : 'Text effect applied!', 'success');
-            } else {
-                localStorage.removeItem('pref_text_effect');
-            }
-        }
-    }
-
-    function toggleText(id) {
-        const el = document.getElementById(`more-${id}`);
-        const btn = document.getElementById(`toggle-btn-${id}`);
-        if (el && btn) {
-            el.classList.toggle('show');
-            const isShown = el.classList.contains('show');
-            if (currentLang === 'NEP') {
-                btn.innerText = isShown ? 'कम देखाउनुहोस्' : 'थप हेर्नुहोस्';
-            } else {
-                btn.innerText = isShown ? 'See Less' : 'See More';
-            }
-        }
-    }
-
-    function checkForUpdates() {
-        showToast(currentLang === 'NEP' ? 'तपाईंसँग नवीनतम संस्करण (Version 6.7) छ!' : 'You are running the latest version (6.7)!', 'success');
-    }
-
-    function handleFeedback(event) {
-        event.preventDefault();
-        const name = document.getElementById('fb-name').value;
-        const msg = document.getElementById('fb-msg').value;
-        if(name && msg) {
-            showToast(currentLang === 'NEP' ? 'तपाईको प्रतिक्रियाको लागि धन्यवाद!' : 'Thank you for your feedback!', 'success');
-            document.getElementById('feedback-form').reset();
-        }
-    }
-
-    function saveProfileDetails() {
-        const name = document.getElementById('input-full-name').value;
-        const address = document.getElementById('input-address').value;
-        const mobile = document.getElementById('input-mobile').value;
-
-        if(name) localStorage.setItem('profile_name', name);
-        localStorage.setItem('profile_address', address);
-        localStorage.setItem('profile_mobile', mobile);
-
-        loadUserData();
-        showToast(currentLang === 'NEP' ? 'विवरण सफलतापूर्वक सेभ भयो!' : 'Details saved successfully!', 'success');
-    }
-
-    function loadUserData() {
-        const savedName = localStorage.getItem('profile_name') || '';
-        const savedAddress = localStorage.getItem('profile_address') || '';
-        const savedMobile = localStorage.getItem('profile_mobile') || '';
-
-        if(document.getElementById('input-full-name')) document.getElementById('input-full-name').value = savedName;
-        if(document.getElementById('input-address')) document.getElementById('input-address').value = savedAddress;
-        if(document.getElementById('input-mobile')) document.getElementById('input-mobile').value = savedMobile;
-
-        const nameEl = document.getElementById('sidebar-profile-name');
-        if(nameEl) nameEl.innerText = savedName;
-    }
-
-    function handleAvatarUpload(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const base64Image = e.target.result;
-                localStorage.setItem('profile_avatar', base64Image);
-                loadAvatar();
-                showToast(currentLang === 'NEP' ? 'प्रोफाइल फोटो अपडेट भयो!' : 'Profile photo updated!', 'success');
-            };
-            reader.readAsDataURL(file);
-        }
-    }
-
-    function loadAvatar() {
-        const savedImage = localStorage.getItem('profile_avatar') || 'N1024.png';
-        ['sidebar-avatar-img', 'header-avatar-img'].forEach(id => {
-            const img = document.getElementById(id);
-            if(img) img.src = savedImage;
+    function handleLogout() {
+        auth.signOut().then(() => {
+            window.location.href = 'index.html';
+        }).catch((error) => {
+            showToast("Error: " + error.message, 'error');
         });
     }
 
-    // सबै सेभ भएका प्रिफरेन्सेसहरू लोड गर्ने मुख्य फंक्सन
-    function loadSavedPreferences() {
-        // १. फन्ट साइज लोड गर्ने
-        const savedSize = localStorage.getItem('pref_font_size');
-        if (savedSize) {
-            let scaleSize = '12px';
-            if (savedSize === 'small') scaleSize = '11px';
-            else if (savedSize === 'medium') scaleSize = '13px';
-            else if (savedSize === 'large') scaleSize = '15px';
-            document.documentElement.style.fontSize = scaleSize;
-            
-            const selectEl = document.getElementById('font-size-select');
-            if(selectEl) selectEl.value = savedSize;
+    function handleChangePassword() {
+        const newPassword = document.getElementById('new-password').value;
+        const user = auth.currentUser;
+
+        if (!newPassword || newPassword.length < 6) {
+            showToast("Password must be at least 6 characters long.", 'error');
+            return;
         }
 
-        // २. फन्ट फेमिली लोड गर्ने
-        const savedFamily = localStorage.getItem('pref_font_family');
-        if (savedFamily) {
-            document.body.style.fontFamily = `'${savedFamily}', sans-serif`;
-            const familyEl = document.getElementById('font-family-select');
-            if(familyEl) familyEl.value = savedFamily;
+        user.updatePassword(newPassword).then(() => {
+            showToast("Password successfully updated.");
+            document.getElementById('new-password').value = '';
+        }).catch((error) => {
+            showToast("Error: Please re-login to update password.", 'error');
+        });
+    }
+
+    function handleDeleteAccount() {
+        const reason = document.getElementById('delete-reason').value;
+        const password = document.getElementById('delete-confirm-password').value;
+        const user = auth.currentUser;
+
+        if (!reason) {
+            showToast("Please provide a reason for deletion.", 'error');
+            return;
+        }
+        if (!password) {
+            showToast("Please confirm your password.", 'error');
+            return;
         }
 
-        // ३. फन्ट शैली लोड गर्ने
-        const savedStyle = localStorage.getItem('pref_font_style');
-        if (savedStyle) {
-            if (savedStyle === 'bold') {
-                document.body.style.fontWeight = 'bold';
-                document.body.style.fontStyle = 'normal';
-            } else if (savedStyle === 'italic') {
-                document.body.style.fontWeight = 'normal';
-                document.body.style.fontStyle = 'italic';
-            } else {
-                document.body.style.fontWeight = 'normal';
-                document.body.style.fontStyle = 'normal';
-            }
-            const styleEl = document.getElementById('font-style-select');
-            if(styleEl) styleEl.value = savedStyle;
-        }
+        const credential = firebase.auth.EmailAuthProvider.credential(user.email, password);
 
-        // ४. टेक्स्ट इफेक्ट लोड गर्ने
-        const savedEffect = localStorage.getItem('pref_text_effect');
-        const mainBody = document.getElementById('main-body');
-        if (savedEffect && mainBody) {
-            mainBody.classList.remove('effect-outline', 'effect-background', 'effect-hollow');
-            mainBody.classList.add(`effect-${savedEffect}`);
+        user.reauthenticateWithCredential(credential).then(() => {
+            // EmailJS मार्फत इमेल पठाउने कन्फिगरेसन
+            const templateParams = {
+                user_email: user.email,
+                delete_reason: reason,
+                device_info: navigator.userAgent
+            };
+
+            emailjs.send('service_8zfv1vu', 'template_36j91tf', templateParams)
+                .then(function(response) {
+                    console.log('Deletion email sent successfully!', response.status);
+                }, function(error) {
+                    console.log('Failed to send deletion email...', error);
+                });
+
+            // Firebase बाट अकाउन्ट स्थायी रूपमा मेटाउने
+            user.delete().then(() => {
+                showToast("Account successfully deleted.");
+                window.location.href = 'index.html';
+            }).catch((error) => {
+                showToast("Error: " + error.message, 'error');
+            });
+        }).catch((error) => {
+            showToast("Incorrect password. Please try again.", 'error');
+        });
+    }
+
+    function togglePinLockSetting(checkbox) {
+        const box = document.getElementById('pin-setup-box');
+        if (checkbox.checked) {
+            box.classList.remove('hidden');
+        } else {
+            box.classList.add('hidden');
+            localStorage.removeItem('app_pin_lock');
+            localStorage.removeItem('biometric_enabled');
+            document.getElementById('biometric-lock-toggle').checked = false;
+            showToast(currentLang === 'NEP' ? 'पिन लक बन्द भयो!' : 'PIN Lock disabled!', 'success');
         }
     }
 
-    // पेज लोड हुनेबित्तिकै सबै कुराहरू स्वतः एप्लाई हुनेछन्
+    function toggleBiometricSetting(checkbox) {
+        if (checkbox.checked) {
+            localStorage.setItem('biometric_enabled', 'true');
+            showToast(currentLang === 'NEP' ? 'फिंगरप्रिन्ट अन भयो!' : 'Biometric enabled!', 'success');
+        } else {
+            localStorage.setItem('biometric_enabled', 'false');
+            showToast(currentLang === 'NEP' ? 'फिंगरप्रिन्ट बन्द भयो!' : 'Biometric disabled!', 'success');
+        }
+    }
+
+    function saveAppPin() {
+        const pin = document.getElementById('new-app-pin').value.trim();
+        if (pin.length !== 6) {
+            showToast(currentLang === 'NEP' ? 'कृपया ६ अंकको पिन राख्नुहोस्!' : 'Please enter a 6-digit PIN!', 'error');
+            return;
+        }
+        localStorage.setItem('app_pin_lock', pin);
+        showToast(currentLang === 'NEP' ? 'पिन सफलतापूर्वक सेभ भयो!' : 'PIN saved successfully!', 'success');
+    }
+
+    function backupData() {
+        const allData = {};
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            allData[key] = localStorage.getItem(key);
+        }
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(allData, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", `digital_notebook_backup_${new Date().toISOString().split('T')[0]}.json`);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+        showToast('ब्याकअप फाइल डाउनलोड भयो!', 'success');
+    }
+
+    function restoreData(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const data = JSON.parse(e.target.result);
+                for (const key in data) {
+                    localStorage.setItem(key, data[key]);
+                }
+                showToast('डाटा सफलतापूर्वक पुनर्स्थापना भयो!', 'success');
+                setTimeout(() => location.reload(), 1000);
+            } catch (err) {
+                showToast('अमान्य ब्याकअप फाइल!', 'error');
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    function openResetModal() {
+        document.getElementById('reset-modal').classList.remove('hidden');
+    }
+
+    function closeResetModal() {
+        document.getElementById('reset-modal').classList.add('hidden');
+    }
+
+    function confirmMasterReset() {
+        const textVal = document.getElementById('reset-input').value.trim();
+        const pinVal = document.getElementById('reset-pin').value.trim();
+        const savedPin = localStorage.getItem('app_pin_lock') || '123456';
+
+        if (textVal !== 'RESET') {
+            showToast("कृपया 'RESET' टाइप गर्नुहोस्!", 'error');
+            return;
+        }
+
+        if (pinVal !== savedPin && pinVal !== '') {
+            showToast("गलत पिन (PIN)!", 'error');
+            return;
+        }
+
+        localStorage.clear();
+        showToast('सिस्टम सफलतापूर्वक रिसेट भयो!', 'success');
+        setTimeout(() => location.reload(), 1000);
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
         updateLanguageUI();
         updateThemeUI();
-        updateDynamicHeader();
-        loadUserData();
-        loadAvatar();
-        loadSavedPreferences();
+        const savedPin = localStorage.getItem('app_pin_lock');
+        const biometricEnabled = localStorage.getItem('biometric_enabled') === 'true';
+        if (savedPin) {
+            document.getElementById('pin-lock-toggle').checked = true;
+            document.getElementById('pin-setup-box').classList.remove('hidden');
+            document.getElementById('new-app-pin').value = savedPin;
+        }
+        if (biometricEnabled) {
+            document.getElementById('biometric-lock-toggle').checked = true;
+        }
     });
 </script>
 </body>
