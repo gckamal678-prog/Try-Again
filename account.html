@@ -210,7 +210,7 @@ tailwind.config = {
                 </div>
             </div>
 
-            <!-- 5. DANGER ZONE -->
+            <!-- 5. DANGER ZONE (Master Reset मात्र बाँकी राखिएको छ) -->
             <div class="bg-white dark:bg-slate-900 border border-rose-900/40 p-5 rounded-2xl shadow-sm space-y-4">
                 <h2 class="text-sm font-bold text-rose-600 dark:text-rose-400 border-b border-rose-900/30 pb-2" data-translate="dangerZoneTitle">Danger Zone</h2>
                 
@@ -218,14 +218,6 @@ tailwind.config = {
                     <p class="text-[11px] text-slate-500 dark:text-slate-400">सबै डाटा मेटाएर फ्याक्ट्री रिसेट गर्नुहोस्:</p>
                     <button onclick="openResetModal()" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium p-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-md">
                         <i class="fa-solid fa-triangle-exclamation"></i> <span data-i18n="btn_reset">Master Reset</span>
-                    </button>
-                </div>
-
-                <div class="space-y-3 text-xs pt-3 border-t border-slate-200 dark:border-slate-800">
-                    <textarea id="delete-reason" data-translate-placeholder="deleteReasonPlaceholder" placeholder="Reason for deleting account..." rows="2" class="w-full p-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:outline-none focus:border-rose-500 resize-none"></textarea>
-                    <input type="password" id="delete-confirm-password" data-translate-placeholder="confirmPasswordPlaceholder" placeholder="Enter your current password to confirm" class="w-full p-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:outline-none focus:border-rose-500">
-                    <button onclick="handleDeleteAccount()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-500 text-white rounded-xl font-bold transition" data-translate="deleteAccountBtn">
-                        Permanently Delete Account
                     </button>
                 </div>
             </div>
@@ -271,8 +263,7 @@ tailwind.config = {
             logoutBtn: "Log Out",
             changePasswordTitle: "Change Password",
             updatePasswordBtn: "Update Password",
-            dangerZoneTitle: "Danger Zone: Permanent Deletion & Reset",
-            deleteAccountBtn: "Permanently Delete Account"
+            dangerZoneTitle: "Danger Zone: System Reset"
         },
         NEP: {
             reset_title: "मास्टर रिसेट पुष्टि",
@@ -289,8 +280,7 @@ tailwind.config = {
             logoutBtn: "लग आउट गर्नुहोस्",
             changePasswordTitle: "पासवर्ड परिवर्तन गर्नुहोस्",
             updatePasswordBtn: "पासवर्ड अपडेट गर्नुहोस्",
-            dangerZoneTitle: "खतरा क्षेत्र: स्थायी अकाउन्ट मेटाउने र रिसेट",
-            deleteAccountBtn: "स्थायी रूपमा अकाउन्ट मेटाउनुहोस्"
+            dangerZoneTitle: "खतरा क्षेत्र: सिस्टम रिसेट"
         }
     };
 
@@ -389,34 +379,6 @@ tailwind.config = {
             document.getElementById('new-password').value = '';
         }).catch((error) => {
             showToast("Error: Please re-login to update password.", 'error');
-        });
-    }
-
-    function handleDeleteAccount() {
-        const reason = document.getElementById('delete-reason').value;
-        const password = document.getElementById('delete-confirm-password').value;
-        const user = auth.currentUser;
-
-        if (!reason) {
-            showToast("Please provide a reason for deletion.", 'error');
-            return;
-        }
-        if (!password) {
-            showToast("Please confirm your password.", 'error');
-            return;
-        }
-
-        const credential = firebase.auth.EmailAuthProvider.credential(user.email, password);
-
-        user.reauthenticateWithCredential(credential).then(() => {
-            user.delete().then(() => {
-                showToast("Account successfully deleted.");
-                window.location.href = 'index.html';
-            }).catch((error) => {
-                showToast("Error: " + error.message, 'error');
-            });
-        }).catch((error) => {
-            showToast("Incorrect password. Please try again.", 'error');
         });
     }
 
